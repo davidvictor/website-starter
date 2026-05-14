@@ -61,12 +61,13 @@ export default function VariantsGalleryPage() {
               /variants
             </p>
             <h1 className="font-heading text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
-              Every block, three ways.
+              Every block × every composition.
             </h1>
             <p className="max-w-2xl text-balance text-muted-foreground">
-              Each marketing block ships in three style variants: clean
-              editorial, standard SaaS, and bold expressive. Use this page as
-              the canonical reference when composing marketing pages.
+              Each marketing block ships in three compositions — editorial,
+              saas, and bold. Compositions are the block layout; the theme
+              (palette + typography) is independent. Switch themes from the
+              dev panel to see this page under each.
             </p>
           </div>
 
@@ -97,7 +98,7 @@ export default function VariantsGalleryPage() {
                   {block.label}
                 </h2>
                 <span className="font-mono text-xs text-muted-foreground">
-                  3 variants
+                  3 compositions
                 </span>
               </div>
             </div>

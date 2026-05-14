@@ -1,4 +1,5 @@
 import type { AccentAnchor } from "@/lib/color"
+import type { ThemeId } from "@/lib/compositions"
 import type { FontKey } from "@/lib/fonts"
 
 import type { ColorTokens } from "./types"
@@ -45,7 +46,13 @@ export type DerivationProfile = {
   fonts: { sans: FontKey; mono: FontKey; heading: FontKey }
 }
 
-export type PresetId = "editorial" | "saas" | "bold" | "cyber" | "custom"
+/**
+ * A `PresetId` is the canonical {@link ThemeId} plus `"custom"` to mark
+ * a controller-theme whose inputs have drifted away from any built-in
+ * preset. Picking a preset re-stamps the inputs + derivation back to a
+ * known shape.
+ */
+export type PresetId = ThemeId | "custom"
 
 /**
  * A controller-driven theme. The source of truth is the inputs +

@@ -2,14 +2,20 @@
 
 import {
   createContext,
+  type ReactNode,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
-  type ReactNode,
 } from "react"
-
+import type {
+  AccentInput,
+  ColorInput,
+  ControllerTheme,
+  DerivationProfile,
+  PresetId,
+} from "@/themes/controller-types"
 import { PRESETS } from "@/themes/presets"
 import {
   applyTheme,
@@ -17,14 +23,6 @@ import {
   defaultThemeId,
   findTheme,
 } from "@/themes/registry"
-import type {
-  AccentInput,
-  ColorInput,
-  ControllerInputs,
-  ControllerTheme,
-  DerivationProfile,
-  PresetId,
-} from "@/themes/controller-types"
 
 type Mode = "light" | "dark" | "system"
 type ResolvedMode = "light" | "dark"
@@ -53,6 +51,8 @@ type ThemeContextValue = {
   patchDerivation: (patch: Partial<DerivationProfile>) => void
   /** Reset the active theme to its base (drops local overrides). */
   resetTheme: () => void
+  /** Wipe all theme-related localStorage and revert to registry defaults. */
+  clearAll: () => void
   /** True if the active theme has any local edits relative to base. */
   isOverridden: boolean
 }
@@ -133,10 +133,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   /* ---- mutators ---- */
 
-  const persistOverrides = useCallback((next: Record<string, ControllerTheme>) => {
-    setOverrides(next)
-    writeStorage(OVERRIDES_STORAGE_KEY, next)
-  }, [])
+  const persistOverrides = useCallback(
+    (next: Record<string, ControllerTheme>) => {
+      setOverrides(next)
+      writeStorage(OVERRIDES_STORAGE_KEY, next)
+    },
+    []
+  )
 
   const setThemeId = useCallback((id: string) => {
     setThemeIdState(id)
@@ -219,6 +222,21 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     persistOverrides(next)
   }, [overrides, theme.id, persistOverrides])
 
+  const clearAll = useCallback(() => {
+    setOverrides({})
+    setThemeIdState(defaultThemeId)
+    setModeState("system")
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem(OVERRIDES_STORAGE_KEY)
+        localStorage.removeItem(THEME_STORAGE_KEY)
+        localStorage.removeItem(MODE_STORAGE_KEY)
+      } catch {
+        /* swallow */
+      }
+    }
+  }, [])
+
   const isOverridden = Boolean(overrides[theme.id])
 
   const value = useMemo<ThemeContextValue>(
@@ -236,6 +254,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       setWarmth,
       patchDerivation,
       resetTheme,
+      clearAll,
       isOverridden,
     }),
     [
@@ -252,6 +271,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       setWarmth,
       patchDerivation,
       resetTheme,
+      clearAll,
       isOverridden,
     ]
   )

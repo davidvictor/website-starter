@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
 
 import { useTheme } from "@/providers/theme-provider"
 
@@ -106,13 +106,7 @@ function DataGroup({
   )
 }
 
-function DataRow({
-  label,
-  value,
-}: {
-  label: string
-  value: React.ReactNode
-}) {
+function DataRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex items-baseline justify-between gap-3 py-0.5 text-xs">
       <dt className="shrink-0 text-muted-foreground">{label}</dt>

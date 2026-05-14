@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, type ReactNode } from "react"
 import { ChevronDown, GripVertical } from "lucide-react"
+import { type ReactNode, useState } from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -58,7 +58,9 @@ export function FloatingControls({
           )}
         />
       </button>
-      {open && <div className="flex flex-col gap-2 px-2.5 py-2">{children}</div>}
+      {open && (
+        <div className="flex flex-col gap-2 px-2.5 py-2">{children}</div>
+      )}
     </aside>
   )
 }

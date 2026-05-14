@@ -1,15 +1,15 @@
-import { FONTS, type FontKey } from "@/lib/fonts"
+import {
+  BUILT_IN_FONTS,
+  type BuiltInFontKey,
+  type FontKey,
+  loadFontIfRemote,
+  resolveFontFamily,
+} from "@/lib/fonts"
 
-import type {
-  ControllerRegistry,
-  ControllerTheme,
-} from "./controller-types"
+import type { ControllerRegistry, ControllerTheme } from "./controller-types"
 import { deriveTokens } from "./derive"
 import registryJson from "./registry.json"
-import {
-  COLOR_TOKEN_TO_CSS_VAR,
-  type ColorTokens,
-} from "./types"
+import { COLOR_TOKEN_TO_CSS_VAR, type ColorTokens } from "./types"
 
 export const baseRegistry = registryJson as ControllerRegistry
 
@@ -50,21 +50,29 @@ export function tokensToCssVars(
     out[COLOR_TOKEN_TO_CSS_VAR[key]] = tokens[key]
   }
   out["--radius"] = theme.derivation.radius
-  out["--font-sans"] = FONTS[theme.derivation.fonts.sans]
-  out["--font-mono"] = FONTS[theme.derivation.fonts.mono]
-  out["--font-heading"] = FONTS[theme.derivation.fonts.heading]
+  out["--font-sans"] = resolveFontFamily(theme.derivation.fonts.sans)
+  out["--font-mono"] = resolveFontFamily(theme.derivation.fonts.mono)
+  out["--font-heading"] = resolveFontFamily(theme.derivation.fonts.heading)
   return out
 }
 
 /**
  * Apply a theme to a target element. Sets CSS variables, data-theme,
  * data-accent-usage, and toggles `.dark`.
+ *
+ * Side effect: loads any remote (Google) fonts referenced by the theme.
  */
 export function applyTheme(
   el: HTMLElement,
   theme: ControllerTheme,
   mode: "light" | "dark"
 ) {
+  // Kick off async font loading before applying — the variable points to
+  // the family name with a fallback stack, so layout doesn't block.
+  loadFontIfRemote(theme.derivation.fonts.sans)
+  loadFontIfRemote(theme.derivation.fonts.mono)
+  loadFontIfRemote(theme.derivation.fonts.heading)
+
   const tokens = resolveTokens(theme, mode)
   const vars = tokensToCssVars(tokens, theme)
   for (const [key, value] of Object.entries(vars)) {
@@ -80,4 +88,6 @@ export function applyTheme(
   }
 }
 
-export const FONT_KEYS = Object.keys(FONTS) as FontKey[]
+export const FONT_KEYS = Object.keys(BUILT_IN_FONTS) as BuiltInFontKey[]
+
+export type { FontKey }

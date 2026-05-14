@@ -28,7 +28,7 @@ function DevPanelInner() {
         aria-label="Open dev panel (press ~)"
         onClick={() => setOpen(true)}
         className={cn(
-          "fixed top-1/2 right-0 z-[9998] -translate-y-1/2 rounded-l-md border border-r-0 border-border bg-card/90 px-1.5 py-3 backdrop-blur-md transition-transform duration-200 ease-out",
+          "fixed top-1/2 right-0 z-[9998] -translate-y-1/2 rounded-l-md border border-r-0 border-border bg-card/90 px-1.5 py-3 backdrop-blur-md transition-transform duration-200 ease-out cursor-pointer",
           "hover:bg-muted",
           open ? "translate-x-full" : "translate-x-0"
         )}
@@ -45,28 +45,28 @@ function DevPanelInner() {
         data-state={open ? "open" : "closed"}
         aria-hidden={!open}
         className={cn(
-          "fixed inset-y-0 right-0 z-[9999] flex w-full max-w-[420px] flex-col border-l border-border bg-card/95 text-card-foreground shadow-2xl backdrop-blur-md",
+          "fixed inset-y-0 right-0 z-[9999] flex w-full max-w-[380px] flex-col border-l border-border bg-card/95 text-card-foreground shadow-2xl backdrop-blur-md",
           "transition-transform duration-300 ease-out",
           open ? "translate-x-0" : "translate-x-full"
         )}
         aria-label="Dev panel"
       >
-        <header className="flex h-10 shrink-0 items-center justify-between gap-2 border-b border-border bg-muted/40 px-3">
-          <span className="flex items-center gap-2 text-xs font-medium tracking-tight">
+        <header className="flex h-9 shrink-0 items-center justify-between gap-2 border-b border-border bg-muted/40 px-2.5">
+          <span className="flex items-center gap-1.5 text-xs font-medium tracking-tight">
             <span className="size-1.5 rounded-full bg-emerald-500" />
-            dev panel
+            dev
           </span>
-          <span className="flex items-center gap-2 text-muted-foreground">
-            <kbd className="rounded border border-border bg-background px-1.5 py-0.5 font-mono text-[10px]">
+          <span className="flex items-center gap-1.5 text-muted-foreground">
+            <kbd className="rounded border border-border bg-background px-1 py-px font-mono text-[9px] leading-none">
               ~
             </kbd>
             <button
               type="button"
               aria-label="Close dev panel"
               onClick={() => setOpen(false)}
-              className="grid size-6 place-items-center rounded hover:bg-muted hover:text-foreground"
+              className="grid size-5 place-items-center rounded cursor-pointer hover:bg-muted hover:text-foreground"
             >
-              <X className="size-3.5" />
+              <X className="size-3" />
             </button>
           </span>
         </header>
@@ -78,21 +78,21 @@ function DevPanelInner() {
           }
           className="flex min-h-0 flex-1 flex-col gap-0"
         >
-          <div className="px-2 pt-2">
+          <div className="px-1.5 pt-1.5">
             <TabsList
               variant="line"
-              className="grid h-8 w-full grid-cols-4 bg-transparent"
+              className="grid h-7 w-full grid-cols-4 bg-transparent"
             >
-              <TabsTrigger value="themes" className="text-xs">
+              <TabsTrigger value="themes" className="text-[11px]">
                 Themes
               </TabsTrigger>
-              <TabsTrigger value="controls" className="text-xs">
+              <TabsTrigger value="controls" className="text-[11px]">
                 Controls
               </TabsTrigger>
-              <TabsTrigger value="nav" className="text-xs">
+              <TabsTrigger value="nav" className="text-[11px]">
                 Nav
               </TabsTrigger>
-              <TabsTrigger value="data" className="text-xs">
+              <TabsTrigger value="data" className="text-[11px]">
                 Data
               </TabsTrigger>
             </TabsList>
@@ -103,7 +103,7 @@ function DevPanelInner() {
             className="mt-0 min-h-0 flex-1 border-t border-border"
           >
             <ScrollArea className="h-full">
-              <div className="p-3">
+              <div className="px-2.5 py-2.5">
                 <ThemesTab />
               </div>
             </ScrollArea>
@@ -119,7 +119,7 @@ function DevPanelInner() {
             className="mt-0 min-h-0 flex-1 border-t border-border"
           >
             <ScrollArea className="h-full">
-              <div className="p-3">
+              <div className="px-2.5 py-2.5">
                 <NavTab />
               </div>
             </ScrollArea>
@@ -129,7 +129,7 @@ function DevPanelInner() {
             className="mt-0 min-h-0 flex-1 border-t border-border"
           >
             <ScrollArea className="h-full">
-              <div className="p-3">
+              <div className="px-2.5 py-2.5">
                 <DataTab />
               </div>
             </ScrollArea>
