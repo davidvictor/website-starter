@@ -4,12 +4,19 @@ import { type HTMLMotionProps, motion } from "motion/react"
 import type { ReactNode } from "react"
 import { Children } from "react"
 
+import { useRouteTransitionPhase } from "./route-transition-context"
+
 type StaggerProps = HTMLMotionProps<"div"> & {
   delay?: number
   gap?: number
   children: ReactNode
 }
 
+/**
+ * Viewport-triggered staggered fade-up. Like `<FadeIn>`, this defers to
+ * the macro route transition while a page change is in flight — items
+ * render at their resting state instead of replaying their entrance.
+ */
 export function Stagger({
   children,
   delay = 0,
@@ -17,6 +24,21 @@ export function Stagger({
   ...rest
 }: StaggerProps) {
   const items = Children.toArray(children)
+  const phase = useRouteTransitionPhase()
+  const deferred = phase !== "idle"
+
+  if (deferred) {
+    return (
+      <motion.div initial={false} {...rest}>
+        {items.map((child, i) => (
+          <motion.div key={i} initial={false} animate={{ opacity: 1, y: 0 }}>
+            {child}
+          </motion.div>
+        ))}
+      </motion.div>
+    )
+  }
+
   return (
     <motion.div
       initial="hidden"

@@ -6,12 +6,13 @@ import type { ReactNode } from "react"
 
 import { useTheme } from "@/providers/theme-provider"
 
+import { useOptionalRouteTransitionContext } from "./route-transition-context"
 import { SPRING_MACRO } from "./springs"
 import { useShouldReduceMacro } from "./use-should-reduce-macro"
 
 /**
  * Three route-transition modes for the marketing layout.
- * See docs/adr/0012-route-transition.md.
+ * See docs/adr/0012-route-transition.md and docs/adr/0018-route-transition-coordination.md.
  *
  *   none               — instant swap (reference pages, dashboards)
  *   vertical-translate — fade + 16px upward translate on enter, 8px down on exit
@@ -19,6 +20,12 @@ import { useShouldReduceMacro } from "./use-should-reduce-macro"
  *
  * When no `mode` prop is provided, the mode is sourced from the active
  * theme's derivation (per-preset defaults). Reduced-motion forces `none`.
+ *
+ * If a parent `<RouteTransitionProvider>` is present, this component
+ * reports `entering → idle` when the enter animation completes so
+ * downstream consumers (`FadeIn`, `Stagger`) can defer their own
+ * entrance animations until the macro transition has settled. Without
+ * a provider, RouteTransition still works — it just doesn't coordinate.
  */
 export type RouteTransitionMode =
   | "none"
@@ -50,12 +57,18 @@ export function RouteTransition({ mode, children }: RouteTransitionProps) {
   const pathname = usePathname()
   const reduce = useShouldReduceMacro()
   const { theme } = useTheme()
+  const transitionCtx = useOptionalRouteTransitionContext()
 
   const themeMode = theme.derivation.routeTransition ?? "vertical-translate"
   const resolved = mode ?? themeMode
   const effective: RouteTransitionMode = reduce ? "none" : resolved
 
   if (effective === "none") {
+    // No animation → no enter phase to report. If a provider is wired,
+    // poke it to idle so consumers don't get stuck in `entering`.
+    if (transitionCtx?.phase === "entering") {
+      transitionCtx.reportEnterComplete()
+    }
     return <>{children}</>
   }
 
@@ -72,6 +85,13 @@ export function RouteTransition({ mode, children }: RouteTransitionProps) {
         animate="animate"
         exit="exit"
         transition={SPRING_MACRO}
+        onAnimationComplete={(definition) => {
+          // Only flip phase on the "animate" (enter) completion; exit
+          // completion is followed by mounting the next page.
+          if (definition === "animate") {
+            transitionCtx?.reportEnterComplete()
+          }
+        }}
       >
         {children}
       </motion.div>

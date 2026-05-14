@@ -1,10 +1,10 @@
 "use client"
 
 import { Menu, X } from "lucide-react"
-import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
+import { TransitionLink as Link } from "@/components/motion/transition-link"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { brand, navLinks } from "@/lib/brand"
 import { cn } from "@/lib/utils"
