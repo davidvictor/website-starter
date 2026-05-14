@@ -19,7 +19,7 @@ export function StatsEditorial() {
         </FadeIn>
 
         <FadeIn delay={0.05}>
-          <h2 className="font-heading mb-12 max-w-3xl text-balance text-3xl leading-tight font-medium tracking-tight md:text-4xl">
+          <h2 className="font-heading mb-12 max-w-3xl text-3xl leading-tight font-medium tracking-tight md:text-4xl">
             We measure what we ship.{" "}
             <span className="text-muted-foreground">
               And we ship what we measure.

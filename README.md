@@ -173,11 +173,17 @@ For real prototypes, the recommended path is:
 - Tested on macOS with Node 22 and pnpm 10. Should work on Linux/Windows but the dev experience is most polished on macOS.
 - The fictional company name ("Nimbus") is just demo content. Replace it before showing this to anyone who'll think it's a real product.
 
+## Polish system
+
+The motion primitives, surface treatments, hit-area rules, and tabular-number conventions that make the system feel crafted are documented in [`docs/UI_POLISH.md`](docs/UI_POLISH.md) and grounded in 17 ADRs in [`docs/adr/`](docs/adr/). The reference page lives at [`/sandbox/polish`](src/app/sandbox/polish/page.tsx) — every primitive, surface, spring tier, and the reduced-motion preview toggle, side-by-side.
+
+Guardrails: `pnpm check:polish` (also wired into `pnpm check`) greps for `transition-all`, raw `<img>` without an outline, ad-hoc shadow utilities, and inline `font-variant-numeric` declarations.
+
 ## What's next
 
 - A non-flash path for user-created themes (currently only base themes are pre-derived in the inline script)
 - A "save to registry.json" server action so editing themes in the dev panel can be persisted back to the source file in development
-- Optional Storybook export of the 27 block variants
+- A Storybook export of the 27 block variants — the polish reference at `/sandbox/polish` covers primitives; Storybook would cover compositions
 - More presets — `mono`, `aurora`, `print` are all sitting half-formed in notes
 
 ## License

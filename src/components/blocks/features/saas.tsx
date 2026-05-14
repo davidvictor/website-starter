@@ -25,7 +25,7 @@ export function FeaturesSaas() {
           <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
             Capabilities
           </p>
-          <h2 className="font-heading max-w-2xl text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 className="font-heading max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
             Everything you need to ship reasoning to production.
           </h2>
           <p className="max-w-xl text-balance text-muted-foreground">

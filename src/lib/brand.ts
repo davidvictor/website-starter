@@ -6,7 +6,7 @@
  * docs/adr/0008-brand-numeric-schema.md.
  */
 
-import type { Metric, Price } from "@/lib/format"
+import type { Metric, Price } from "@/lib/brand-types"
 
 export const brand = {
   name: "Nimbus",
@@ -487,7 +487,11 @@ export const customers = [
     contact: "Lin Wong · VP Engineering",
     metric: {
       label: "Annual model spend reduction",
-      value: { value: 1.4e6, currency: "USD" } satisfies Price,
+      value: {
+        value: 1.4e6,
+        format: "currency",
+        precision: 1,
+      } satisfies Metric,
     },
     logo: "YN",
   },

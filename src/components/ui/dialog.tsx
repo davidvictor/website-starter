@@ -2,12 +2,45 @@
 
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 import { XIcon } from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
 import * as React from "react"
+
+import { SPRING_MACRO } from "@/components/motion/springs"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-function Dialog({ ...props }: DialogPrimitive.Root.Props) {
-  return <DialogPrimitive.Root data-slot="dialog" {...props} />
+/**
+ * Dialog — migrated to motion/react + AnimatePresence per ADR 0002 (hybrid
+ * motion strategy). Base UI manages the portal mount; the open state is
+ * mirrored into context so AnimatePresence can wrap the Portal subtree and
+ * play exit animations before unmount.
+ */
+
+const DialogOpenContext = React.createContext<boolean>(false)
+
+function Dialog({
+  open: openProp,
+  defaultOpen,
+  onOpenChange,
+  ...props
+}: DialogPrimitive.Root.Props) {
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen ?? false)
+  const isControlled = openProp !== undefined
+  const open = isControlled ? openProp : internalOpen
+
+  return (
+    <DialogOpenContext.Provider value={open}>
+      <DialogPrimitive.Root
+        open={openProp}
+        defaultOpen={defaultOpen}
+        onOpenChange={(o, e) => {
+          if (!isControlled) setInternalOpen(o)
+          onOpenChange?.(o, e)
+        }}
+        {...props}
+      />
+    </DialogOpenContext.Provider>
+  )
 }
 
 function DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {
@@ -29,8 +62,17 @@ function DialogOverlay({
   return (
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
+      render={
+        <motion.div
+          data-motion="macro"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={SPRING_MACRO}
+        />
+      }
       className={cn(
-        "fixed inset-0 isolate z-50 bg-black/10 duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+        "fixed inset-0 isolate z-50 bg-black/10 supports-backdrop-filter:backdrop-blur-xs",
         className
       )}
       {...props}
@@ -46,35 +88,51 @@ function DialogContent({
 }: DialogPrimitive.Popup.Props & {
   showCloseButton?: boolean
 }) {
+  const open = React.useContext(DialogOpenContext)
+
   return (
-    <DialogPortal>
-      <DialogOverlay />
-      <DialogPrimitive.Popup
-        data-slot="dialog-content"
-        className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 shadow-[var(--shadow-overlay)] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
-          className
-        )}
-        {...props}
-      >
-        {children}
-        {showCloseButton && (
-          <DialogPrimitive.Close
-            data-slot="dialog-close"
+    <AnimatePresence>
+      {open && (
+        <DialogPortal keepMounted>
+          <DialogOverlay />
+          <DialogPrimitive.Popup
+            data-slot="dialog-content"
             render={
-              <Button
-                variant="ghost"
-                className="absolute top-2 right-2"
-                size="icon-sm"
+              <motion.div
+                data-motion="macro"
+                initial={{ opacity: 0, scale: 0.95, x: "-50%", y: "-50%" }}
+                animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%" }}
+                exit={{ opacity: 0, scale: 0.95, x: "-50%", y: "-50%" }}
+                transition={SPRING_MACRO}
               />
             }
+            className={cn(
+              "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 shadow-[var(--shadow-overlay)] outline-none sm:max-w-sm",
+              className
+            )}
+            {...props}
           >
-            <XIcon />
-            <span className="sr-only">Close</span>
-          </DialogPrimitive.Close>
-        )}
-      </DialogPrimitive.Popup>
-    </DialogPortal>
+            {children}
+            {showCloseButton && (
+              <DialogPrimitive.Close
+                data-slot="dialog-close"
+                render={
+                  <Button
+                    variant="ghost"
+                    className="absolute top-2 right-2"
+                    size="icon-sm"
+                    data-touch
+                  />
+                }
+              >
+                <XIcon />
+                <span className="sr-only">Close</span>
+              </DialogPrimitive.Close>
+            )}
+          </DialogPrimitive.Popup>
+        </DialogPortal>
+      )}
+    </AnimatePresence>
   )
 }
 

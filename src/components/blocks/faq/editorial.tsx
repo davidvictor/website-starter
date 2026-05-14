@@ -16,7 +16,7 @@ export function FaqEditorial() {
 
         <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
           <FadeIn delay={0.05} className="md:col-span-4">
-            <h2 className="font-heading text-balance text-3xl leading-tight font-medium tracking-tight md:text-4xl">
+            <h2 className="font-heading text-3xl leading-tight font-medium tracking-tight md:text-4xl">
               Frequently asked,
               <br />
               actually answered.

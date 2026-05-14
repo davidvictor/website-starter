@@ -1,7 +1,10 @@
 "use client"
 
+import { AnimatePresence, motion } from "motion/react"
 import * as React from "react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+
+import { SPRING_STANDARD } from "@/components/motion/springs"
 import {
   Card,
   CardAction,
@@ -214,11 +217,19 @@ export function ChartAreaInteractive() {
         </CardAction>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
-        >
-          <AreaChart data={filteredData}>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={timeRange}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={SPRING_STANDARD}
+          >
+            <ChartContainer
+              config={chartConfig}
+              className="aspect-auto h-[250px] w-full"
+            >
+              <AreaChart data={filteredData}>
             <defs>
               <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
                 <stop
@@ -288,8 +299,10 @@ export function ChartAreaInteractive() {
               stroke="var(--color-desktop)"
               stackId="a"
             />
-          </AreaChart>
-        </ChartContainer>
+              </AreaChart>
+            </ChartContainer>
+          </motion.div>
+        </AnimatePresence>
       </CardContent>
     </Card>
   )

@@ -16,3 +16,8 @@ The decisions below shaped the lookbook polish system. Each is a one-pager with 
 | [0010](0010-radius-enforcement.md) | Concentric radius: doc + `useConcentric` | Accepted |
 | [0011](0011-reduced-motion.md) | Pragmatic reduced-motion policy | Accepted |
 | [0012](0012-route-transition.md) | Three route-transition modes | Accepted |
+| [0013](0013-scope-and-sequencing.md) | Scope: all 7 phases | Accepted |
+| [0014](0014-verification-strategy.md) | Verification: manual visual diff | Accepted |
+| [0015](0015-brand-phasing.md) | brand.ts migration lands in 4a | Accepted |
+| [0016](0016-feature-scope.md) | Feature scope (count-up, pricing toggle, route transitions) | Accepted |
+| [0017](0017-primitive-location.md) | Polish primitives in `components/motion/` | Accepted |

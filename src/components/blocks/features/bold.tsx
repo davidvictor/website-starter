@@ -22,7 +22,7 @@ export function FeaturesBold() {
             <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
               Capabilities
             </span>
-            <h2 className="font-heading max-w-3xl text-balance text-[clamp(2.5rem,7vw,5rem)] leading-[0.95] font-bold tracking-tighter">
+            <h2 className="font-heading max-w-3xl text-[clamp(2.5rem,7vw,5rem)] leading-[0.95] font-bold tracking-tighter">
               Six primitives.
               <br />
               <span className="text-muted-foreground">Zero ceremony.</span>

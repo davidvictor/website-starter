@@ -18,7 +18,7 @@ export function FaqSaas() {
             <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
               FAQ
             </p>
-            <h2 className="font-heading text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h2 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
               Questions we&apos;ve been asked more than once.
             </h2>
           </div>

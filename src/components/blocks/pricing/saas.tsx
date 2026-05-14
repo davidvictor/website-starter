@@ -3,6 +3,7 @@
 import { Check } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import Link from "next/link"
+import { Press } from "@/components/motion/press"
 import { SPRING_STANDARD } from "@/components/motion/springs"
 import { Stagger } from "@/components/motion/stagger"
 import {
@@ -33,7 +34,7 @@ export function PricingSaas() {
           <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
             Pricing
           </p>
-          <h2 className="font-heading max-w-2xl text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 className="font-heading max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
             Start free. Scale honestly.
           </h2>
           <p className="max-w-xl text-balance text-muted-foreground">
@@ -98,17 +99,22 @@ export function PricingSaas() {
                   </ul>
                 </CardContent>
                 <CardFooter>
-                  <Link
-                    href="/contact"
-                    className={cn(
-                      buttonVariants({
-                        variant: tier.featured ? "default" : "outline",
-                      }),
-                      "w-full"
-                    )}
-                  >
-                    {tier.cta}
-                  </Link>
+                  <Press
+                    className="w-full"
+                    render={
+                      <Link
+                        href="/contact"
+                        className={cn(
+                          buttonVariants({
+                            variant: tier.featured ? "default" : "outline",
+                          }),
+                          "w-full"
+                        )}
+                      >
+                        {tier.cta}
+                      </Link>
+                    }
+                  />
                 </CardFooter>
               </Card>
             )

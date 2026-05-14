@@ -1,31 +1,35 @@
-# 0002 — Motion strategy: `motion/react` everywhere
+# 0002 — Motion strategy: hybrid `motion/react` + tuned CSS
 
-**Status:** Accepted
+**Status:** Accepted (revised)
 
 ## Decision
 
-All interactive motion uses `motion/react` (`AnimatePresence`, `motion.div`, springs). Base UI's `data-starting-style` / `data-ending-style` CSS animations are replaced for popover-family primitives (popover, dropdown, select, dialog, sheet, drawer, etc.).
+Motion is split by **who owns the mount lifecycle**:
+
+| Surface | Animation system |
+| --- | --- |
+| Dialog, AlertDialog, Sheet, Drawer | `motion/react` + `AnimatePresence` |
+| Popover, Hover-card, Tooltip, Dropdown, Menubar, Context-menu, Select, Combobox | CSS keyframes (`data-open` / `data-closed`) with tier-matched durations and easings |
+| Dev panel, route transitions, custom motion components, marketing animation | `motion/react` |
+| Scroll entrances (`FadeIn`, `Stagger`) | `motion/react` with tween (see ADR 0006) |
 
 ## Why
 
-Two competing motion systems creates fragmentation: `motion/react` handles enter/exit + state, CSS handles popovers. Authors must remember which is which. Unifying gives one mental model, shared spring tiers, and a single reduced-motion policy.
+The original locked decision was "unify on `motion/react` everywhere." Base UI's portal-managed primitives (popover, dropdown, select, menu, combobox, hover-card, tooltip) control their own mount/unmount through React portals. Wrapping their content in `AnimatePresence` from outside fights the portal teardown — `AnimatePresence` needs the child to stay mounted during exit, but Base UI yanks it via the portal.
+
+For dialog, alert-dialog, sheet, and drawer the wrapping works cleanly because the surface itself is the mount target. For the rest, fighting the framework costs more than it pays. We keep the CSS keyframe approach for that group but tune the durations and easings to match our spring tiers visually.
 
 ## How to apply
 
-- New components: reach for `<AnimatePresence>` + `motion.div` first.
-- Springs from [`@/components/motion/springs`](../../src/components/motion/springs.ts): `SPRING_MICRO`, `SPRING_STANDARD`, `SPRING_MACRO`.
-- For pure scroll entrances (no exit), `FadeIn` and `Stagger` remain (tween, not spring).
+- **Dialog-family surfaces** use `motion/react`: `<AnimatePresence>` wrapping a `motion.div` with `SPRING_MACRO`.
+- **Popover-family surfaces** use Tailwind's `animate-in` / `animate-out` keyframes with these tier-matched classes:
 
-### Addendum: Base UI portal primitives
+  | Tier | Tailwind classes |
+  | --- | --- |
+  | Micro (tooltip, hover-card) | `duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]` |
+  | Standard (popover, dropdown, select, menu, combobox) | `duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]` |
+  | Macro (legacy — should be migrated to motion/react) | `duration-400 ease-[cubic-bezier(0.22,1,0.36,1)]` |
 
-Base UI's popover-family primitives (Popover, Dropdown, Select, Dialog, Sheet, etc.) manage their own portal mount/unmount lifecycle. Wrapping their content in `AnimatePresence` doesn't compose cleanly because Base UI controls when children unmount.
+  The cubic-bezier visually approximates `{ bounce: 0 }` springs.
 
-**Pragmatic implementation:** keep Base UI's `data-open` / `data-closed` keyframe animations (from `tw-animate-css`) but tune the durations and easings to match our spring tiers:
-
-| Tier | Tailwind classes |
-| --- | --- |
-| Micro (tooltip, hover-card) | `duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]` |
-| Standard (popover, dropdown, select, menu, combobox) | `duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]` |
-| Macro (dialog, alert-dialog, sheet, drawer) | `duration-400 ease-[cubic-bezier(0.22,1,0.36,1)]` |
-
-These cubic-bezier curves approximate `{ bounce: 0 }` springs visually. Use `motion/react` + `AnimatePresence` for surfaces we control directly: dev panel, route transitions, custom motion components, anything that's not wrapped in a Base UI portal.
+- For new components we control end-to-end, reach for `motion/react` first. Springs from [`@/components/motion/springs`](../../src/components/motion/springs.ts).

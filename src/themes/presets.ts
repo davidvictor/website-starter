@@ -33,6 +33,7 @@ export const PRESETS: Record<Exclude<PresetId, "custom">, ControllerTheme> = {
         mono: "ibm-plex-mono",
         heading: "instrument-serif",
       },
+      routeTransition: "none",
     },
   },
   saas: {
@@ -57,6 +58,7 @@ export const PRESETS: Record<Exclude<PresetId, "custom">, ControllerTheme> = {
         mono: "geist-mono",
         heading: "geist-sans",
       },
+      routeTransition: "vertical-translate",
     },
   },
   bold: {
@@ -81,6 +83,7 @@ export const PRESETS: Record<Exclude<PresetId, "custom">, ControllerTheme> = {
         mono: "jetbrains-mono",
         heading: "geist-sans",
       },
+      routeTransition: "blur-scale-fade",
     },
   },
   cyber: {
@@ -105,6 +108,7 @@ export const PRESETS: Record<Exclude<PresetId, "custom">, ControllerTheme> = {
         mono: "jetbrains-mono",
         heading: "ibm-plex-mono",
       },
+      routeTransition: "blur-scale-fade",
     },
   },
 }

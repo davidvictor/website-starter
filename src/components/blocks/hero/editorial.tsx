@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
+import { Press } from "@/components/motion/press"
 import { buttonVariants } from "@/components/ui/button"
 import { brand, taglines } from "@/lib/brand"
 import { cn } from "@/lib/utils"
@@ -19,7 +20,7 @@ export function HeroEditorial() {
             </div>
           </FadeIn>
           <FadeIn delay={0.05}>
-            <h1 className="font-heading text-balance text-5xl leading-[0.95] font-medium tracking-tight sm:text-6xl md:text-7xl">
+            <h1 className="font-heading text-5xl leading-[0.95] font-medium tracking-tight sm:text-6xl md:text-7xl">
               Computers that finally{" "}
               <em className="font-heading italic text-brand-accent">
                 get the assignment.
@@ -33,13 +34,17 @@ export function HeroEditorial() {
           </FadeIn>
           <FadeIn delay={0.15}>
             <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
-              <Link
-                href="/pricing"
-                className={cn(buttonVariants({ size: "lg" }))}
-              >
-                Read the docs
-                <ArrowUpRight className="size-4" />
-              </Link>
+              <Press
+                render={
+                  <Link
+                    href="/pricing"
+                    className={cn(buttonVariants({ size: "lg" }))}
+                  >
+                    Read the docs
+                    <ArrowUpRight className="size-4" />
+                  </Link>
+                }
+              />
               <Link
                 href="/about"
                 className="text-sm text-foreground underline-offset-4 hover:underline"

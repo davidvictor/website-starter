@@ -1,7 +1,9 @@
 "use client"
 
 import { X } from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
 
+import { SPRING_MACRO } from "@/components/motion/springs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
@@ -23,36 +25,47 @@ function DevPanelInner() {
   return (
     <>
       {/* Edge handle — visible when panel is closed */}
-      <button
-        type="button"
-        aria-label="Open dev panel (press ~)"
-        onClick={() => setOpen(true)}
-        data-touch
-        className={cn(
-          "fixed top-1/2 right-0 z-[9998] -translate-y-1/2 rounded-l-md border border-r-0 border-border bg-card/90 px-1.5 py-3 backdrop-blur-md transition-[transform,background-color] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer",
-          "hover:bg-muted",
-          open ? "translate-x-full" : "translate-x-0"
+      <AnimatePresence>
+        {!open && (
+          <motion.button
+            type="button"
+            aria-label="Open dev panel (press ~)"
+            onClick={() => setOpen(true)}
+            data-touch
+            data-motion="macro"
+            initial={{ x: "100%", y: "-50%" }}
+            animate={{ x: 0, y: "-50%" }}
+            exit={{ x: "100%", y: "-50%" }}
+            transition={SPRING_MACRO}
+            className={cn(
+              "fixed top-1/2 right-0 z-[9998] rounded-l-md border border-r-0 border-border bg-card/90 px-1.5 py-3 backdrop-blur-md transition-[background-color] cursor-pointer",
+              "hover:bg-muted"
+            )}
+          >
+            <span className="flex flex-col items-center gap-1.5">
+              <span className="size-1 rounded-full bg-foreground/40" />
+              <span className="size-1 rounded-full bg-foreground/40" />
+              <span className="size-1 rounded-full bg-foreground/40" />
+            </span>
+          </motion.button>
         )}
-      >
-        <span className="flex flex-col items-center gap-1.5">
-          <span className="size-1 rounded-full bg-foreground/40" />
-          <span className="size-1 rounded-full bg-foreground/40" />
-          <span className="size-1 rounded-full bg-foreground/40" />
-        </span>
-      </button>
+      </AnimatePresence>
 
       {/* The sheet itself */}
-      <aside
-        data-state={open ? "open" : "closed"}
-        data-motion="macro"
-        aria-hidden={!open}
-        className={cn(
-          "fixed inset-y-0 right-0 z-[9999] flex w-full max-w-[380px] flex-col border-l border-border bg-card/95 text-card-foreground shadow-[var(--shadow-overlay)] backdrop-blur-md",
-          "transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)]",
-          open ? "translate-x-0" : "translate-x-full"
-        )}
-        aria-label="Dev panel"
-      >
+      <AnimatePresence>
+        {open && (
+          <motion.aside
+            data-state="open"
+            data-motion="macro"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={SPRING_MACRO}
+            className={cn(
+              "fixed inset-y-0 right-0 z-[9999] flex w-full max-w-[380px] flex-col border-l border-border bg-card/95 text-card-foreground shadow-[var(--shadow-overlay)] backdrop-blur-md"
+            )}
+            aria-label="Dev panel"
+          >
         <header className="flex h-9 shrink-0 items-center justify-between gap-2 border-b border-border bg-muted/40 px-2.5">
           <span className="flex items-center gap-1.5 text-xs font-medium tracking-tight">
             <span className="size-1.5 rounded-full bg-emerald-500" />
@@ -138,7 +151,9 @@ function DevPanelInner() {
             </ScrollArea>
           </TabsContent>
         </Tabs>
-      </aside>
+          </motion.aside>
+        )}
+      </AnimatePresence>
     </>
   )
 }

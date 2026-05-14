@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
 import { MeshGradient } from "@/components/shaders/mesh-gradient"
+import { Press } from "@/components/motion/press"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -30,7 +31,7 @@ export function CtaBold() {
           </span>
         </FadeIn>
         <FadeIn delay={0.05}>
-          <h2 className="font-heading max-w-4xl text-balance text-[clamp(2.5rem,9vw,7rem)] leading-[0.9] font-bold tracking-tighter">
+          <h2 className="font-heading max-w-4xl text-[clamp(2.5rem,9vw,7rem)] leading-[0.9] font-bold tracking-tighter">
             Stop integrating.
             <br />
             Start shipping.
@@ -44,25 +45,33 @@ export function CtaBold() {
           </p>
         </FadeIn>
         <FadeIn delay={0.15} className="flex flex-wrap items-center gap-3">
-          <Link
-            href="/pricing"
-            className={cn(
-              buttonVariants({ size: "lg" }),
-              "border-background bg-background text-foreground hover:bg-background/90"
-            )}
-          >
-            Start free
-            <ArrowRight className="size-4" />
-          </Link>
-          <Link
-            href="/customers"
-            className={cn(
-              buttonVariants({ size: "lg", variant: "outline" }),
-              "border-background/40 bg-transparent text-background hover:bg-background/10"
-            )}
-          >
-            Read customer stories
-          </Link>
+          <Press
+            render={
+              <Link
+                href="/pricing"
+                className={cn(
+                  buttonVariants({ size: "lg" }),
+                  "border-background bg-background text-foreground hover:bg-background/90"
+                )}
+              >
+                Start free
+                <ArrowRight className="size-4" />
+              </Link>
+            }
+          />
+          <Press
+            render={
+              <Link
+                href="/customers"
+                className={cn(
+                  buttonVariants({ size: "lg", variant: "outline" }),
+                  "border-background/40 bg-transparent text-background hover:bg-background/10"
+                )}
+              >
+                Read customer stories
+              </Link>
+            }
+          />
         </FadeIn>
       </div>
     </section>

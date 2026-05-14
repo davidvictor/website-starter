@@ -45,6 +45,7 @@ export function FloatingControls({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
+        data-touch
         className="flex h-8 items-center justify-between gap-2 border-b border-border px-2.5 hover:bg-muted/50"
       >
         <span className="flex items-center gap-1.5 text-xs font-medium tracking-tight">
@@ -121,6 +122,7 @@ export function ControlColor({
           type="color"
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          data-touch
           className="size-5 cursor-pointer rounded border border-border bg-transparent p-0"
         />
         <span className="font-mono text-[10px]">{value}</span>
@@ -145,6 +147,7 @@ export function ControlBoolean({
         type="checkbox"
         checked={value}
         onChange={(e) => onChange(e.target.checked)}
+        data-touch
         className="size-4 cursor-pointer accent-foreground"
       />
     </label>

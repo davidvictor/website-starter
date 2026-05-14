@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
+import { Press } from "@/components/motion/press"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -14,7 +15,7 @@ export function CtaEditorial() {
               <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
                 Closing notes
               </span>
-              <h2 className="font-heading mt-4 max-w-2xl text-balance text-4xl leading-tight font-medium tracking-tight md:text-5xl">
+              <h2 className="font-heading mt-4 max-w-2xl text-4xl leading-tight font-medium tracking-tight md:text-5xl">
                 Build cognitive infrastructure that ships{" "}
                 <em className="font-heading italic text-brand-accent">
                   this quarter.
@@ -22,13 +23,17 @@ export function CtaEditorial() {
               </h2>
             </div>
             <div className="flex flex-col items-start gap-3 md:col-span-5 md:items-end">
-              <Link
-                href="/pricing"
-                className={cn(buttonVariants({ size: "lg" }))}
-              >
-                Start free
-                <ArrowUpRight className="size-4" />
-              </Link>
+              <Press
+                render={
+                  <Link
+                    href="/pricing"
+                    className={cn(buttonVariants({ size: "lg" }))}
+                  >
+                    Start free
+                    <ArrowUpRight className="size-4" />
+                  </Link>
+                }
+              />
               <Link
                 href="/contact"
                 className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"

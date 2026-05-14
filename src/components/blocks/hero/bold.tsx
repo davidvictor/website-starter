@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
 import { GrainGradient } from "@/components/shaders/grain-gradient"
+import { Press } from "@/components/motion/press"
 import { buttonVariants } from "@/components/ui/button"
 import { taglines } from "@/lib/brand"
 import { cn } from "@/lib/utils"
@@ -33,7 +34,7 @@ export function HeroBold() {
         </FadeIn>
 
         <FadeIn delay={0.05}>
-          <h1 className="font-heading max-w-5xl text-balance text-[clamp(3rem,11vw,8rem)] leading-[0.85] font-bold tracking-tighter">
+          <h1 className="font-heading max-w-5xl text-[clamp(3rem,11vw,8rem)] leading-[0.85] font-bold tracking-tighter">
             Computers
             <br />
             that finally
@@ -47,25 +48,33 @@ export function HeroBold() {
             {taglines.secondary}
           </p>
           <div className="flex flex-wrap items-end gap-3 md:col-span-5 md:justify-end">
-            <Link
-              href="/pricing"
-              className={cn(
-                buttonVariants({ size: "lg" }),
-                "border-background bg-background text-foreground hover:bg-background/90"
-              )}
-            >
-              Get started
-              <ArrowRight className="size-4" />
-            </Link>
-            <Link
-              href="/customers"
-              className={cn(
-                buttonVariants({ size: "lg", variant: "outline" }),
-                "border-background/40 bg-transparent text-background hover:bg-background/10"
-              )}
-            >
-              See it in production
-            </Link>
+            <Press
+              render={
+                <Link
+                  href="/pricing"
+                  className={cn(
+                    buttonVariants({ size: "lg" }),
+                    "border-background bg-background text-foreground hover:bg-background/90"
+                  )}
+                >
+                  Get started
+                  <ArrowRight className="size-4" />
+                </Link>
+              }
+            />
+            <Press
+              render={
+                <Link
+                  href="/customers"
+                  className={cn(
+                    buttonVariants({ size: "lg", variant: "outline" }),
+                    "border-background/40 bg-transparent text-background hover:bg-background/10"
+                  )}
+                >
+                  See it in production
+                </Link>
+              }
+            />
           </div>
         </FadeIn>
 

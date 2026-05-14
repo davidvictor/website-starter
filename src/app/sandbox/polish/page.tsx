@@ -1,10 +1,17 @@
 "use client"
 
+import { motion } from "motion/react"
 import { Bell, Moon, Sun } from "lucide-react"
 import { useState } from "react"
+
 import { AnimatedNumber } from "@/components/motion/animated-number"
 import { IconMorph } from "@/components/motion/icon-morph"
 import { Press } from "@/components/motion/press"
+import {
+  SPRING_MACRO,
+  SPRING_MICRO,
+  SPRING_STANDARD,
+} from "@/components/motion/springs"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatCompact, formatPercent } from "@/lib/format"
@@ -12,13 +19,21 @@ import { formatCompact, formatPercent } from "@/lib/format"
 /**
  * Live reference for the polish system. Renders every motion primitive,
  * each surface treatment, the radius scale, tabular vs proportional nums,
- * and the spring tiers side-by-side. See docs/UI_POLISH.md.
+ * the three spring tiers, and a reduced-motion preview toggle.
+ * See docs/UI_POLISH.md.
  */
 export default function PolishSandboxPage() {
   const [iconActive, setIconActive] = useState(false)
+  const [springPlay, setSpringPlay] = useState(0)
+  const [reducedPreview, setReducedPreview] = useState(false)
 
   return (
-    <div className="mx-auto flex max-w-5xl flex-col gap-12 px-4 py-12 sm:px-6 lg:px-8">
+    <div
+      // Preview reduced-motion locally by adding the `prefers-reduced-motion`
+      // media via data-motion overrides on the inspected subtree.
+      data-reduced-preview={reducedPreview || undefined}
+      className="mx-auto flex max-w-5xl flex-col gap-12 px-4 py-12 sm:px-6 lg:px-8"
+    >
       <header className="flex flex-col gap-2">
         <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
           Sandbox
@@ -31,6 +46,20 @@ export default function PolishSandboxPage() {
           the polish system ships with. Use this page as the regression
           reference when sweeping the codebase.
         </p>
+        <div className="mt-2 inline-flex items-center gap-2 text-xs">
+          <label className="inline-flex cursor-pointer items-center gap-2">
+            <input
+              type="checkbox"
+              checked={reducedPreview}
+              onChange={(e) => setReducedPreview(e.target.checked)}
+              data-touch
+              className="size-4 cursor-pointer accent-foreground"
+            />
+            <span className="text-muted-foreground">
+              Preview reduced-motion (skips macro tier on this page)
+            </span>
+          </label>
+        </div>
       </header>
 
       <section className="flex flex-col gap-4">
@@ -101,6 +130,87 @@ export default function PolishSandboxPage() {
             </CardContent>
           </Card>
         </div>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="font-heading text-2xl font-medium tracking-tight">
+          Spring tiers (ADR 0007)
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Press the play button to compare durations side-by-side. Each block
+          slides 80px on the same trigger.
+        </p>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={() => setSpringPlay((n) => n + 1)}
+          >
+            Play
+          </Button>
+          <span className="text-xs text-muted-foreground">
+            Replays whenever you press the button
+          </span>
+        </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <Card>
+            <CardHeader>
+              <CardTitle>Micro · 0.2s</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <motion.div
+                key={`micro-${springPlay}`}
+                data-motion="macro"
+                initial={{ x: 0 }}
+                animate={{ x: 80 }}
+                transition={SPRING_MICRO}
+                className="h-8 w-8 rounded-md bg-foreground"
+              />
+              <p className="mt-2 text-xs text-muted-foreground">
+                Press, hover-card, tooltip, icon morph.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Standard · 0.3s</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <motion.div
+                key={`standard-${springPlay}`}
+                data-motion="macro"
+                initial={{ x: 0 }}
+                animate={{ x: 80 }}
+                transition={SPRING_STANDARD}
+                className="h-8 w-8 rounded-md bg-foreground"
+              />
+              <p className="mt-2 text-xs text-muted-foreground">
+                Popover, dropdown, select, menu, combobox.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Macro · 0.4s</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <motion.div
+                key={`macro-${springPlay}`}
+                data-motion="macro"
+                initial={{ x: 0 }}
+                animate={{ x: 80 }}
+                transition={SPRING_MACRO}
+                className="h-8 w-8 rounded-md bg-foreground"
+              />
+              <p className="mt-2 text-xs text-muted-foreground">
+                Dialog, alert dialog, sheet, drawer, dev panel.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Macro motion respects `prefers-reduced-motion`. Toggle the preview
+          above (or your OS setting) to see motion collapse to instant.
+        </p>
       </section>
 
       <section className="flex flex-col gap-4">

@@ -1,24 +1,19 @@
 /**
- * Format helpers — Intl-based formatters for the typed numeric data in brand.ts.
- * See docs/adr/0008-brand-numeric-schema.md.
+ * Format helpers — Intl-based formatters for the typed numeric data
+ * shaped in `@/lib/brand-types`. See docs/adr/0008-brand-numeric-schema.md.
+ *
+ * Types are re-exported from `@/lib/brand-types` for backward compatibility.
  */
 
-export type Cadence = "month" | "year"
+import type {
+  Cadence,
+  Metric,
+  MetricFormat,
+  Price,
+  StatPair,
+} from "@/lib/brand-types"
 
-export type Price = {
-  value: number
-  currency: "USD"
-  cadence?: Cadence
-}
-
-export type MetricFormat = "compact" | "percent" | "plain"
-
-export type Metric = {
-  value: number
-  unit?: string
-  format: MetricFormat
-  precision?: number
-}
+export type { Cadence, Metric, MetricFormat, Price, StatPair }
 
 const CADENCE_SUFFIX: Record<Cadence, string> = {
   month: "/mo",
@@ -32,8 +27,7 @@ export function formatCurrency(price: Price): string {
     minimumFractionDigits: Number.isInteger(price.value) ? 0 : 2,
     maximumFractionDigits: 2,
   })
-  const base = formatter.format(price.value)
-  return price.cadence ? `${base}${CADENCE_SUFFIX[price.cadence]}` : base
+  return `${formatter.format(price.value)}${CADENCE_SUFFIX[price.cadence]}`
 }
 
 export function formatPrice(price: Price): { amount: string; cadence: string } {
@@ -45,7 +39,7 @@ export function formatPrice(price: Price): { amount: string; cadence: string } {
   })
   return {
     amount: formatter.format(price.value),
-    cadence: price.cadence ? CADENCE_SUFFIX[price.cadence] : "",
+    cadence: CADENCE_SUFFIX[price.cadence],
   }
 }
 
@@ -71,6 +65,15 @@ export function formatPlain(value: number, precision = 0): string {
   }).format(value)
 }
 
+export function formatCurrencyCompact(value: number, precision = 1): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    notation: "compact",
+    maximumFractionDigits: precision,
+  }).format(value)
+}
+
 export function formatMetric(metric: Metric): string {
   const precision = metric.precision ?? (metric.format === "percent" ? 0 : 1)
   let core: string
@@ -83,6 +86,9 @@ export function formatMetric(metric: Metric): string {
       break
     case "plain":
       core = formatPlain(metric.value, precision)
+      break
+    case "currency":
+      core = formatCurrencyCompact(metric.value, precision)
       break
   }
   return metric.unit ? `${core}${metric.unit}` : core
@@ -97,15 +103,4 @@ const DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
 export function formatDate(isoOrDate: string | Date): string {
   const date = typeof isoOrDate === "string" ? new Date(isoOrDate) : isoOrDate
   return DATE_FORMATTER.format(date)
-}
-
-/**
- * Render either a Metric or a Price. Useful for cases where a value might be
- * a percentage, a multiplier, or a currency amount (e.g. customer metrics).
- */
-export function formatMetricOrPrice(value: Metric | Price): string {
-  if ("currency" in value) {
-    return formatCurrency(value)
-  }
-  return formatMetric(value)
 }

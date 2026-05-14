@@ -4,6 +4,8 @@ import { AnimatePresence, motion, type Variants } from "motion/react"
 import { usePathname } from "next/navigation"
 import type { ReactNode } from "react"
 
+import { useTheme } from "@/providers/theme-provider"
+
 import { SPRING_MACRO } from "./springs"
 import { useShouldReduceMacro } from "./use-should-reduce-macro"
 
@@ -14,6 +16,9 @@ import { useShouldReduceMacro } from "./use-should-reduce-macro"
  *   none               — instant swap (reference pages, dashboards)
  *   vertical-translate — fade + 16px upward translate on enter, 8px down on exit
  *   blur-scale-fade    — opacity + scale + blur (the canonical polish-kit feel)
+ *
+ * When no `mode` prop is provided, the mode is sourced from the active
+ * theme's derivation (per-preset defaults). Reduced-motion forces `none`.
  */
 export type RouteTransitionMode =
   | "none"
@@ -33,18 +38,22 @@ const BLUR_SCALE_VARIANTS: Variants = {
 }
 
 type RouteTransitionProps = {
+  /**
+   * Override the per-theme default. Omit to use
+   * `theme.derivation.routeTransition`.
+   */
   mode?: RouteTransitionMode
   children: ReactNode
 }
 
-export function RouteTransition({
-  mode = "vertical-translate",
-  children,
-}: RouteTransitionProps) {
+export function RouteTransition({ mode, children }: RouteTransitionProps) {
   const pathname = usePathname()
   const reduce = useShouldReduceMacro()
+  const { theme } = useTheme()
 
-  const effective: RouteTransitionMode = reduce ? "none" : mode
+  const themeMode = theme.derivation.routeTransition ?? "vertical-translate"
+  const resolved = mode ?? themeMode
+  const effective: RouteTransitionMode = reduce ? "none" : resolved
 
   if (effective === "none") {
     return <>{children}</>

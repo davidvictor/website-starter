@@ -12,6 +12,9 @@ import {
 } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
 
+import { IconMorph } from "@/components/motion/icon-morph"
+import { Press } from "@/components/motion/press"
+import { useConcentric } from "@/components/motion/use-concentric"
 import { Button } from "@/components/ui/button"
 import { FontPicker } from "@/components/ui/font-picker"
 import { Input } from "@/components/ui/input"
@@ -176,19 +179,23 @@ export function ThemesTab() {
           {PRESET_ORDER.map((id) => {
             const active = theme.presetId === id && !isOverridden
             return (
-              <button
-                type="button"
+              <Press
                 key={id}
-                onClick={() => applyPreset(id)}
-                className={cn(
-                  "h-7 rounded-md border text-xs font-medium capitalize transition-colors cursor-pointer",
-                  active
-                    ? "border-foreground bg-foreground text-background"
-                    : "border-border hover:bg-muted"
-                )}
-              >
-                {PRESETS[id].name}
-              </button>
+                render={
+                  <button
+                    type="button"
+                    onClick={() => applyPreset(id)}
+                    className={cn(
+                      "h-7 rounded-md border text-xs font-medium capitalize transition-colors cursor-pointer",
+                      active
+                        ? "border-foreground bg-foreground text-background"
+                        : "border-border hover:bg-muted"
+                    )}
+                  >
+                    {PRESETS[id].name}
+                  </button>
+                }
+              />
             )
           })}
         </div>
@@ -202,7 +209,20 @@ export function ThemesTab() {
       <Separator />
 
       {/* MODE */}
-      <Section label="mode">
+      <Section
+        label="mode"
+        trailing={
+          <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground">
+            resolved
+            <IconMorph
+              from={Sun}
+              to={Moon}
+              active={resolvedMode === "dark"}
+              size={12}
+            />
+          </span>
+        }
+      >
         <div className="grid grid-cols-3 gap-1">
           {modeOptions.map(({ value, icon: Icon, label }) => (
             <Button
@@ -330,6 +350,33 @@ export function ThemesTab() {
             className="h-7 font-mono text-xs"
           />
         </div>
+        <div className="flex flex-col gap-1">
+          <SubLabel>route transition</SubLabel>
+          <div className="flex flex-wrap gap-1">
+            {(
+              [
+                "none",
+                "vertical-translate",
+                "blur-scale-fade",
+              ] as const
+            ).map((m) => (
+              <Button
+                key={m}
+                size="xs"
+                variant={
+                  (theme.derivation.routeTransition ?? "vertical-translate") ===
+                  m
+                    ? "default"
+                    : "outline"
+                }
+                className="h-6 text-[10px]"
+                onClick={() => patchDerivation({ routeTransition: m })}
+              >
+                {m}
+              </Button>
+            ))}
+          </div>
+        </div>
       </DisclosureSection>
 
       <Separator />
@@ -388,21 +435,26 @@ export function ThemesTab() {
 function Section({
   label,
   sublabel,
+  trailing,
   children,
 }: {
   label: string
   sublabel?: string
+  trailing?: React.ReactNode
   children: React.ReactNode
 }) {
   return (
     <section className="flex flex-col gap-1.5">
-      <Label className="flex items-baseline gap-2 text-[10px] font-medium tracking-wider text-muted-foreground uppercase">
-        <span>{label}</span>
-        {sublabel && (
-          <span className="font-mono text-[9px] normal-case tracking-normal text-muted-foreground/60">
-            {sublabel}
-          </span>
-        )}
+      <Label className="flex items-baseline justify-between gap-2 text-[10px] font-medium tracking-wider text-muted-foreground uppercase">
+        <span className="flex items-baseline gap-2">
+          <span>{label}</span>
+          {sublabel && (
+            <span className="font-mono text-[9px] normal-case tracking-normal text-muted-foreground/60">
+              {sublabel}
+            </span>
+          )}
+        </span>
+        {trailing}
       </Label>
       {children}
     </section>
@@ -425,6 +477,9 @@ function DisclosureSection({
   children: React.ReactNode
 }) {
   const [open, setOpen] = useState(false)
+  // Outer rounded-md (8px) + p-2.5 (10px) → inner content should clip
+  // close to flush. `useConcentric` returns rounded-none here.
+  const innerRadius = useConcentric("rounded-md", 10)
   return (
     <section className="flex flex-col gap-2">
       <button
@@ -438,7 +493,12 @@ function DisclosureSection({
         />
       </button>
       {open && (
-        <div className="flex flex-col gap-3 rounded-md border border-border bg-muted/20 p-2.5">
+        <div
+          className={cn(
+            "flex flex-col gap-3 rounded-md border border-border bg-muted/20 p-2.5",
+            "[&>*:where(.concentric-inner)]:" + innerRadius
+          )}
+        >
           {children}
         </div>
       )}

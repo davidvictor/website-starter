@@ -1,6 +1,7 @@
 import { ArrowRight, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
+import { Press } from "@/components/motion/press"
 import { MeshGradient } from "@/components/shaders/mesh-gradient"
 import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
@@ -34,7 +35,7 @@ export function HeroSaas() {
         </FadeIn>
 
         <FadeIn delay={0.05}>
-          <h1 className="font-heading max-w-3xl text-balance text-5xl font-semibold tracking-tight sm:text-6xl md:text-7xl">
+          <h1 className="font-heading max-w-3xl text-5xl font-semibold tracking-tight sm:text-6xl md:text-7xl">
             Computers that finally{" "}
             <span className="bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
               get the assignment.
@@ -52,16 +53,29 @@ export function HeroSaas() {
           delay={0.15}
           className="mt-4 flex flex-wrap items-center justify-center gap-3"
         >
-          <Link href="/pricing" className={cn(buttonVariants({ size: "lg" }))}>
-            Start free
-            <ArrowRight className="size-4" />
-          </Link>
-          <Link
-            href="/contact"
-            className={cn(buttonVariants({ size: "lg", variant: "outline" }))}
-          >
-            Talk to sales
-          </Link>
+          <Press
+            render={
+              <Link
+                href="/pricing"
+                className={cn(buttonVariants({ size: "lg" }))}
+              >
+                Start free
+                <ArrowRight className="size-4" />
+              </Link>
+            }
+          />
+          <Press
+            render={
+              <Link
+                href="/contact"
+                className={cn(
+                  buttonVariants({ size: "lg", variant: "outline" })
+                )}
+              >
+                Talk to sales
+              </Link>
+            }
+          />
         </FadeIn>
 
         <FadeIn delay={0.2}>

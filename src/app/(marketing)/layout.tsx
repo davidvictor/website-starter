@@ -10,7 +10,7 @@ export default function MarketingLayout({
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="flex flex-1 flex-col">
-        <RouteTransition mode="vertical-translate">{children}</RouteTransition>
+        <RouteTransition>{children}</RouteTransition>
       </main>
     </div>
   )

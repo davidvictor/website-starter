@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
 import { GrainGradient } from "@/components/shaders/grain-gradient"
+import { Press } from "@/components/motion/press"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -26,7 +27,7 @@ export function CtaSaas() {
 
           <div className="relative flex flex-col items-center gap-5 px-6 py-16 text-center sm:px-12 sm:py-20">
             <FadeIn>
-              <h2 className="font-heading max-w-2xl text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+              <h2 className="font-heading max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
                 Ready to ship reasoning to production?
               </h2>
             </FadeIn>
@@ -40,21 +41,29 @@ export function CtaSaas() {
               delay={0.1}
               className="flex flex-wrap items-center justify-center gap-3"
             >
-              <Link
-                href="/pricing"
-                className={cn(buttonVariants({ size: "lg" }))}
-              >
-                Start free
-                <ArrowRight className="size-4" />
-              </Link>
-              <Link
-                href="/contact"
-                className={cn(
-                  buttonVariants({ size: "lg", variant: "outline" })
-                )}
-              >
-                Talk to sales
-              </Link>
+              <Press
+                render={
+                  <Link
+                    href="/pricing"
+                    className={cn(buttonVariants({ size: "lg" }))}
+                  >
+                    Start free
+                    <ArrowRight className="size-4" />
+                  </Link>
+                }
+              />
+              <Press
+                render={
+                  <Link
+                    href="/contact"
+                    className={cn(
+                      buttonVariants({ size: "lg", variant: "outline" })
+                    )}
+                  >
+                    Talk to sales
+                  </Link>
+                }
+              />
             </FadeIn>
           </div>
         </div>

@@ -4,6 +4,7 @@ import { Check } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
+import { Press } from "@/components/motion/press"
 import { SPRING_STANDARD } from "@/components/motion/springs"
 import {
   PricingToggle,
@@ -31,7 +32,7 @@ export function PricingEditorial() {
 
         <FadeIn delay={0.05}>
           <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-12">
-            <h2 className="font-heading text-balance text-4xl leading-tight font-medium tracking-tight md:col-span-7 md:text-5xl">
+            <h2 className="font-heading text-4xl leading-tight font-medium tracking-tight md:col-span-7 md:text-5xl">
               Three brackets. No surprises.
             </h2>
             <p className="text-balance text-muted-foreground md:col-span-5 md:pt-3">
@@ -102,18 +103,23 @@ export function PricingEditorial() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  href="/contact"
-                  className={cn(
-                    buttonVariants({
-                      variant: tier.featured ? "default" : "outline",
-                      size: "sm",
-                    }),
-                    "mt-auto"
-                  )}
-                >
-                  {tier.cta}
-                </Link>
+                <Press
+                  className="mt-auto"
+                  render={
+                    <Link
+                      href="/contact"
+                      className={cn(
+                        buttonVariants({
+                          variant: tier.featured ? "default" : "outline",
+                          size: "sm",
+                        }),
+                        "mt-auto"
+                      )}
+                    >
+                      {tier.cta}
+                    </Link>
+                  }
+                />
               </FadeIn>
             )
           })}

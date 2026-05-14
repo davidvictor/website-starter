@@ -8,7 +8,12 @@ import {
 } from "@/lib/color"
 
 import type { ControllerInputs, DerivationProfile } from "./controller-types"
-import type { ColorTokens } from "./types"
+import {
+  DEFAULT_SHADOWS_DARK,
+  DEFAULT_SHADOWS_LIGHT,
+  type ColorTokens,
+  type ShadowTokens,
+} from "./types"
 
 type Mode = "light" | "dark"
 
@@ -205,4 +210,12 @@ export function deriveTokens(
     warning: oklchToCss(warning),
     info: oklchToCss(info),
   }
+}
+
+/**
+ * Polish shadow tokens. Defaults baked from the polish system (see
+ * ADR 0003). Themes can override these via per-theme shadow overrides.
+ */
+export function deriveShadows(mode: Mode): ShadowTokens {
+  return mode === "dark" ? DEFAULT_SHADOWS_DARK : DEFAULT_SHADOWS_LIGHT
 }

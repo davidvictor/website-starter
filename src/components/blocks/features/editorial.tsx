@@ -16,7 +16,7 @@ export function FeaturesEditorial() {
 
         <FadeIn delay={0.05}>
           <div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-12">
-            <h2 className="font-heading text-balance text-4xl leading-tight font-medium tracking-tight md:col-span-7 md:text-5xl">
+            <h2 className="font-heading text-4xl leading-tight font-medium tracking-tight md:col-span-7 md:text-5xl">
               The cognitive primitives that ship.
             </h2>
             <p className="text-balance text-muted-foreground md:col-span-5 md:pt-3">

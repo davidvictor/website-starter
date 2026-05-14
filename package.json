@@ -20,7 +20,7 @@
     "start": "next start",
     "format": "biome format --write .",
     "lint": "biome lint .",
-    "check": "biome check .",
+    "check": "biome check . && pnpm check:polish",
     "check:polish": "node scripts/check-polish.mjs"
   },
   "dependencies": {

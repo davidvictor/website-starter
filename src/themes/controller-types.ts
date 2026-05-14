@@ -44,6 +44,11 @@ export type DerivationProfile = {
   radius: string
   /** Per-role font keys. */
   fonts: { sans: FontKey; mono: FontKey; heading: FontKey }
+  /**
+   * Page transition mode for the marketing layout. See
+   * docs/adr/0012-route-transition.md.
+   */
+  routeTransition?: "none" | "vertical-translate" | "blur-scale-fade"
 }
 
 /**

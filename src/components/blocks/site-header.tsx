@@ -37,6 +37,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-8">
           <Link
             href="/"
+            data-touch
             className="flex items-center gap-2 text-sm font-semibold tracking-tight"
           >
             <span className="grid size-6 place-items-center rounded-md bg-foreground text-background">

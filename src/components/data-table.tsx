@@ -577,6 +577,7 @@ export function DataTable({
             <div className="ml-auto flex items-center gap-2 lg:ml-0">
               <Button
                 variant="outline"
+                data-touch
                 className="hidden h-8 w-8 p-0 lg:flex"
                 onClick={() => table.setPageIndex(0)}
                 disabled={!table.getCanPreviousPage()}
@@ -586,6 +587,7 @@ export function DataTable({
               </Button>
               <Button
                 variant="outline"
+                data-touch
                 className="size-8"
                 size="icon"
                 onClick={() => table.previousPage()}
@@ -596,6 +598,7 @@ export function DataTable({
               </Button>
               <Button
                 variant="outline"
+                data-touch
                 className="size-8"
                 size="icon"
                 onClick={() => table.nextPage()}
@@ -606,6 +609,7 @@ export function DataTable({
               </Button>
               <Button
                 variant="outline"
+                data-touch
                 className="hidden size-8 lg:flex"
                 size="icon"
                 onClick={() => table.setPageIndex(table.getPageCount() - 1)}

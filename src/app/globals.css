@@ -215,3 +215,11 @@
     transition-duration: 1ms !important;
   }
 }
+
+/* Manual preview override used by /sandbox/polish to demo reduced-motion. */
+/* biome-ignore lint/complexity/noImportantStyles: a11y override preview */
+[data-reduced-preview] [data-motion="macro"],
+[data-reduced-preview] [data-motion="macro"] * {
+  animation-duration: 1ms !important;
+  transition-duration: 1ms !important;
+}

@@ -7,7 +7,7 @@ import {
 } from "@/components/blocks"
 import { FadeIn } from "@/components/motion/fade-in"
 import { customers } from "@/lib/brand"
-import { formatMetricOrPrice } from "@/lib/format"
+import { formatMetric } from "@/lib/format"
 
 export const metadata = {
   title: "Customers · Nimbus",
@@ -68,7 +68,7 @@ export default function CustomersPage() {
                       {c.metric.label}
                     </p>
                     <p className="font-heading text-3xl font-semibold tracking-tight tabular">
-                      {formatMetricOrPrice(c.metric.value)}
+                      {formatMetric(c.metric.value)}
                     </p>
                   </div>
                 </div>

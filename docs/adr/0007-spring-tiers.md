@@ -14,7 +14,7 @@ Three named springs cover every interactive motion in the system:
 
 ## Why
 
-A single canonical spring doesn't fit motion of every magnitude — a 0.2s feel on a sheet looks rushed; a 0.4s feel on a press is sluggish. Two tiers wasn't enough to capture the gap between popovers and dialogs. Three is the smallest set that covers the size space cleanly.
+A single canonical spring doesn't fit motion of every magnitude — a 0.2s feel on a sheet looks rushed; a 0.4s feel on a press is sluggish. The original interview answer was "two-tier" but in implementation a third (standard) tier was needed to cover popovers, dropdowns, and menus — they read as rushed at micro and sluggish at macro. Three is the smallest set that covers the size space cleanly; this ADR formalizes the deviation.
 
 ## How to apply
 

@@ -2,6 +2,22 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Card — the standard surface primitive.
+ *
+ * Surface treatment: `ring-1 ring-foreground/10 + shadow-[var(--shadow-raised)]`.
+ * See docs/adr/0003-surface-treatment.md.
+ *
+ * Concentric radius math (docs/adr/0010-radius-enforcement.md):
+ *   outer `rounded-xl` (14px) + `px-4 py-4` (16px) → inner content radius
+ *   should be `rounded-sm` (6px) or smaller. Inner image caps use
+ *   `rounded-t-xl` / `rounded-b-xl` because they sit flush with the edge
+ *   (no padding between image and outer ring). The CardFooter inherits
+ *   `rounded-b-xl` flush with the bottom edge for the same reason.
+ *
+ * Nested cards or content with padding should use `useConcentric()` from
+ * `@/components/motion` to compute the inner radius dynamically.
+ */
 function Card({
   className,
   size = "default",
@@ -12,7 +28,7 @@ function Card({
       data-slot="card"
       data-size={size}
       className={cn(
-        "group/card flex flex-col gap-4 overflow-hidden rounded-xl bg-card py-4 text-sm text-card-foreground ring-1 ring-foreground/10 shadow-[var(--shadow-subtle)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
+        "group/card flex flex-col gap-4 overflow-hidden rounded-xl bg-card py-4 text-sm text-card-foreground ring-1 ring-foreground/10 shadow-[var(--shadow-raised)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
         className
       )}
       {...props}

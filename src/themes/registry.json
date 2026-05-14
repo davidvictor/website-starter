@@ -21,7 +21,8 @@
           "sans": "geist-sans",
           "mono": "ibm-plex-mono",
           "heading": "instrument-serif"
-        }
+        },
+        "routeTransition": "none"
       }
     },
     {
@@ -44,7 +45,8 @@
           "sans": "geist-sans",
           "mono": "geist-mono",
           "heading": "geist-sans"
-        }
+        },
+        "routeTransition": "vertical-translate"
       }
     },
     {
@@ -67,7 +69,8 @@
           "sans": "geist-sans",
           "mono": "jetbrains-mono",
           "heading": "geist-sans"
-        }
+        },
+        "routeTransition": "blur-scale-fade"
       }
     },
     {
@@ -90,7 +93,8 @@
           "sans": "ibm-plex-mono",
           "mono": "jetbrains-mono",
           "heading": "ibm-plex-mono"
-        }
+        },
+        "routeTransition": "blur-scale-fade"
       }
     }
   ]

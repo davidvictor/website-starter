@@ -1,3 +1,4 @@
+import { deriveShadows } from "@/themes/derive"
 import {
   baseThemes,
   defaultThemeId,
@@ -28,8 +29,16 @@ export function ThemeScript() {
 
   for (const theme of baseThemes) {
     themeMap[theme.id] = {
-      light: tokensToCssVars(resolveTokens(theme, "light"), theme),
-      dark: tokensToCssVars(resolveTokens(theme, "dark"), theme),
+      light: tokensToCssVars(
+        resolveTokens(theme, "light"),
+        deriveShadows("light"),
+        theme
+      ),
+      dark: tokensToCssVars(
+        resolveTokens(theme, "dark"),
+        deriveShadows("dark"),
+        theme
+      ),
       meta: {
         accentUsage: theme.derivation.accentUsage,
         contrast: theme.derivation.contrast,

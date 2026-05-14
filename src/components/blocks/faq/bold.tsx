@@ -6,7 +6,7 @@ export function FaqBold() {
     <section className="border-b border-border bg-muted/20">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
         <FadeIn>
-          <h2 className="font-heading mb-16 max-w-4xl text-balance text-[clamp(2.5rem,7vw,5rem)] leading-[0.95] font-bold tracking-tighter">
+          <h2 className="font-heading mb-16 max-w-4xl text-[clamp(2.5rem,7vw,5rem)] leading-[0.95] font-bold tracking-tighter">
             Things people ask.
             <br />
             <span className="text-muted-foreground">

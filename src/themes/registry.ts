@@ -7,9 +7,14 @@ import {
 } from "@/lib/fonts"
 
 import type { ControllerRegistry, ControllerTheme } from "./controller-types"
-import { deriveTokens } from "./derive"
+import { deriveShadows, deriveTokens } from "./derive"
 import registryJson from "./registry.json"
-import { COLOR_TOKEN_TO_CSS_VAR, type ColorTokens } from "./types"
+import {
+  COLOR_TOKEN_TO_CSS_VAR,
+  SHADOW_TOKEN_TO_CSS_VAR,
+  type ColorTokens,
+  type ShadowTokens,
+} from "./types"
 
 export const baseRegistry = registryJson as ControllerRegistry
 
@@ -43,11 +48,15 @@ export function resolveTokens(
  */
 export function tokensToCssVars(
   tokens: ColorTokens,
+  shadows: ShadowTokens,
   theme: ControllerTheme
 ): Record<string, string> {
   const out: Record<string, string> = {}
   for (const key of Object.keys(tokens) as (keyof ColorTokens)[]) {
     out[COLOR_TOKEN_TO_CSS_VAR[key]] = tokens[key]
+  }
+  for (const key of Object.keys(shadows) as (keyof ShadowTokens)[]) {
+    out[SHADOW_TOKEN_TO_CSS_VAR[key]] = shadows[key]
   }
   out["--radius"] = theme.derivation.radius
   out["--font-sans"] = resolveFontFamily(theme.derivation.fonts.sans)
@@ -74,7 +83,8 @@ export function applyTheme(
   loadFontIfRemote(theme.derivation.fonts.heading)
 
   const tokens = resolveTokens(theme, mode)
-  const vars = tokensToCssVars(tokens, theme)
+  const shadows = deriveShadows(mode)
+  const vars = tokensToCssVars(tokens, shadows, theme)
   for (const [key, value] of Object.entries(vars)) {
     el.style.setProperty(key, value)
   }

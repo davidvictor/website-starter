@@ -4,6 +4,7 @@ import { ArrowRight, Check } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
+import { Press } from "@/components/motion/press"
 import { SPRING_STANDARD } from "@/components/motion/springs"
 import {
   PricingToggle,
@@ -21,7 +22,7 @@ export function PricingBold() {
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
         <FadeIn>
-          <h2 className="font-heading mb-12 max-w-4xl text-balance text-[clamp(2.5rem,7vw,5rem)] leading-[0.95] font-bold tracking-tighter">
+          <h2 className="font-heading mb-12 max-w-4xl text-[clamp(2.5rem,7vw,5rem)] leading-[0.95] font-bold tracking-tighter">
             Pick a tier.
             <br />
             <span className="text-muted-foreground">Outgrow it later.</span>
@@ -125,19 +126,24 @@ export function PricingBold() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  href="/contact"
-                  className={cn(
-                    buttonVariants({ size: "lg" }),
-                    "mt-auto",
-                    featured
-                      ? "border-brand-accent-foreground bg-brand-accent-foreground text-brand-accent hover:bg-brand-accent-foreground/90"
-                      : ""
-                  )}
-                >
-                  {tier.cta}
-                  <ArrowRight className="size-4" />
-                </Link>
+                <Press
+                  className="mt-auto"
+                  render={
+                    <Link
+                      href="/contact"
+                      className={cn(
+                        buttonVariants({ size: "lg" }),
+                        "mt-auto",
+                        featured
+                          ? "border-brand-accent-foreground bg-brand-accent-foreground text-brand-accent hover:bg-brand-accent-foreground/90"
+                          : ""
+                      )}
+                    >
+                      {tier.cta}
+                      <ArrowRight className="size-4" />
+                    </Link>
+                  }
+                />
               </FadeIn>
             )
           })}
