@@ -1,3 +1,4 @@
+// src/components/dev-panel/hooks/use-dev-controls.ts
 "use client"
 
 import { folder, useControls } from "leva"
@@ -11,11 +12,70 @@ import type {
 
 type LevaInput = Record<string, unknown>
 
-function specToLevaInput(spec: DevControlSpec): LevaInput {
+type UseDevControlsOptions = {
+  /** When false, the folder is not registered with Leva; the hook still
+   *  returns merged defaults+values so the caller can render correctly. */
+  enabled?: boolean
+  /** Pre-populated values to merge over schema defaults when disabled,
+   *  or to seed Leva's inputs when enabled. */
+  values?: Record<string, unknown>
+}
+
+function specToLevaInput(
+  spec: DevControlSpec,
+  seedValue: unknown
+): LevaInput {
+  const value = seedValue ?? spec.default
+
+  if (spec.renderIf) {
+    const renderIfKey = spec.renderIf.key
+    const renderIfEquals = spec.renderIf.equals
+    const renderProp = {
+      render: (get: (key: string) => unknown) =>
+        get(renderIfKey) === renderIfEquals,
+    }
+
+    switch (spec.type) {
+      case "number":
+        return {
+          value,
+          min: spec.min,
+          max: spec.max,
+          step: spec.step,
+          label: spec.label,
+          ...renderProp,
+        }
+      case "boolean":
+      case "string":
+      case "color":
+        return { value, label: spec.label, ...renderProp }
+      case "select": {
+        if (spec.optionsLabels) {
+          const opts: Record<string, string> = {}
+          for (const v of spec.options) {
+            opts[spec.optionsLabels[v] ?? v] = v
+          }
+          return { value, options: opts, label: spec.label, ...renderProp }
+        }
+        return {
+          value,
+          options: [...spec.options],
+          label: spec.label,
+          ...renderProp,
+        }
+      }
+      case "vec3": {
+        const v = value as [number, number, number] | { x: number; y: number; z: number }
+        const seed = Array.isArray(v) ? { x: v[0], y: v[1], z: v[2] } : v
+        return { value: seed, label: spec.label, ...renderProp }
+      }
+    }
+  }
+
   switch (spec.type) {
     case "number":
       return {
-        value: spec.default,
+        value,
         min: spec.min,
         max: spec.max,
         step: spec.step,
@@ -24,66 +84,113 @@ function specToLevaInput(spec: DevControlSpec): LevaInput {
     case "boolean":
     case "string":
     case "color":
-      return { value: spec.default, label: spec.label }
-    case "select":
+      return { value, label: spec.label }
+    case "select": {
+      if (spec.optionsLabels) {
+        const opts: Record<string, string> = {}
+        for (const v of spec.options) {
+          opts[spec.optionsLabels[v] ?? v] = v
+        }
+        return { value, options: opts, label: spec.label }
+      }
       return {
-        value: spec.default,
+        value,
         options: [...spec.options],
         label: spec.label,
       }
-    case "vec3":
-      return {
-        value: {
-          x: spec.default[0],
-          y: spec.default[1],
-          z: spec.default[2],
-        },
-        label: spec.label,
-      }
+    }
+    case "vec3": {
+      const v = value as [number, number, number] | { x: number; y: number; z: number }
+      const seed = Array.isArray(v) ? { x: v[0], y: v[1], z: v[2] } : v
+      return { value: seed, label: spec.label }
+    }
   }
+}
+
+function defaultFor(spec: DevControlSpec): unknown {
+  return spec.type === "vec3" ? [...spec.default] : spec.default
+}
+
+function mergeDefaults<S extends DevControlSchema>(
+  schema: S,
+  values: Record<string, unknown>
+): DevControlValues<S> {
+  const out: Record<string, unknown> = {}
+  for (const [key, spec] of Object.entries(schema)) {
+    const v = values[key]
+    if (v === undefined) {
+      out[key] = defaultFor(spec)
+      continue
+    }
+    if (spec.type === "vec3") {
+      if (Array.isArray(v) && v.length === 3) out[key] = v
+      else if (v && typeof v === "object" && "x" in v && "y" in v && "z" in v) {
+        const o = v as { x: number; y: number; z: number }
+        out[key] = [o.x, o.y, o.z]
+      } else out[key] = defaultFor(spec)
+    } else {
+      out[key] = v
+    }
+  }
+  return out as DevControlValues<S>
 }
 
 /**
  * Register a typed set of dev controls under a named folder.
  * Values stay in sync with the dev panel's Controls tab.
+ *
+ * @param group   - Folder label shown in the Leva panel.
+ * @param schema  - Typed control descriptors.
+ * @param options - Optional `{ enabled, values }`.
+ *   - `enabled=false`: folder is NOT registered with Leva; hook returns
+ *     merged defaults+values so callers render correctly without the panel.
+ *   - `values`: seed values merged over schema defaults.
  */
 export function useDevControls<S extends DevControlSchema>(
   group: string,
-  schema: S
+  schema: S,
+  options?: UseDevControlsOptions
 ): DevControlValues<S> {
+  const enabled = options?.enabled ?? true
+  const externalValues = options?.values
+
   const folderSchema = useMemo(() => {
+    if (!enabled) return null
     const inner: Record<string, LevaInput> = {}
     for (const [key, spec] of Object.entries(schema)) {
-      inner[key] = specToLevaInput(spec)
+      inner[key] = specToLevaInput(spec, externalValues?.[key])
     }
     return { [group]: folder(inner as never) } as Record<string, unknown>
-  }, [group, schema])
+    // Re-register when schema or seed values shape changes.
+  }, [enabled, group, schema, externalValues])
 
-  const values = useControls(folderSchema as never) as Record<string, unknown>
+  // useControls must be unconditional (React rules of hooks).
+  // Pass empty object when disabled — registers nothing with Leva.
+  const levaValues = useControls(
+    (folderSchema ?? {}) as never
+  ) as Record<string, unknown>
 
   return useMemo(() => {
-    const out: Record<string, unknown> = {}
+    if (!enabled) {
+      return mergeDefaults(schema, externalValues ?? {})
+    }
+    // Normalize vec3 values back to tuples.
+    const normalized: Record<string, unknown> = {}
     for (const [key, spec] of Object.entries(schema)) {
-      const raw = values[key]
+      const raw = levaValues[key]
       if (spec.type === "vec3") {
-        if (
-          raw &&
-          typeof raw === "object" &&
-          "x" in raw &&
-          "y" in raw &&
-          "z" in raw
-        ) {
+        if (raw && typeof raw === "object" && "x" in raw && "y" in raw && "z" in raw) {
           const v = raw as { x: number; y: number; z: number }
-          out[key] = [v.x, v.y, v.z]
+          normalized[key] = [v.x, v.y, v.z]
         } else if (Array.isArray(raw) && raw.length === 3) {
-          out[key] = raw
+          normalized[key] = raw
         } else {
-          out[key] = spec.default
+          normalized[key] = defaultFor(spec)
         }
       } else {
-        out[key] = raw ?? spec.default
+        normalized[key] = raw ?? defaultFor(spec)
       }
     }
-    return out as DevControlValues<S>
-  }, [schema, values])
+    return normalized as DevControlValues<S>
+  }, [enabled, externalValues, schema, levaValues])
 }
