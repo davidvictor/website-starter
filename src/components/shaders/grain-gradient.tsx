@@ -1,16 +1,12 @@
 "use client"
 
 import {
-  GrainGradient as PaperGrainGradient,
   type GrainGradientProps,
+  GrainGradient as PaperGrainGradient,
 } from "@paper-design/shaders-react"
 
 export function GrainGradient({
-  colors = [
-    "hsl(250 90% 60%)",
-    "hsl(190 85% 60%)",
-    "hsl(330 80% 65%)",
-  ],
+  colors = ["hsl(250 90% 60%)", "hsl(190 85% 60%)", "hsl(330 80% 65%)"],
   speed = 0.5,
   intensity = 0.6,
   noise = 0.4,

@@ -1,15 +1,14 @@
 "use client"
 
 import { useState } from "react"
-
-import { GrainGradient } from "@/components/shaders/grain-gradient"
-import { MeshGradient } from "@/components/shaders/mesh-gradient"
 import {
   ControlBoolean,
   ControlColor,
   ControlNumber,
   FloatingControls,
 } from "@/components/dev-panel"
+import { GrainGradient } from "@/components/shaders/grain-gradient"
+import { MeshGradient } from "@/components/shaders/mesh-gradient"
 
 export default function ShadersExamplePage() {
   const [speed, setSpeed] = useState(0.4)

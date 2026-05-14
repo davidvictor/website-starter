@@ -1,6 +1,6 @@
+import { Stagger } from "@/components/motion/stagger"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
-import { Stagger } from "@/components/motion/stagger"
 import { testimonials } from "@/lib/brand"
 
 export function TestimonialsSaas() {
@@ -18,9 +18,11 @@ export function TestimonialsSaas() {
 
         <Stagger className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {testimonials.slice(0, 6).map((t) => (
-            <Card key={t.name} className="border-border/60">
+            <Card key={t.name}>
               <CardContent className="flex h-full flex-col justify-between gap-6 p-6">
-                <p className="text-sm leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
+                <p className="text-sm leading-relaxed">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
                 <div className="flex items-center gap-3 border-t border-border pt-4">
                   <Avatar className="size-8">
                     <AvatarFallback className="text-[10px]">

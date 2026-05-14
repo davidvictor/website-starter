@@ -1,8 +1,8 @@
 import {
   applyAccentAnchor,
   darkenForMode,
-  oklchToCss,
   type OKLCH,
+  oklchToCss,
   vibrancyToLC,
   warmthToNeutral,
 } from "@/lib/color"
@@ -23,8 +23,7 @@ function resolvePrimary(
 ): OKLCH {
   const { l, c } = vibrancyToLC(inputs.primary.vibrancy)
   const chroma = c * derivation.chromaBoost
-  const lightness =
-    mode === "dark" ? darkenForMode(l, { kind: "brand" }) : l
+  const lightness = mode === "dark" ? darkenForMode(l, { kind: "brand" }) : l
   return { l: lightness, c: chroma, h: inputs.primary.hue }
 }
 
@@ -35,8 +34,7 @@ function resolveAccent(
 ): OKLCH {
   const { l, c } = vibrancyToLC(inputs.accent.vibrancy)
   const chroma = c * derivation.chromaBoost
-  const lightness =
-    mode === "dark" ? darkenForMode(l, { kind: "brand" }) : l
+  const lightness = mode === "dark" ? darkenForMode(l, { kind: "brand" }) : l
   const hue = applyAccentAnchor(
     inputs.primary.hue,
     inputs.accent.hue,

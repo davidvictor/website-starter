@@ -1,9 +1,8 @@
-import Link from "next/link"
 import { ArrowUpRight, MapPin } from "lucide-react"
-
-import { Badge } from "@/components/ui/badge"
-import { FadeIn } from "@/components/motion/fade-in"
+import Link from "next/link"
 import { CtaSaas, FooterSaas, StatsSaas } from "@/components/blocks"
+import { FadeIn } from "@/components/motion/fade-in"
+import { Badge } from "@/components/ui/badge"
 import { jobs, valuesList } from "@/lib/brand"
 
 export const metadata = {
@@ -68,7 +67,7 @@ export default function CareersPage() {
               Open roles
             </p>
             <h2 className="font-heading text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-              {jobs.length} open roles
+              <span className="tabular">{jobs.length}</span> open roles
             </h2>
           </div>
 

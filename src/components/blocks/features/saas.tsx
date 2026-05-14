@@ -1,19 +1,11 @@
-import {
-  Beaker,
-  Brain,
-  Receipt,
-  ShieldCheck,
-  Wrench,
-  Zap,
-} from "lucide-react"
-
+import { Beaker, Brain, Receipt, ShieldCheck, Wrench, Zap } from "lucide-react"
+import { Stagger } from "@/components/motion/stagger"
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Stagger } from "@/components/motion/stagger"
 import { features } from "@/lib/brand"
 
 const ICONS = {
@@ -46,7 +38,7 @@ export function FeaturesSaas() {
           {features.map((feature) => {
             const Icon = ICONS[feature.icon as keyof typeof ICONS] ?? Brain
             return (
-              <Card key={feature.title} className="border-border/60">
+              <Card key={feature.title}>
                 <CardHeader className="gap-4">
                   <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-muted/60">
                     <Icon className="size-4" />

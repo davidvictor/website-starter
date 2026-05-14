@@ -11,7 +11,7 @@ import { FadeIn } from "@/components/motion/fade-in"
 export const metadata = {
   title: "Pricing · Nimbus",
   description:
-    "Three plans. Honest pricing. No \"contact sales\" until you want us to.",
+    'Three plans. Honest pricing. No "contact sales" until you want us to.',
 }
 
 export default function PricingPage() {

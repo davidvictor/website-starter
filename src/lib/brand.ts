@@ -1,7 +1,12 @@
 /**
  * Fictional company used to populate the marketing scaffold.
  * All copy is parody-energy — confident, unhinged, AI hype-cycle adjacent.
+ *
+ * Numeric data uses the typed shapes in `@/lib/format`. See
+ * docs/adr/0008-brand-numeric-schema.md.
  */
+
+import type { Metric, Price } from "@/lib/format"
 
 export const brand = {
   name: "Nimbus",
@@ -12,7 +17,11 @@ export const brand = {
   founded: 2027,
   funding: {
     stage: "Series B",
-    valuation: "$4.2B",
+    valuation: {
+      value: 4.2e9,
+      format: "compact" as const,
+      precision: 1,
+    } satisfies Metric,
     led: "Sequoia, with participation from anyone who answered our calls",
   },
   socials: {
@@ -105,11 +114,31 @@ export const features = [
   },
 ] as const
 
+/**
+ * Typed metrics. `value` is the raw number; format helpers in
+ * `@/lib/format` produce display strings.
+ */
 export const stats = [
-  { value: "9.2T", label: "Tokens processed last quarter" },
-  { value: "67ms", label: "P50 streaming latency" },
-  { value: "99.997%", label: "Uptime since June" },
-  { value: "412", label: "Production deployments this week" },
+  {
+    metric: { value: 9.2e12, format: "compact", precision: 1 } satisfies Metric,
+    label: "Tokens processed last quarter",
+  },
+  {
+    metric: { value: 67, unit: "ms", format: "plain" } satisfies Metric,
+    label: "P50 streaming latency",
+  },
+  {
+    metric: {
+      value: 0.99997,
+      format: "percent",
+      precision: 3,
+    } satisfies Metric,
+    label: "Uptime since June",
+  },
+  {
+    metric: { value: 412, format: "plain" } satisfies Metric,
+    label: "Production deployments this week",
+  },
 ] as const
 
 export const customerLogos = [
@@ -174,12 +203,27 @@ export const testimonials = [
   },
 ] as const
 
-export const pricingTiers = [
+/**
+ * Pricing tiers with both monthly and annual prices so the pricing toggle
+ * can cross-fade between them. `price` is null for the talk-to-sales tier.
+ */
+export type PricingTier = {
+  id: string
+  name: string
+  price: Price | null
+  priceYearly: Price | null
+  description: string
+  features: readonly string[]
+  cta: string
+  featured: boolean
+}
+
+export const pricingTiers: readonly PricingTier[] = [
   {
     id: "spark",
     name: "Spark",
-    price: "$0",
-    cadence: "/forever",
+    price: { value: 0, currency: "USD", cadence: "month" },
+    priceYearly: { value: 0, currency: "USD", cadence: "year" },
     description: "For weekend agents that may or may not see prod.",
     features: [
       "1 project",
@@ -194,8 +238,8 @@ export const pricingTiers = [
   {
     id: "surge",
     name: "Surge",
-    price: "$49",
-    cadence: "/seat/mo",
+    price: { value: 49, currency: "USD", cadence: "month" },
+    priceYearly: { value: 470, currency: "USD", cadence: "year" },
     description: "For teams shipping things people actually depend on.",
     features: [
       "Unlimited projects",
@@ -211,9 +255,10 @@ export const pricingTiers = [
   {
     id: "singularity",
     name: "Singularity",
-    price: "Talk to us",
-    cadence: "",
-    description: "For when 'usage-based' has stopped fitting in your CFO's tooling.",
+    price: null,
+    priceYearly: null,
+    description:
+      "For when 'usage-based' has stopped fitting in your CFO's tooling.",
     features: [
       "Everything in Surge",
       "Dedicated capacity, dedicated humans",
@@ -255,8 +300,7 @@ export const faq = [
   },
   {
     question: "Where are you in the hype cycle?",
-    answer:
-      "Late peak, sprinting toward trough. We brought snacks.",
+    answer: "Late peak, sprinting toward trough. We brought snacks.",
   },
 ] as const
 
@@ -297,8 +341,7 @@ export const changelog = [
     version: "0.39.7",
     date: "2026-03-21",
     title: "Edge regions in Frankfurt and Mumbai",
-    summary:
-      "Streaming P50 in EU dropped 31ms. We didn't ask. They did.",
+    summary: "Streaming P50 in EU dropped 31ms. We didn't ask. They did.",
     tags: ["Infra"],
   },
   {
@@ -411,7 +454,10 @@ export const customers = [
     quote:
       "We swapped six internal services for one Synthesis route. The diff was negative 11,000 lines.",
     contact: "Priya Anand · Head of Platform",
-    metric: { label: "Reduction in incident MTTR", value: "−63%" },
+    metric: {
+      label: "Reduction in incident MTTR",
+      value: { value: -0.63, format: "percent", precision: 0 } satisfies Metric,
+    },
     logo: "HL",
   },
   {
@@ -421,7 +467,15 @@ export const customers = [
     quote:
       "Cortex agents pair with our humans on every PR. Reviewers get to focus on intent, not formatting.",
     contact: "Marcus Reidel · Staff Engineer",
-    metric: { label: "Faster PR turnaround", value: "3.4x" },
+    metric: {
+      label: "Faster PR turnaround",
+      value: {
+        value: 3.4,
+        unit: "x",
+        format: "plain",
+        precision: 1,
+      } satisfies Metric,
+    },
     logo: "CN",
   },
   {
@@ -431,7 +485,10 @@ export const customers = [
     quote:
       "Our compliance team approves Synthesis routes faster than they approve copy changes. That is a sentence we never thought we'd say.",
     contact: "Lin Wong · VP Engineering",
-    metric: { label: "Annual model spend reduction", value: "$1.4M" },
+    metric: {
+      label: "Annual model spend reduction",
+      value: { value: 1.4e6, currency: "USD" } satisfies Price,
+    },
     logo: "YN",
   },
 ] as const

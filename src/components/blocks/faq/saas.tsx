@@ -1,12 +1,12 @@
 "use client"
 
+import { FadeIn } from "@/components/motion/fade-in"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { FadeIn } from "@/components/motion/fade-in"
 import { faq } from "@/lib/brand"
 
 export function FaqSaas() {

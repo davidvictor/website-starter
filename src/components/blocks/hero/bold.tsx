@@ -1,9 +1,8 @@
-import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-
-import { buttonVariants } from "@/components/ui/button"
+import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
 import { GrainGradient } from "@/components/shaders/grain-gradient"
+import { buttonVariants } from "@/components/ui/button"
 import { taglines } from "@/lib/brand"
 import { cn } from "@/lib/utils"
 
@@ -81,7 +80,7 @@ export function HeroBold() {
             { label: "Engineering team", value: "57" },
           ].map((stat) => (
             <div key={stat.label} className="flex flex-col gap-1">
-              <span className="font-heading text-2xl font-bold tracking-tight md:text-3xl">
+              <span className="font-heading text-2xl font-bold tracking-tight tabular md:text-3xl">
                 {stat.value}
               </span>
               <span className="text-xs text-background/70">{stat.label}</span>

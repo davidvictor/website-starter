@@ -1,16 +1,15 @@
-import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-
-import { buttonVariants } from "@/components/ui/button"
+import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
 import { GrainGradient } from "@/components/shaders/grain-gradient"
+import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 export function CtaSaas() {
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-card">
+        <div className="relative overflow-hidden rounded-3xl bg-card ring-1 ring-foreground/10 shadow-[var(--shadow-subtle)]">
           <div className="pointer-events-none absolute inset-0 opacity-50">
             <GrainGradient
               colors={[

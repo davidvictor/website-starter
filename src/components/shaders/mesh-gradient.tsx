@@ -1,8 +1,8 @@
 "use client"
 
 import {
-  MeshGradient as PaperMeshGradient,
   type MeshGradientProps,
+  MeshGradient as PaperMeshGradient,
 } from "@paper-design/shaders-react"
 
 const DEFAULT_COLORS = [

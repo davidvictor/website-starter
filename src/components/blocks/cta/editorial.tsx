@@ -1,8 +1,7 @@
-import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
-
-import { buttonVariants } from "@/components/ui/button"
+import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
+import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 export function CtaEditorial() {

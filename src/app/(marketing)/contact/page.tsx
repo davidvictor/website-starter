@@ -1,11 +1,10 @@
 import { ArrowRight, Mail, MapPin, Phone } from "lucide-react"
-
+import { FooterSaas } from "@/components/blocks"
+import { FadeIn } from "@/components/motion/fade-in"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { FadeIn } from "@/components/motion/fade-in"
-import { FooterSaas } from "@/components/blocks"
 import { brand } from "@/lib/brand"
 
 export const metadata = {

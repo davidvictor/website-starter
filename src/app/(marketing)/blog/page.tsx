@@ -1,9 +1,8 @@
-import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
-
-import { Badge } from "@/components/ui/badge"
-import { FadeIn } from "@/components/motion/fade-in"
+import Link from "next/link"
 import { CtaSaas, FooterSaas } from "@/components/blocks"
+import { FadeIn } from "@/components/motion/fade-in"
+import { Badge } from "@/components/ui/badge"
 import { blogPosts } from "@/lib/brand"
 
 export const metadata = {
@@ -58,7 +57,7 @@ export default function BlogIndexPage() {
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Badge variant="secondary">{featured.tag}</Badge>
                     <span>·</span>
-                    <span>{formatDate(featured.date)}</span>
+                    <span className="tabular">{formatDate(featured.date)}</span>
                     <span>·</span>
                     <span>{featured.readTime}</span>
                   </div>
@@ -114,7 +113,7 @@ export default function BlogIndexPage() {
                       {post.tag}
                     </Badge>
                     <span>·</span>
-                    <span>{formatDate(post.date)}</span>
+                    <span className="tabular">{formatDate(post.date)}</span>
                   </div>
                   <h3 className="font-heading text-xl font-semibold leading-snug tracking-tight">
                     {post.title}

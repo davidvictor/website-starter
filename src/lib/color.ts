@@ -143,13 +143,13 @@ export function oklchToCss({ l, c, h }: OKLCH, alpha?: number): string {
 export function vibrancyToLC(vibrancy: number): { l: number; c: number } {
   const t = Math.max(0, Math.min(100, vibrancy)) / 100
   const l = 0.42 + t * 0.23
-  const c = 0.015 + Math.pow(t, 0.85) * 0.21
+  const c = 0.015 + t ** 0.85 * 0.21
   return { l, c }
 }
 
 export function lcToVibrancy(l: number, c: number): number {
   const t = Math.max(0, Math.min(1, (c - 0.015) / 0.21))
-  return Math.round(Math.pow(t, 1 / 0.85) * 100)
+  return Math.round(t ** (1 / 0.85) * 100)
 }
 
 /* ------------------------------------------------------------------ */
@@ -201,7 +201,7 @@ export function applyAccentAnchor(
 ): number {
   const offset = ACCENT_ANCHORS[anchor]
   if (offset == null) return accentHue
-  return ((primaryHue + offset) % 360 + 360) % 360
+  return (((primaryHue + offset) % 360) + 360) % 360
 }
 
 /* ------------------------------------------------------------------ */

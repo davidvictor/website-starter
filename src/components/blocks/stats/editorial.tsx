@@ -1,5 +1,9 @@
+"use client"
+
+import { AnimatedNumber } from "@/components/motion/animated-number"
 import { FadeIn } from "@/components/motion/fade-in"
 import { stats } from "@/lib/brand"
+import { formatMetric } from "@/lib/format"
 
 export function StatsEditorial() {
   return (
@@ -28,7 +32,10 @@ export function StatsEditorial() {
             <FadeIn key={stat.label} delay={0.05 + i * 0.04}>
               <dt className="text-xs text-muted-foreground">{stat.label}</dt>
               <dd className="font-heading mt-2 text-5xl leading-none font-medium tracking-tight">
-                {stat.value}
+                <AnimatedNumber
+                  value={stat.metric.value}
+                  format={(v) => formatMetric({ ...stat.metric, value: v })}
+                />
               </dd>
             </FadeIn>
           ))}

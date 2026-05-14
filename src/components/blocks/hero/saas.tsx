@@ -1,10 +1,9 @@
-import Link from "next/link"
 import { ArrowRight, Sparkles } from "lucide-react"
-
-import { Badge } from "@/components/ui/badge"
-import { buttonVariants } from "@/components/ui/button"
+import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
 import { MeshGradient } from "@/components/shaders/mesh-gradient"
+import { Badge } from "@/components/ui/badge"
+import { buttonVariants } from "@/components/ui/button"
 import { taglines } from "@/lib/brand"
 import { cn } from "@/lib/utils"
 
@@ -53,10 +52,7 @@ export function HeroSaas() {
           delay={0.15}
           className="mt-4 flex flex-wrap items-center justify-center gap-3"
         >
-          <Link
-            href="/pricing"
-            className={cn(buttonVariants({ size: "lg" }))}
-          >
+          <Link href="/pricing" className={cn(buttonVariants({ size: "lg" }))}>
             Start free
             <ArrowRight className="size-4" />
           </Link>

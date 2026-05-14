@@ -1,8 +1,7 @@
-import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
-
-import { buttonVariants } from "@/components/ui/button"
+import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
+import { buttonVariants } from "@/components/ui/button"
 import { brand, taglines } from "@/lib/brand"
 import { cn } from "@/lib/utils"
 
@@ -67,7 +66,7 @@ export function HeroEditorial() {
                 { label: "Customers", value: "180+" },
               ].map((stat) => (
                 <div key={stat.label} className="flex flex-col gap-1">
-                  <span className="font-heading text-3xl font-medium tracking-tight">
+                  <span className="font-heading text-3xl font-medium tracking-tight tabular">
                     {stat.value}
                   </span>
                   <span className="text-xs text-muted-foreground">

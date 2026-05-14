@@ -37,15 +37,69 @@ export const metadata = {
 }
 
 const blocks = [
-  { id: "hero", label: "Hero", Editorial: HeroEditorial, Saas: HeroSaas, Bold: HeroBold },
-  { id: "logos", label: "Logos / social proof", Editorial: LogosEditorial, Saas: LogosSaas, Bold: LogosBold },
-  { id: "features", label: "Features", Editorial: FeaturesEditorial, Saas: FeaturesSaas, Bold: FeaturesBold },
-  { id: "stats", label: "Stats", Editorial: StatsEditorial, Saas: StatsSaas, Bold: StatsBold },
-  { id: "testimonials", label: "Testimonials", Editorial: TestimonialsEditorial, Saas: TestimonialsSaas, Bold: TestimonialsBold },
-  { id: "pricing", label: "Pricing", Editorial: PricingEditorial, Saas: PricingSaas, Bold: PricingBold },
-  { id: "faq", label: "FAQ", Editorial: FaqEditorial, Saas: FaqSaas, Bold: FaqBold },
-  { id: "cta", label: "CTA", Editorial: CtaEditorial, Saas: CtaSaas, Bold: CtaBold },
-  { id: "footer", label: "Footer", Editorial: FooterEditorial, Saas: FooterSaas, Bold: FooterBold },
+  {
+    id: "hero",
+    label: "Hero",
+    Editorial: HeroEditorial,
+    Saas: HeroSaas,
+    Bold: HeroBold,
+  },
+  {
+    id: "logos",
+    label: "Logos / social proof",
+    Editorial: LogosEditorial,
+    Saas: LogosSaas,
+    Bold: LogosBold,
+  },
+  {
+    id: "features",
+    label: "Features",
+    Editorial: FeaturesEditorial,
+    Saas: FeaturesSaas,
+    Bold: FeaturesBold,
+  },
+  {
+    id: "stats",
+    label: "Stats",
+    Editorial: StatsEditorial,
+    Saas: StatsSaas,
+    Bold: StatsBold,
+  },
+  {
+    id: "testimonials",
+    label: "Testimonials",
+    Editorial: TestimonialsEditorial,
+    Saas: TestimonialsSaas,
+    Bold: TestimonialsBold,
+  },
+  {
+    id: "pricing",
+    label: "Pricing",
+    Editorial: PricingEditorial,
+    Saas: PricingSaas,
+    Bold: PricingBold,
+  },
+  {
+    id: "faq",
+    label: "FAQ",
+    Editorial: FaqEditorial,
+    Saas: FaqSaas,
+    Bold: FaqBold,
+  },
+  {
+    id: "cta",
+    label: "CTA",
+    Editorial: CtaEditorial,
+    Saas: CtaSaas,
+    Bold: CtaBold,
+  },
+  {
+    id: "footer",
+    label: "Footer",
+    Editorial: FooterEditorial,
+    Saas: FooterSaas,
+    Bold: FooterBold,
+  },
 ] as const
 
 const VARIANTS = ["Editorial", "Saas", "Bold"] as const
@@ -66,8 +120,8 @@ export default function VariantsGalleryPage() {
             <p className="max-w-2xl text-balance text-muted-foreground">
               Each marketing block ships in three compositions — editorial,
               saas, and bold. Compositions are the block layout; the theme
-              (palette + typography) is independent. Switch themes from the
-              dev panel to see this page under each.
+              (palette + typography) is independent. Switch themes from the dev
+              panel to see this page under each.
             </p>
           </div>
 

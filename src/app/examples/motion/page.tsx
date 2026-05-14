@@ -1,11 +1,10 @@
 "use client"
 
 import { motion } from "motion/react"
-
-import { FadeIn } from "@/components/motion/fade-in"
-import { Stagger } from "@/components/motion/stagger"
 import { useDevControls } from "@/components/dev-panel"
 import { useDevData } from "@/components/dev-panel/hooks/use-dev-data"
+import { FadeIn } from "@/components/motion/fade-in"
+import { Stagger } from "@/components/motion/stagger"
 
 export default function MotionExamplePage() {
   const { distance, duration, scale } = useDevControls("motion playground", {
@@ -54,7 +53,11 @@ export default function MotionExamplePage() {
         <h2 className="text-sm font-medium tracking-tight">
           FadeIn (live duration & distance)
         </h2>
-        <FadeIn key={`${distance}-${duration}`} y={distance} duration={duration}>
+        <FadeIn
+          key={`${distance}-${duration}`}
+          y={distance}
+          duration={duration}
+        >
           <div className="rounded-lg border border-border bg-card p-6">
             <p>Re-mounts when you change the dev controls.</p>
           </div>

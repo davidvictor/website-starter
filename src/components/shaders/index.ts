@@ -1,2 +1,2 @@
-export { MeshGradient } from "./mesh-gradient"
 export { GrainGradient } from "./grain-gradient"
+export { MeshGradient } from "./mesh-gradient"

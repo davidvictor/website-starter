@@ -27,8 +27,9 @@ function DevPanelInner() {
         type="button"
         aria-label="Open dev panel (press ~)"
         onClick={() => setOpen(true)}
+        data-touch
         className={cn(
-          "fixed top-1/2 right-0 z-[9998] -translate-y-1/2 rounded-l-md border border-r-0 border-border bg-card/90 px-1.5 py-3 backdrop-blur-md transition-transform duration-200 ease-out cursor-pointer",
+          "fixed top-1/2 right-0 z-[9998] -translate-y-1/2 rounded-l-md border border-r-0 border-border bg-card/90 px-1.5 py-3 backdrop-blur-md transition-[transform,background-color] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer",
           "hover:bg-muted",
           open ? "translate-x-full" : "translate-x-0"
         )}
@@ -43,10 +44,11 @@ function DevPanelInner() {
       {/* The sheet itself */}
       <aside
         data-state={open ? "open" : "closed"}
+        data-motion="macro"
         aria-hidden={!open}
         className={cn(
-          "fixed inset-y-0 right-0 z-[9999] flex w-full max-w-[380px] flex-col border-l border-border bg-card/95 text-card-foreground shadow-2xl backdrop-blur-md",
-          "transition-transform duration-300 ease-out",
+          "fixed inset-y-0 right-0 z-[9999] flex w-full max-w-[380px] flex-col border-l border-border bg-card/95 text-card-foreground shadow-[var(--shadow-overlay)] backdrop-blur-md",
+          "transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)]",
           open ? "translate-x-0" : "translate-x-full"
         )}
         aria-label="Dev panel"
@@ -64,7 +66,8 @@ function DevPanelInner() {
               type="button"
               aria-label="Close dev panel"
               onClick={() => setOpen(false)}
-              className="grid size-5 place-items-center rounded cursor-pointer hover:bg-muted hover:text-foreground"
+              data-touch
+              className="grid size-5 place-items-center rounded cursor-pointer transition-[color,background-color] hover:bg-muted hover:text-foreground"
             >
               <X className="size-3" />
             </button>

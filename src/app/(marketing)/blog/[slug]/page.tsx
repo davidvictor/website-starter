@@ -1,10 +1,9 @@
-import { notFound } from "next/navigation"
-import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
-
-import { Badge } from "@/components/ui/badge"
-import { FadeIn } from "@/components/motion/fade-in"
+import Link from "next/link"
+import { notFound } from "next/navigation"
 import { CtaSaas, FooterSaas } from "@/components/blocks"
+import { FadeIn } from "@/components/motion/fade-in"
+import { Badge } from "@/components/ui/badge"
 import { blogPostBody, blogPosts } from "@/lib/brand"
 
 export async function generateStaticParams() {
@@ -130,7 +129,7 @@ export default async function BlogPostPage({
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Badge variant="secondary">{post.tag}</Badge>
                 <span>·</span>
-                <span>{formatDate(post.date)}</span>
+                <span className="tabular">{formatDate(post.date)}</span>
                 <span>·</span>
                 <span>{post.readTime}</span>
               </div>

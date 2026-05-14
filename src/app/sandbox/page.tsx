@@ -47,12 +47,7 @@ import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { useTheme } from "@/providers/theme-provider"
 import { resolveTokens } from "@/themes/registry"
@@ -84,7 +79,8 @@ export default function SandboxPage() {
           <Badge variant="secondary">theme · {theme.id}</Badge>
           <Badge variant="secondary">mode · {resolvedMode}</Badge>
           <Badge variant="secondary">
-            radius · <span className="font-mono">{theme.derivation.radius}</span>
+            radius ·{" "}
+            <span className="font-mono">{theme.derivation.radius}</span>
           </Badge>
           <Badge variant="secondary">
             sans · {theme.derivation.fonts.sans}
@@ -97,7 +93,11 @@ export default function SandboxPage() {
           </Badge>
         </div>
         <p className="text-xs text-muted-foreground">
-          Open the dev panel (<kbd className="rounded border border-border bg-muted px-1 font-mono">~</kbd>) to switch themes, toggle mode, edit tokens.
+          Open the dev panel (
+          <kbd className="rounded border border-border bg-muted px-1 font-mono">
+            ~
+          </kbd>
+          ) to switch themes, toggle mode, edit tokens.
         </p>
       </header>
 
@@ -224,7 +224,11 @@ export default function SandboxPage() {
           </div>
           <div className="flex flex-col gap-3 md:col-span-2">
             <Label htmlFor="sb-bio">Bio</Label>
-            <Textarea id="sb-bio" placeholder="Tell us about yourself…" rows={4} />
+            <Textarea
+              id="sb-bio"
+              placeholder="Tell us about yourself…"
+              rows={4}
+            />
           </div>
           <div className="flex items-center gap-3">
             <Checkbox id="sb-check" />

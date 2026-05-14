@@ -1,9 +1,8 @@
-import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-
-import { buttonVariants } from "@/components/ui/button"
+import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
 import { MeshGradient } from "@/components/shaders/mesh-gradient"
+import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 export function CtaBold() {
@@ -39,7 +38,9 @@ export function CtaBold() {
         </FadeIn>
         <FadeIn delay={0.1}>
           <p className="max-w-xl text-lg leading-relaxed">
-            Nimbus replaces the entire AI plumbing layer with a single, well-typed surface. You have something better to do with the next six weeks. Probably.
+            Nimbus replaces the entire AI plumbing layer with a single,
+            well-typed surface. You have something better to do with the next
+            six weeks. Probably.
           </p>
         </FadeIn>
         <FadeIn delay={0.15} className="flex flex-wrap items-center gap-3">

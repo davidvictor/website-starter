@@ -50,13 +50,15 @@ export function FooterEditorial() {
               {brand.description}
             </p>
             <p className="mt-auto font-mono text-xs text-muted-foreground">
-              © {brand.currentYear} {brand.name}, Inc. — Made in San
-              Francisco.
+              © {brand.currentYear} {brand.name}, Inc. — Made in San Francisco.
             </p>
           </div>
 
           {groups.map((group) => (
-            <div key={group.label} className="flex flex-col gap-3 md:col-span-2">
+            <div
+              key={group.label}
+              className="flex flex-col gap-3 md:col-span-2"
+            >
               <h3 className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
                 {group.label}
               </h3>

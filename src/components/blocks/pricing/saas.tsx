@@ -1,6 +1,14 @@
-import Link from "next/link"
-import { Check } from "lucide-react"
+"use client"
 
+import { Check } from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
+import Link from "next/link"
+import { SPRING_STANDARD } from "@/components/motion/springs"
+import { Stagger } from "@/components/motion/stagger"
+import {
+  PricingToggle,
+  usePricingPeriod,
+} from "@/components/pricing/pricing-toggle"
 import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
 import {
@@ -11,11 +19,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Stagger } from "@/components/motion/stagger"
 import { pricingTiers } from "@/lib/brand"
+import { formatPrice } from "@/lib/format"
 import { cn } from "@/lib/utils"
 
 export function PricingSaas() {
+  const period = usePricingPeriod()
+
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
@@ -30,65 +40,79 @@ export function PricingSaas() {
             All plans include unlimited workspaces, SOC2 by default, and a real
             human you can email.
           </p>
+          <PricingToggle className="mt-2" />
         </div>
 
         <Stagger className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {pricingTiers.map((tier) => (
-            <Card
-              key={tier.id}
-              className={cn(
-                "relative flex flex-col",
-                tier.featured
-                  ? "border-brand-accent/60 ring-2 ring-brand-accent/20 shadow-lg"
-                  : "border-border/60"
-              )}
-            >
-              {tier.featured && (
-                <Badge className="absolute -top-3 left-6 bg-brand-accent text-brand-accent-foreground">
-                  Most popular
-                </Badge>
-              )}
-              <CardHeader className="gap-2">
-                <CardTitle className="text-lg">{tier.name}</CardTitle>
-                <CardDescription className="leading-relaxed">
-                  {tier.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex flex-1 flex-col gap-5">
-                <div className="flex items-baseline gap-1">
-                  <span className="font-heading text-4xl font-semibold tracking-tight">
-                    {tier.price}
-                  </span>
-                  {tier.cadence && (
-                    <span className="text-sm text-muted-foreground">
-                      {tier.cadence}
-                    </span>
-                  )}
-                </div>
-                <ul className="flex flex-col gap-2 text-sm">
-                  {tier.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2">
-                      <Check className="mt-0.5 size-4 shrink-0 text-foreground/70" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-              <CardFooter>
-                <Link
-                  href="/contact"
-                  className={cn(
-                    buttonVariants({
-                      variant: tier.featured ? "default" : "outline",
-                    }),
-                    "w-full"
-                  )}
-                >
-                  {tier.cta}
-                </Link>
-              </CardFooter>
-            </Card>
-          ))}
+          {pricingTiers.map((tier) => {
+            const activePrice =
+              period === "year" ? tier.priceYearly : tier.price
+            const formatted = activePrice ? formatPrice(activePrice) : null
+            return (
+              <Card
+                key={tier.id}
+                className={cn(
+                  "relative flex flex-col",
+                  tier.featured &&
+                    "ring-2 ring-brand-accent/40 shadow-[var(--shadow-raised)]"
+                )}
+              >
+                {tier.featured && (
+                  <Badge className="absolute -top-3 left-6 bg-brand-accent text-brand-accent-foreground">
+                    Most popular
+                  </Badge>
+                )}
+                <CardHeader className="gap-2">
+                  <CardTitle className="text-lg">{tier.name}</CardTitle>
+                  <CardDescription className="leading-relaxed">
+                    {tier.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-1 flex-col gap-5">
+                  <div className="flex items-baseline gap-1">
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.span
+                        key={`${tier.id}-${period}`}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={SPRING_STANDARD}
+                        className="font-heading text-4xl font-semibold tracking-tight tabular"
+                      >
+                        {formatted ? formatted.amount : "Talk to us"}
+                      </motion.span>
+                    </AnimatePresence>
+                    {formatted?.cadence && (
+                      <span className="text-sm text-muted-foreground tabular">
+                        {formatted.cadence}
+                      </span>
+                    )}
+                  </div>
+                  <ul className="flex flex-col gap-2 text-sm">
+                    {tier.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2">
+                        <Check className="mt-0.5 size-4 shrink-0 text-foreground/70" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter>
+                  <Link
+                    href="/contact"
+                    className={cn(
+                      buttonVariants({
+                        variant: tier.featured ? "default" : "outline",
+                      }),
+                      "w-full"
+                    )}
+                  >
+                    {tier.cta}
+                  </Link>
+                </CardFooter>
+              </Card>
+            )
+          })}
         </Stagger>
       </div>
     </section>

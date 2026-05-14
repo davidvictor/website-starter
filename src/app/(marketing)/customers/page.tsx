@@ -1,13 +1,13 @@
 import { ArrowUpRight } from "lucide-react"
-
-import { FadeIn } from "@/components/motion/fade-in"
 import {
   CtaSaas,
   FooterSaas,
   LogosSaas,
   TestimonialsSaas,
 } from "@/components/blocks"
+import { FadeIn } from "@/components/motion/fade-in"
 import { customers } from "@/lib/brand"
+import { formatMetricOrPrice } from "@/lib/format"
 
 export const metadata = {
   title: "Customers · Nimbus",
@@ -31,8 +31,8 @@ export default function CustomersPage() {
           <FadeIn delay={0.1}>
             <p className="mx-auto mt-6 max-w-2xl text-balance text-lg text-muted-foreground">
               Robotics labs, dev tools companies, fintech infra teams. Big
-              companies you&apos;d recognize and small ones that will be on
-              this page next year.
+              companies you&apos;d recognize and small ones that will be on this
+              page next year.
             </p>
           </FadeIn>
         </div>
@@ -67,8 +67,8 @@ export default function CustomersPage() {
                     <p className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
                       {c.metric.label}
                     </p>
-                    <p className="font-heading text-3xl font-semibold tracking-tight">
-                      {c.metric.value}
+                    <p className="font-heading text-3xl font-semibold tracking-tight tabular">
+                      {formatMetricOrPrice(c.metric.value)}
                     </p>
                   </div>
                 </div>

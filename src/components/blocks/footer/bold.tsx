@@ -60,26 +60,17 @@ export function FooterBold() {
               </h3>
               <ul className="flex flex-col gap-2 text-sm">
                 <li>
-                  <a
-                    href={brand.socials.x}
-                    className="hover:opacity-70"
-                  >
+                  <a href={brand.socials.x} className="hover:opacity-70">
                     X / Twitter
                   </a>
                 </li>
                 <li>
-                  <a
-                    href={brand.socials.github}
-                    className="hover:opacity-70"
-                  >
+                  <a href={brand.socials.github} className="hover:opacity-70">
                     GitHub
                   </a>
                 </li>
                 <li>
-                  <a
-                    href={brand.socials.linkedin}
-                    className="hover:opacity-70"
-                  >
+                  <a href={brand.socials.linkedin} className="hover:opacity-70">
                     LinkedIn
                   </a>
                 </li>

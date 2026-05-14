@@ -20,7 +20,8 @@
     "start": "next start",
     "format": "biome format --write .",
     "lint": "biome lint .",
-    "check": "biome check ."
+    "check": "biome check .",
+    "check:polish": "node scripts/check-polish.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

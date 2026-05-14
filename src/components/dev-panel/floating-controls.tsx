@@ -35,7 +35,7 @@ export function FloatingControls({
   return (
     <aside
       className={cn(
-        "fixed z-40 flex w-[260px] flex-col rounded-lg border border-border bg-card/90 text-card-foreground shadow-xl backdrop-blur-md",
+        "fixed z-40 flex w-[260px] flex-col rounded-lg border border-border bg-card/90 text-card-foreground shadow-[var(--shadow-overlay)] backdrop-blur-md",
         position === "bottom-left" && "bottom-4 left-4",
         position === "bottom-right" && "bottom-4 right-4",
         position === "top-left" && "top-4 left-4",

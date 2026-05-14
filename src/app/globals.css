@@ -25,6 +25,9 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-info: var(--info);
+  --shadow-subtle: var(--shadow-subtle);
+  --shadow-raised: var(--shadow-raised);
+  --shadow-overlay: var(--shadow-overlay);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -101,6 +104,11 @@
   --success: oklch(0.58 0.16 145);
   --warning: oklch(0.58 0.16 70);
   --info: oklch(0.58 0.16 215);
+
+  /* Polish system — see docs/adr/0003-surface-treatment.md */
+  --shadow-subtle: 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-raised: 0 4px 12px rgb(0 0 0 / 0.06), 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-overlay: 0 12px 32px rgb(0 0 0 / 0.12), 0 4px 8px rgb(0 0 0 / 0.06);
 }
 
 .dark {
@@ -140,6 +148,11 @@
   --success: oklch(0.7 0.16 145);
   --warning: oklch(0.7 0.16 70);
   --info: oklch(0.7 0.16 215);
+
+  /* Dark mode: stronger shadow opacity to read against dark surfaces */
+  --shadow-subtle: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-raised: 0 4px 12px rgb(0 0 0 / 0.35), 0 1px 2px rgb(0 0 0 / 0.25);
+  --shadow-overlay: 0 12px 32px rgb(0 0 0 / 0.5), 0 4px 8px rgb(0 0 0 / 0.3);
 }
 
 @layer base {
@@ -151,5 +164,54 @@
   }
   html {
     @apply font-sans;
+  }
+
+  /* Polish system — see docs/adr/ */
+  :where(h1, h2, h3) {
+    text-wrap: balance;
+  }
+  :where(p) {
+    text-wrap: pretty;
+  }
+}
+
+@layer utilities {
+  /* See docs/adr/0004-tabular-nums.md */
+  .tabular {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  /* Subtle 1px outline for images — see typography/surfaces principles. */
+  .image-outline {
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.1);
+  }
+  .dark .image-outline {
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1);
+  }
+
+  /* Touch target — see docs/adr/0005-hit-area.md */
+  [data-touch] {
+    position: relative;
+  }
+  [data-touch]::before {
+    content: "";
+    position: absolute;
+    inset: 50%;
+    width: max(100%, 40px);
+    height: max(100%, 40px);
+    translate: -50% -50%;
+  }
+}
+
+/* Reduced motion: macro tier collapses to instant. See ADR 0011.
+ * `!important` is the canonical pattern for prefers-reduced-motion overrides —
+ * it must beat any inline `transition` set by Tailwind or motion/react.
+ */
+/* biome-ignore lint/complexity/noImportantStyles: a11y override */
+@media (prefers-reduced-motion: reduce) {
+  [data-motion="macro"],
+  [data-motion="macro"] * {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
   }
 }

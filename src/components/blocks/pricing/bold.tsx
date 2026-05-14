@@ -1,28 +1,45 @@
-import Link from "next/link"
-import { ArrowRight, Check } from "lucide-react"
+"use client"
 
-import { buttonVariants } from "@/components/ui/button"
+import { ArrowRight, Check } from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
+import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
+import { SPRING_STANDARD } from "@/components/motion/springs"
+import {
+  PricingToggle,
+  usePricingPeriod,
+} from "@/components/pricing/pricing-toggle"
+import { buttonVariants } from "@/components/ui/button"
 import { pricingTiers } from "@/lib/brand"
+import { formatPrice } from "@/lib/format"
 import { cn } from "@/lib/utils"
 
 export function PricingBold() {
+  const period = usePricingPeriod()
+
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
         <FadeIn>
-          <h2 className="font-heading mb-16 max-w-4xl text-balance text-[clamp(2.5rem,7vw,5rem)] leading-[0.95] font-bold tracking-tighter">
+          <h2 className="font-heading mb-12 max-w-4xl text-balance text-[clamp(2.5rem,7vw,5rem)] leading-[0.95] font-bold tracking-tighter">
             Pick a tier.
             <br />
-            <span className="text-muted-foreground">
-              Outgrow it later.
-            </span>
+            <span className="text-muted-foreground">Outgrow it later.</span>
           </h2>
+        </FadeIn>
+
+        <FadeIn delay={0.05}>
+          <div className="mb-12 flex justify-end">
+            <PricingToggle />
+          </div>
         </FadeIn>
 
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
           {pricingTiers.map((tier, i) => {
             const featured = tier.featured
+            const activePrice =
+              period === "year" ? tier.priceYearly : tier.price
+            const formatted = activePrice ? formatPrice(activePrice) : null
             return (
               <FadeIn
                 key={tier.id}
@@ -40,7 +57,7 @@ export function PricingBold() {
                   </h3>
                   <span
                     className={cn(
-                      "font-mono text-xs",
+                      "font-mono text-xs tabular",
                       featured
                         ? "text-brand-accent-foreground/60"
                         : "text-muted-foreground"
@@ -60,19 +77,28 @@ export function PricingBold() {
                   {tier.description}
                 </p>
                 <div className="flex items-baseline gap-1">
-                  <span className="font-heading text-5xl font-bold tracking-tighter md:text-6xl">
-                    {tier.price}
-                  </span>
-                  {tier.cadence && (
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.span
+                      key={`${tier.id}-${period}`}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={SPRING_STANDARD}
+                      className="font-heading text-5xl font-bold tracking-tighter tabular md:text-6xl"
+                    >
+                      {formatted ? formatted.amount : "Talk to us"}
+                    </motion.span>
+                  </AnimatePresence>
+                  {formatted?.cadence && (
                     <span
                       className={cn(
-                        "text-sm",
+                        "text-sm tabular",
                         featured
                           ? "text-brand-accent-foreground/70"
                           : "text-muted-foreground"
                       )}
                     >
-                      {tier.cadence}
+                      {formatted.cadence}
                     </span>
                   )}
                 </div>

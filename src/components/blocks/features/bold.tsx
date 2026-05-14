@@ -1,11 +1,4 @@
-import {
-  Beaker,
-  Brain,
-  Receipt,
-  ShieldCheck,
-  Wrench,
-  Zap,
-} from "lucide-react"
+import { Beaker, Brain, Receipt, ShieldCheck, Wrench, Zap } from "lucide-react"
 
 import { FadeIn } from "@/components/motion/fade-in"
 import { features } from "@/lib/brand"
@@ -32,9 +25,7 @@ export function FeaturesBold() {
             <h2 className="font-heading max-w-3xl text-balance text-[clamp(2.5rem,7vw,5rem)] leading-[0.95] font-bold tracking-tighter">
               Six primitives.
               <br />
-              <span className="text-muted-foreground">
-                Zero ceremony.
-              </span>
+              <span className="text-muted-foreground">Zero ceremony.</span>
             </h2>
           </div>
         </FadeIn>

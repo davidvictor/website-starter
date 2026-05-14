@@ -1,6 +1,6 @@
-import { Badge } from "@/components/ui/badge"
-import { FadeIn } from "@/components/motion/fade-in"
 import { CtaSaas, FooterSaas } from "@/components/blocks"
+import { FadeIn } from "@/components/motion/fade-in"
+import { Badge } from "@/components/ui/badge"
 import { changelog } from "@/lib/brand"
 
 export const metadata = {
@@ -49,17 +49,21 @@ export default function ChangelogPage() {
                 className="grid grid-cols-1 gap-3 border-l border-border pl-6 md:grid-cols-[120px_1fr] md:gap-6 md:border-l-0 md:pl-0"
               >
                 <div className="flex flex-col gap-1 md:items-end">
-                  <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
+                  <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase tabular">
                     {formatDate(entry.date)}
                   </span>
-                  <span className="font-mono text-xs text-foreground">
+                  <span className="font-mono text-xs text-foreground tabular">
                     v{entry.version}
                   </span>
                 </div>
                 <div className="flex flex-col gap-3 md:border-l md:border-border md:pl-6">
                   <div className="flex flex-wrap items-center gap-2">
                     {entry.tags.map((tag) => (
-                      <Badge key={tag} variant="secondary" className="text-[10px]">
+                      <Badge
+                        key={tag}
+                        variant="secondary"
+                        className="text-[10px]"
+                      >
                         {tag}
                       </Badge>
                     ))}

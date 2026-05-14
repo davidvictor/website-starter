@@ -1,6 +1,7 @@
-import { FadeIn } from "@/components/motion/fade-in"
 import { CtaSaas, FooterSaas, StatsSaas } from "@/components/blocks"
+import { FadeIn } from "@/components/motion/fade-in"
 import { brand, teamCounts, valuesList } from "@/lib/brand"
+import { formatMetric } from "@/lib/format"
 
 export const metadata = {
   title: "About · Nimbus",
@@ -36,16 +37,21 @@ export default function AboutPage() {
                 </p>
                 <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
                   <dt className="text-muted-foreground">Founded</dt>
-                  <dd>{brand.founded}</dd>
+                  <dd className="tabular">{brand.founded}</dd>
                   <dt className="text-muted-foreground">Stage</dt>
                   <dd>{brand.funding.stage}</dd>
                   <dt className="text-muted-foreground">Valuation</dt>
-                  <dd>{brand.funding.valuation}</dd>
+                  <dd className="tabular">
+                    ${formatMetric(brand.funding.valuation)}
+                  </dd>
                   <dt className="text-muted-foreground">HQ</dt>
                   <dd>San Francisco</dd>
                   <dt className="text-muted-foreground">Headcount</dt>
                   <dd>
-                    {teamCounts.reduce((s, t) => s + t.value, 0)} (and growing)
+                    <span className="tabular">
+                      {teamCounts.reduce((s, t) => s + t.value, 0)}
+                    </span>{" "}
+                    (and growing)
                   </dd>
                 </dl>
               </div>
@@ -77,7 +83,9 @@ export default function AboutPage() {
                 <h3 className="font-heading text-2xl font-medium tracking-tight">
                   {v.title}
                 </h3>
-                <p className="leading-relaxed text-muted-foreground">{v.body}</p>
+                <p className="leading-relaxed text-muted-foreground">
+                  {v.body}
+                </p>
               </FadeIn>
             ))}
           </div>
@@ -97,7 +105,7 @@ export default function AboutPage() {
                 key={t.label}
                 className="flex flex-col gap-1 rounded-xl border border-border bg-muted/20 px-5 py-5"
               >
-                <span className="font-heading text-3xl font-semibold tracking-tight">
+                <span className="font-heading text-3xl font-semibold tracking-tight tabular">
                   {t.value}
                 </span>
                 <span className="text-xs text-muted-foreground">{t.label}</span>

@@ -124,7 +124,9 @@ pnpm check
 | [`src/components/dev-panel/`](src/components/dev-panel/) | The panel itself + the `useDevControls` / `useDevData` hooks |
 | [`src/themes/`](src/themes/) | The color system: `derive.ts` is the engine, `presets.ts` is where the four presets live, `registry.json` is the persisted theme list |
 | [`src/lib/color.ts`](src/lib/color.ts) | OKLCH math, hex conversions, the vibrancy curve, the warmth model |
-| [`src/lib/brand.ts`](src/lib/brand.ts) | All Nimbus copy in one file — swap it out per prototype |
+| [`src/lib/brand.ts`](src/lib/brand.ts) | All Nimbus copy in one file — swap it out per prototype. Numeric data uses typed shapes from `@/lib/format` |
+| [`docs/UI_POLISH.md`](docs/UI_POLISH.md) · [`docs/adr/`](docs/adr/) | The polish system: motion primitives, surface treatments, hit areas, tabular numbers, and the 12 decisions that ground them |
+| [`/sandbox/polish`](src/app/sandbox/polish/page.tsx) | Live reference for every polish primitive — open after `pnpm dev` |
 
 ## Routes that ship
 
