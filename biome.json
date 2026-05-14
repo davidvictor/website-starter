@@ -1,0 +1,47 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "files": {
+    "includes": ["src/**", "*.ts", "*.tsx", "*.json"],
+    "ignoreUnknown": true,
+    "experimentalScannerIgnores": [
+      "node_modules",
+      ".next",
+      "next-env.d.ts",
+      "src/components/ui/**",
+      "src/components/data-table.tsx",
+      "src/components/nav-*.tsx",
+      "src/components/team-switcher.tsx",
+      "src/components/app-sidebar.tsx",
+      "src/components/chart-area-interactive.tsx",
+      "src/components/section-cards.tsx",
+      "src/components/site-header.tsx",
+      "src/components/login-form.tsx",
+      "src/components/signup-form.tsx"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 80,
+    "lineEnding": "lf"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": { "noExplicitAny": "off" },
+      "style": { "useImportType": "off" },
+      "a11y": { "useKeyWithClickEvents": "off" }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "semicolons": "asNeeded",
+      "trailingCommas": "es5",
+      "arrowParentheses": "always"
+    }
+  }
+}
