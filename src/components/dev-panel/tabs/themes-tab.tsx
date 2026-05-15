@@ -45,6 +45,7 @@ import {
   ROUTE_TRANSITION_MODES,
 } from "@/themes/derivation-axes"
 import { presetIds, presetsById } from "@/themes/registry"
+import { A11yIndicator } from "../a11y-indicator"
 
 const ANCHOR_OPTIONS: { label: string; value: AccentAnchor }[] = [
   { label: "Free", value: "free" },
@@ -116,6 +117,8 @@ export function ThemesTab() {
 
   return (
     <div className="flex flex-col gap-4">
+      <A11yIndicator />
+      <Separator />
       {/* THEME SWITCHER */}
       <Section label="theme" sublabel="palette + typography">
         <div className="flex flex-col gap-1">
