@@ -10,6 +10,9 @@ import {
   Trash2,
   Type,
 } from "lucide-react"
+
+import { clearAllShaderOverrides } from "@/components/shaders/themed/use-shader-overrides"
+import { SHADER_IDS } from "@/components/shaders/themed/registry"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { IconMorph } from "@/components/motion/icon-morph"
@@ -417,6 +420,16 @@ export function ThemesTab() {
           {confirmingClear
             ? "Click again to clear all local state"
             : "Clear localStorage"}
+        </Button>
+        <Button
+          type="button"
+          size="sm"
+          variant="ghost"
+          className="h-7 text-xs"
+          onClick={() => clearAllShaderOverrides(SHADER_IDS)}
+        >
+          <RotateCcw className="size-3.5" />
+          Reset all 24 shaders
         </Button>
         <p className="text-[10px] leading-relaxed text-muted-foreground">
           Edits persist to <code className="font-mono">localStorage</code>. Copy
