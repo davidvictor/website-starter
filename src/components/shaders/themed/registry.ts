@@ -1,10 +1,10 @@
-// src/components/shaders/themed/registry.ts
+import { editorialLetterpressPair } from "./editorial/2.letterpress"
 import { editorialVeilPair } from "./editorial/1.veil"
 import type { ShaderDef, ShaderId } from "./types"
 
 const allPairs: ReadonlyArray<readonly [ShaderDef, ShaderDef]> = [
   editorialVeilPair,
-  // remaining pairs added in Phase 8
+  editorialLetterpressPair,
 ]
 
 export const SHADER_REGISTRY: Partial<Record<ShaderId, ShaderDef>> =
