@@ -20,6 +20,12 @@ export const devRoutes = [
     description: "Side-by-side gallery of every composition × every block.",
   },
   {
+    path: "/accessibility",
+    label: "Accessibility",
+    group: "reference",
+    description: "WCAG 2.2 contrast audit for every theme × mode, on one page.",
+  },
+  {
     path: "/examples/motion",
     label: "Motion",
     group: "playground",
