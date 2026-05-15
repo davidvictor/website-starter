@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { features } from "@/lib/brand"
+import type { FeaturesProps } from "../props"
 
 const ICONS = {
   Brain,
@@ -17,7 +17,7 @@ const ICONS = {
   Receipt,
 } as const
 
-export function FeaturesSaas() {
+export function FeaturesSaas({ features }: FeaturesProps) {
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">

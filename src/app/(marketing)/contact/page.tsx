@@ -1,15 +1,16 @@
-import { ArrowRight, Mail, MapPin, Phone } from "lucide-react"
+import { Mail, MapPin, Phone } from "lucide-react"
 import { FooterSaas } from "@/components/blocks"
 import { FadeIn } from "@/components/motion/fade-in"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { brand } from "@/lib/brand"
+import { getBlockProps } from "@/lib/brand-resolver"
+import { siteMetadata } from "@/lib/metadata"
+import { ContactForm } from "./contact-form"
 
-export const metadata = {
-  title: "Contact · Nimbus",
-}
+export const metadata = siteMetadata({
+  title: "Contact",
+  description: "A polished contact route for the Lookbook marketing system.",
+  path: "/contact",
+})
 
 export default function ContactPage() {
   return (
@@ -56,48 +57,12 @@ export default function ContactPage() {
           </FadeIn>
 
           <FadeIn delay={0.1} className="md:col-span-7">
-            <form className="flex flex-col gap-5 rounded-2xl border border-border bg-card p-6 lg:p-8">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="firstName">First name</Label>
-                  <Input id="firstName" placeholder="Jane" />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="lastName">Last name</Label>
-                  <Input id="lastName" placeholder="Doe" />
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="email">Work email</Label>
-                <Input id="email" type="email" placeholder="jane@company.com" />
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="company">Company</Label>
-                <Input id="company" placeholder="Hyperion Labs" />
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="message">What are you building?</Label>
-                <Textarea
-                  id="message"
-                  rows={4}
-                  placeholder="A reasoning system that finally ships."
-                />
-              </div>
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <p className="text-xs text-muted-foreground">
-                  We never spam. We never share your email. We do reply.
-                </p>
-                <Button type="submit" size="lg">
-                  Send message
-                  <ArrowRight className="size-4" />
-                </Button>
-              </div>
-            </form>
+            <ContactForm />
           </FadeIn>
         </div>
       </section>
 
-      <FooterSaas />
+      <FooterSaas {...getBlockProps("footer")} />
     </>
   )
 }

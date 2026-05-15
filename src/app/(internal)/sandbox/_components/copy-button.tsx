@@ -36,6 +36,7 @@ export function CopyButton({
             variant="ghost"
             size="icon-sm"
             aria-label={label}
+            data-touch
             onClick={onCopy}
             className="opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
           >

@@ -7,9 +7,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { faq } from "@/lib/brand"
+import type { FaqProps } from "../props"
 
-export function FaqSaas() {
+export function FaqSaas({ headline, items }: FaqProps) {
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-3xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
@@ -19,14 +19,14 @@ export function FaqSaas() {
               FAQ
             </p>
             <h2 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
-              Questions we&apos;ve been asked more than once.
+              {headline ?? "Questions we've been asked more than once."}
             </h2>
           </div>
         </FadeIn>
 
         <FadeIn delay={0.05}>
           <Accordion defaultValue={[`item-0`]}>
-            {faq.map((item, i) => (
+            {items.map((item, i) => (
               <AccordionItem
                 key={item.question}
                 value={`item-${i}`}

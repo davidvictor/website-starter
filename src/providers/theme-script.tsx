@@ -21,6 +21,7 @@ export function ThemeScript() {
   const themeMap: Record<
     string,
     {
+      accentUsage: string
       light: Record<string, string>
       dark: Record<string, string>
     }
@@ -28,6 +29,7 @@ export function ThemeScript() {
 
   for (const theme of baseThemes) {
     themeMap[theme.id] = {
+      accentUsage: theme.derivation.accentUsage,
       light: tokensToCssVars(
         resolveTokens(theme, "light"),
         deriveShadows("light", theme),
@@ -57,6 +59,7 @@ export function ThemeScript() {
     if (!entry) return;
     var html = document.documentElement;
     html.setAttribute("data-theme", themeId);
+    html.setAttribute("data-accent-usage", entry.accentUsage || "primary-only");
     if (resolved === "dark") html.classList.add("dark");
     var vars = entry[resolved];
     for (var key in vars) {

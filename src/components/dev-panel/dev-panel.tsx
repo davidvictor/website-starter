@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "motion/react"
 import { SPRING_MACRO } from "@/components/motion/springs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { runtime } from "@/config/runtime"
 import { cn } from "@/lib/utils"
 
 import { useDevPanel } from "./dev-panel-provider"
@@ -15,7 +16,7 @@ import { NavTab } from "./tabs/nav-tab"
 import { ThemesTab } from "./tabs/themes-tab"
 
 export function DevPanel() {
-  if (process.env.NODE_ENV !== "development") return null
+  if (!runtime.isDevelopment) return null
   return <DevPanelInner />
 }
 
@@ -68,7 +69,7 @@ function DevPanelInner() {
           >
             <header className="flex h-9 shrink-0 items-center justify-between gap-2 border-b border-border bg-muted/40 px-2.5">
               <span className="flex items-center gap-1.5 text-xs font-medium tracking-tight">
-                <span className="size-1.5 rounded-full bg-emerald-500" />
+                <span className="size-1.5 rounded-full bg-success" />
                 dev
               </span>
               <span className="flex items-center gap-1.5 text-muted-foreground">

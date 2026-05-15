@@ -5,6 +5,8 @@ import { CtaSaas, FooterSaas } from "@/components/blocks"
 import { FadeIn } from "@/components/motion/fade-in"
 import { Badge } from "@/components/ui/badge"
 import { blogPostBody, blogPosts } from "@/lib/brand"
+import { getBlockProps } from "@/lib/brand-resolver"
+import { siteMetadata } from "@/lib/metadata"
 
 export async function generateStaticParams() {
   return blogPosts.map((p) => ({ slug: p.slug }))
@@ -17,11 +19,12 @@ export async function generateMetadata({
 }) {
   const { slug } = await params
   const post = blogPosts.find((p) => p.slug === slug)
-  if (!post) return { title: "Not found" }
-  return {
-    title: `${post.title} · Nimbus blog`,
+  if (!post) return siteMetadata({ title: "Not found", path: "/blog" })
+  return siteMetadata({
+    title: post.title,
     description: post.excerpt,
-  }
+    path: `/blog/${post.slug}`,
+  })
 }
 
 function formatDate(iso: string) {
@@ -38,18 +41,22 @@ function renderBody(body: string) {
   const lines = body.trim().split("\n")
   const out: React.ReactNode[] = []
   let codeBuffer: string[] | null = null
+  let nodeCount = 0
+  const nextKey = (prefix: string, source: string) =>
+    `${prefix}-${nodeCount++}-${source.slice(0, 32)}`
 
-  lines.forEach((line, i) => {
+  lines.forEach((line) => {
     if (line.startsWith("```")) {
       if (codeBuffer === null) {
         codeBuffer = []
       } else {
+        const code = codeBuffer.join("\n")
         out.push(
           <pre
-            key={`code-${i}`}
+            key={nextKey("code", code)}
             className="overflow-x-auto rounded-xl border border-border bg-muted/40 px-4 py-3 font-mono text-xs leading-relaxed"
           >
-            <code>{codeBuffer.join("\n")}</code>
+            <code>{code}</code>
           </pre>
         )
         codeBuffer = null
@@ -63,7 +70,7 @@ function renderBody(body: string) {
     if (line.startsWith("## ")) {
       out.push(
         <h2
-          key={`h2-${i}`}
+          key={nextKey("h2", line)}
           className="font-heading mt-12 text-2xl font-semibold tracking-tight"
         >
           {line.replace(/^## /, "")}
@@ -73,7 +80,10 @@ function renderBody(body: string) {
     }
     if (line.startsWith("- ")) {
       out.push(
-        <li key={`li-${i}`} className="ml-5 list-disc leading-relaxed">
+        <li
+          key={nextKey("li", line)}
+          className="ml-5 list-disc leading-relaxed"
+        >
           {line.replace(/^- /, "")}
         </li>
       )
@@ -83,7 +93,7 @@ function renderBody(body: string) {
     if (/^[—–-]\s*\w/.test(line.trim())) {
       out.push(
         <p
-          key={`sig-${i}`}
+          key={nextKey("sig", line)}
           className="mt-8 font-mono text-sm text-muted-foreground"
         >
           {line}
@@ -92,7 +102,7 @@ function renderBody(body: string) {
       return
     }
     out.push(
-      <p key={`p-${i}`} className="leading-relaxed">
+      <p key={nextKey("p", line)} className="leading-relaxed">
         {line}
       </p>
     )
@@ -167,8 +177,8 @@ export default async function BlogPostPage({
         </div>
       </article>
 
-      <CtaSaas />
-      <FooterSaas />
+      <CtaSaas {...getBlockProps("cta")} />
+      <FooterSaas {...getBlockProps("footer")} />
     </>
   )
 }

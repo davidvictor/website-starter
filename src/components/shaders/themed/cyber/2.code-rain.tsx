@@ -272,5 +272,5 @@ export const cyberCodeRainPair = definePair({
   buildInteractive,
   renderInteractive,
   fallbackBackground:
-    "repeating-linear-gradient(180deg, transparent 0px, {{a}} 1px, transparent 4px), linear-gradient(180deg, var(--background) 0%, #000 100%)",
+    "repeating-linear-gradient(180deg, transparent 0px, {{a}} 1px, transparent 4px), linear-gradient(180deg, var(--background) 0%, var(--foreground) 100%)",
 })

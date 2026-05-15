@@ -11,6 +11,7 @@ import {
   useState,
 } from "react"
 import type { ShaderId } from "@/components/shaders/themed/types"
+import { runtime } from "@/config/runtime"
 import type { DevDataEntry } from "./types"
 
 type DevPanelContextValue = {
@@ -100,6 +101,8 @@ export function DevPanelProvider({ children }: { children: ReactNode }) {
   )
 
   useEffect(() => {
+    if (!runtime.isDevelopment) return
+
     function isModifierComboFor(e: KeyboardEvent, base: "[" | "]"): boolean {
       const isMac =
         typeof navigator !== "undefined" &&

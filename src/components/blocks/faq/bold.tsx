@@ -1,7 +1,7 @@
 import { FadeIn } from "@/components/motion/fade-in"
-import { faq } from "@/lib/brand"
+import type { FaqProps } from "../props"
 
-export function FaqBold() {
+export function FaqBold({ items }: FaqProps) {
   return (
     <section className="border-b border-border bg-muted/20">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
@@ -16,7 +16,7 @@ export function FaqBold() {
         </FadeIn>
 
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2">
-          {faq.map((item, i) => (
+          {items.map((item, i) => (
             <FadeIn
               key={item.question}
               delay={0.05 + (i % 3) * 0.04}

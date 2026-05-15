@@ -2,10 +2,14 @@ import { CtaSaas, FooterSaas } from "@/components/blocks"
 import { FadeIn } from "@/components/motion/fade-in"
 import { Badge } from "@/components/ui/badge"
 import { changelog } from "@/lib/brand"
+import { getBlockProps } from "@/lib/brand-resolver"
+import { siteMetadata } from "@/lib/metadata"
 
-export const metadata = {
-  title: "Changelog · Nimbus",
-}
+export const metadata = siteMetadata({
+  title: "Changelog",
+  description: "A release-notes route for the Lookbook marketing system.",
+  path: "/changelog",
+})
 
 function formatDate(iso: string) {
   const d = new Date(iso)
@@ -81,8 +85,8 @@ export default function ChangelogPage() {
         </div>
       </section>
 
-      <CtaSaas />
-      <FooterSaas />
+      <CtaSaas {...getBlockProps("cta")} />
+      <FooterSaas {...getBlockProps("footer")} />
     </>
   )
 }

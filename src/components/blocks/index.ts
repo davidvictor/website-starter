@@ -30,9 +30,8 @@ import { testimonialsVariants } from "./testimonials"
 
 /**
  * Master registry, keyed by `BlockKind`. Each entry is typed against
- * its kind's props in `BlockPropsByKind` — variants that opt in to
- * per-instance data implement that shape; zero-arg variants still
- * satisfy `ComponentType<P>`.
+ * its kind's props in `BlockPropsByKind`, so composed pages and
+ * hand-authored routes share the same data contract.
  */
 export const BLOCK_REGISTRY: {
   [K in BlockKind]: VariantRegistryFor<K>

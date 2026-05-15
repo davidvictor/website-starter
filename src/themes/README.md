@@ -21,7 +21,7 @@ The dev panel (toggle with `~`) is the runtime interface for these inputs.
 | `tokens.ts` | The canonical color token registry — adds/renames tokens flow through here | Sensitive |
 | `derivation-axes.ts` | The discrete axes (`chromaBoost`, `contrast`, `semanticIntensity`, `accentUsage`, `radius`) | Sensitive |
 | `registry.ts` | Loads `registry.json`, exposes `baseThemes`, `presetsById`, `findPreset`, `findTheme` | Sensitive |
-| `registry.json` | **The four built-in presets** + any persisted custom themes saved via the dev panel | Care |
+| `registry.json` | **The four built-in presets** + any custom themes copied back from the dev panel | Care |
 | `types.ts` | Re-exports the `ColorTokens` contract + radii/shadow shapes | Sensitive |
 | `controller-types.ts` | `ControllerInputs` + `DerivationProfile` + `ControllerTheme` shapes — drives dev panel typing | Sensitive |
 
@@ -64,21 +64,21 @@ Foreground colors for filled surfaces (`primaryForeground`,
 `accent`) are tone-adjusted per mode via `tuneBrandForMode` so they
 clear AA against the mode's background.
 
-`pnpm audit:a11y` runs the audit from the command line; it exits
-non-zero on any failure and is part of CI.
+`pnpm audit:a11y` runs the runtime-backed audit suite from the command line; it
+exits non-zero on any failure and is part of CI.
 
 ## What's safe to do
 
 - **Tune an existing preset** — edit the matching entry in `registry.json`. Each `themes[]` entry has `inputs` (Primary hue+vibrancy, Accent hue+vibrancy+anchor, Warmth) and a `derivation` (`chromaBoost`, `contrast`, `semanticIntensity`, `accentUsage`, `radius`, `fonts`, `routeTransition`). Toggle values and reload.
 - **Add a new preset** — append a new entry to `themes[]` in `registry.json`. Pick a unique `id` (e.g., `minimal`, `editorial-dark`). The dev panel surfaces it as a chip automatically.
-- **Save a custom theme via the dev panel** — open `~`, tune inputs, click "Save". Writes a new entry to `registry.json`.
+- **Save a custom theme via the dev panel** — open `~`, tune inputs, then copy the JSON from the panel and commit it into `registry.json`. Runtime edits persist in localStorage only.
 - **Add a new semantic color** — bracket case. If the brand needs (say) a `brand-tertiary` token, the cleanest path is: add it to the registry in `tokens.ts`, derive it in `derive.ts` / `deriveColorTokens`, and expose it as a CSS variable in `src/app/globals.css`.
 
 ## What requires careful change
 
 - **`derive.ts`** is **pure** and consumed by every rendered surface. Changes here need:
   - A unit test in `src/themes/__tests__/derive.test.ts` covering the new behavior.
-  - A manual sanity check at `/sandbox` (the design-system reference) and `/variants` (every block × every style).
+  - A manual sanity check at `/sandbox` (the design-system reference) and `/variants` (every block × every style, both under the noindexed internal route group).
   - Verification that all four built-in presets still produce distinct, sensible token output.
 - **`types.ts`** and **`controller-types.ts`** are the contract. Renaming or removing fields breaks both the dev panel and every CSS variable consumer (which is everything). Avoid; if unavoidable, do it in one PR with the rename rippling through every consumer.
 
@@ -117,7 +117,7 @@ The dev panel picks this up automatically; the new preset appears as a chip on n
 
 ## How to retune an existing preset
 
-Open the dev panel (`~`), pick the preset, adjust Primary / Accent / Warmth / Advanced inputs until it looks right, click "Save". The dev panel writes the resolved values back to `registry.json` — either updating the existing theme entry (if you're tuning a built-in) or appending a new entry (if you saved under a new id).
+Open the dev panel (`~`), pick the preset, adjust Primary / Accent / Warmth / Advanced inputs until it looks right, then copy the resolved JSON from the panel into `registry.json`. The panel persists runtime edits to localStorage so you can keep tuning locally, but source-control persistence is still a code edit.
 
 When tuning a built-in preset that should ship for **every** project cloning this base, commit the change to `registry.json`. When tuning for **this project only**, do the same — but be aware that future merges from upstream Lookbook may conflict with your project-specific edits.
 
@@ -132,7 +132,7 @@ When tuning a built-in preset that should ship for **every** project cloning thi
 Two layers:
 
 - **Unit tests** in `__tests__/derive.test.ts` (post-Phase 2 of the starter-kit-hardening spec). Cover: determinism, range, preset stamping, warmth swing, hex round-trip stability.
-- **Visual smoke** at `/variants` and `/sandbox` after any change. The 27 blocks × 4 themes give a wide visual surface that catches regressions you'd otherwise miss.
+- **Visual smoke** at `/variants` and `/sandbox` after any change. The 27 blocks × 4 themes give a wide visual surface that catches regressions you'd otherwise miss; these routes are reference surfaces, not sitemap entries.
 
 ## Common pitfalls
 

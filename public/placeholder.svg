@@ -1,0 +1,10 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Placeholder image</title>
+  <desc id="desc">A neutral geometric placeholder for generated shadcn blocks.</desc>
+  <rect width="1200" height="900" fill="#F4F1EA"/>
+  <rect x="96" y="96" width="1008" height="708" rx="28" fill="#FFFFFF" stroke="#D8D0C2" stroke-width="2"/>
+  <path d="M245 647L433 459L538 564L665 437L955 727H245V647Z" fill="#D9E7DF"/>
+  <circle cx="828" cy="274" r="74" fill="#E7D8C7"/>
+  <rect x="176" y="168" width="318" height="18" rx="9" fill="#B8AD9D"/>
+  <rect x="176" y="214" width="208" height="14" rx="7" fill="#D8D0C2"/>
+</svg>

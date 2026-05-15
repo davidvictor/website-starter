@@ -9,13 +9,14 @@
 3. [ ] Update `LICENSE` if needed
 4. [ ] Update `src/config/site.ts` (post-Phase 2): name, description, url, links, navLinks
 5. [ ] Replace `src/lib/brand.ts` with the client's content
-6. [ ] Pick a starting preset (dev panel `~` → save back to `src/themes/registry.json`)
+6. [ ] Pick a starting preset (dev panel `~` → copy JSON into `src/themes/registry.json`)
 7. [ ] Copy `.env.example` → `.env.local`, set `NEXT_PUBLIC_SITE_URL=http://localhost:3000`
 8. [ ] Update `SECURITY.md` contact (post-Phase 3)
 9. [ ] `vercel link` — connect to a new Vercel project; set production domain
 10. [ ] Configure GitHub branch protection (require CI green to merge)
-11. [ ] Run through one example client request (Tier 1–3 from [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md)) to verify the playbook works on this clone
-12. [ ] Hand off [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md) + the deployed preview URL to the client
+11. [ ] Decide whether to keep, guard, or remove the internal reference routes
+12. [ ] Run through one example client request (Tier 1–3 from [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md)) to verify the playbook works on this clone
+13. [ ] Hand off [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md) + the deployed preview URL to the client
 
 ## Detail per step
 
@@ -93,7 +94,7 @@ If a block on the home page is irrelevant to the client (e.g., they don't want a
 
 Two paths:
 
-**Quick:** open `pnpm dev`, hit `~` to open the dev panel, tune Primary / Accent / Warmth, pick a preset that matches the client's brand neighborhood. Save.
+**Quick:** open `pnpm dev`, hit `~` to open the dev panel, tune Primary / Accent / Warmth, pick a preset that matches the client's brand neighborhood. Copy the resolved JSON back into `src/themes/registry.json` when the direction is worth keeping.
 
 **Code:** edit `src/themes/registry.json` directly — each entry in `themes[]` has `inputs` (Primary / Accent / Warmth) and a `derivation` (DerivationProfile). Add a new entry for a custom theme, or override an existing one.
 
@@ -139,18 +140,35 @@ On GitHub: Settings → Branches → Add branch protection rule for `main`:
 - Require branches to be up to date before merging
 - (Optional) Require linear history
 
-### 11. Smoke-test the playbook
+### 11. Internal reference routes
+
+Lookbook ships `/sandbox`, `/variants`, `/accessibility`, `/dashboard`,
+`/login`, `/signup`, and `/examples/*` inside the `(internal)` route group.
+They are useful while building a client site and are noindexed by the shared
+internal layout, and they are intentionally excluded from `sitemap.ts`.
+
+Before production launch, choose one policy:
+
+- **Keep:** leave them available but noindexed for the agency/operator.
+- **Guard:** add middleware/auth before sharing the production URL broadly.
+- **Remove:** delete the routes from `src/app/(internal)/` and prune matching
+  entries from `src/lib/routes.ts` plus the internal sidebar config.
+
+Do not expose these as public marketing links in a client launch unless the
+client explicitly wants a visible design-system/reference area.
+
+### 12. Smoke-test the playbook
 
 Pick one Tier 1 and one Tier 2 request from [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md) and run them through Claude on the fresh clone. Confirm Claude finds the right files and the changes apply cleanly. If something feels off, that's a signal to update AGENTS.md or the relevant inline README.
 
-### 12. Hand off
+### 13. Hand off
 
 Send the client:
 
 - The preview URL (or production URL).
 - A link to [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md) — the human-facing guide for what to ask Claude.
 - Instructions for running Claude Code locally if they want to (https://claude.com/claude-code).
-- Optionally: a 30-minute walkthrough of the dev panel (`~`), explaining how theme tweaks are saved.
+- Optionally: a 30-minute walkthrough of the dev panel (`~`), explaining that live theme tweaks persist in localStorage until copied into `src/themes/registry.json`.
 
 ## After hand-off — keeping the project healthy
 

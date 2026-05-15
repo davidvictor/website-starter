@@ -44,7 +44,7 @@ import {
   CONTRAST_LEVELS,
   ROUTE_TRANSITION_MODES,
 } from "@/themes/derivation-axes"
-import { presetIds, presetsById } from "@/themes/registry"
+import { presetIds, presetsById, resolveTokens } from "@/themes/registry"
 import { A11yIndicator } from "../a11y-indicator"
 
 const ANCHOR_OPTIONS: { label: string; value: AccentAnchor }[] = [
@@ -139,7 +139,7 @@ export function ThemesTab() {
                 <div className="flex min-w-0 items-center gap-2">
                   <span className="text-sm font-medium">{t.name}</span>
                   {isOverridden && active && (
-                    <span className="rounded bg-amber-500/15 px-1 py-0.5 font-mono text-[9px] text-amber-600 dark:text-amber-400">
+                    <span className="rounded bg-warning/15 px-1 py-0.5 font-mono text-[9px] text-warning">
                       EDITED
                     </span>
                   )}
@@ -1184,27 +1184,13 @@ function ThemePreviewSwatches({
   const theme = themes.find((t) => t.id === themeId)
   if (!theme) return null
 
-  const { primary, accent } = theme.inputs
-  const primaryHex = oklchToHex({
-    ...vibrancyToLC(primary.vibrancy),
-    h: primary.hue,
-  })
-  const accentHex = oklchToHex({
-    ...vibrancyToLC(accent.vibrancy),
-    h:
-      accent.anchor === "free"
-        ? accent.hue
-        : (((primary.hue + (ACCENT_ANCHORS[accent.anchor] ?? 0)) % 360) + 360) %
-          360,
-  })
-  const bgHex = mode === "dark" ? "#181818" : "#fafafa"
-  const fgHex = mode === "dark" ? "#fafafa" : "#181818"
+  const tokens = resolveTokens(theme, mode)
 
   const swatches = [
-    { role: "bg", color: bgHex },
-    { role: "fg", color: fgHex },
-    { role: "primary", color: primaryHex },
-    { role: "accent", color: accentHex },
+    { role: "bg", color: tokens.background },
+    { role: "fg", color: tokens.foreground },
+    { role: "primary", color: tokens.primary },
+    { role: "accent", color: tokens.accent },
   ]
   return (
     <div className="flex shrink-0 gap-0.5">

@@ -1,9 +1,15 @@
 import { Stagger } from "@/components/motion/stagger"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
-import { testimonials } from "@/lib/brand"
+import type { TestimonialsProps } from "../props"
 
-export function TestimonialsSaas() {
+function personInitials(
+  testimonial: TestimonialsProps["testimonials"][number]
+) {
+  return testimonial.avatar ?? testimonial.author.slice(0, 2).toUpperCase()
+}
+
+export function TestimonialsSaas({ testimonials }: TestimonialsProps) {
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
@@ -18,7 +24,7 @@ export function TestimonialsSaas() {
 
         <Stagger className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {testimonials.slice(0, 6).map((t) => (
-            <Card key={t.name}>
+            <Card key={t.author}>
               <CardContent className="flex h-full flex-col justify-between gap-6 p-6">
                 <p className="text-sm leading-relaxed">
                   &ldquo;{t.quote}&rdquo;
@@ -26,12 +32,12 @@ export function TestimonialsSaas() {
                 <div className="flex items-center gap-3 border-t border-border pt-4">
                   <Avatar className="size-8">
                     <AvatarFallback className="text-[10px]">
-                      {t.avatar}
+                      {personInitials(t)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col gap-0">
                     <span className="text-sm font-medium leading-tight">
-                      {t.name}
+                      {t.author}
                     </span>
                     <span className="text-xs text-muted-foreground">
                       {t.title} · {t.company}

@@ -7,11 +7,9 @@
  * importing `HeroSaas` by name.
  *
  * The `BlockPropsByKind` map in `props.ts` defines what data each
- * kind's variants conceptually accept. Today most variants are
- * zero-arg and read `@/lib/brand` directly — they still satisfy
- * `ComponentType<P>` because TS allows ignoring extra props. When a
- * variant migrates to accept its kind's props, the type narrows
- * naturally.
+ * kind's variants accept. The composition system resolves those props
+ * from `getBlockProps(kind)` and individual pages can layer in
+ * per-instance overrides.
  */
 
 import type { ComponentType } from "react"

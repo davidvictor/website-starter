@@ -2,14 +2,11 @@
  * Typed props per block kind — the data contract a variant accepts
  * when it opts in to per-instance data.
  *
- * Today most variants are zero-arg and read from `@/lib/brand`
- * directly. The contract is forward-facing: when a variant migrates
- * to accept props, it implements `BlockPropsByKind[kind]`. Until
- * then, props are passed but ignored.
+ * Variants receive their data through this contract so pages,
+ * compositions, and the future CMS bridge all exercise the same path.
  */
 
-import type { PricingTier } from "@/lib/brand"
-import type { Metric, StatPair } from "@/lib/brand-types"
+import type { Metric, PricingTier, StatPair } from "@/lib/brand-types"
 
 /* ------------------------------------------------------------------ */
 /* Shared shapes                                                        */
@@ -27,6 +24,11 @@ export type BrandCore = {
   founded?: number | string
   description?: string
   currentYear?: number
+  socials?: {
+    x?: string
+    github?: string
+    linkedin?: string
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -35,14 +37,21 @@ export type BrandCore = {
 
 export type HeroProps = {
   brand: BrandCore
+  eyebrow?: string
+  headline: {
+    before: string
+    emphasis: string
+    after?: string
+  }
   tagline: string
   bullets?: readonly string[]
   cta?: { primary: Cta; secondary?: Cta }
   stats?: readonly { label: string; value: string }[]
+  proof?: string
 }
 
 export type LogosProps = {
-  logos: readonly { name: string; logo?: string }[]
+  logos: readonly { name: string; logo?: string; initials?: string }[]
 }
 
 export type FeaturesProps = {
@@ -61,6 +70,7 @@ export type TestimonialsProps = {
     author: string
     title?: string
     company?: string
+    avatar?: string
   }[]
 }
 
@@ -78,8 +88,14 @@ export type FaqProps = {
 
 export type CtaProps = {
   brand: BrandCore
-  tagline: string
-  cta?: Cta
+  eyebrow?: string
+  headline: {
+    before: string
+    emphasis?: string
+    after?: string
+  }
+  body: string
+  cta?: { primary: Cta; secondary?: Cta }
 }
 
 export type FooterProps = {

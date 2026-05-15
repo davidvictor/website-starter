@@ -1,9 +1,14 @@
 "use client"
 
-import { Mail, Plus, Search } from "lucide-react"
+import { CheckCircle2, Mail, Plus, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -17,6 +22,7 @@ import {
 } from "@/components/ui/pagination"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Slider } from "@/components/ui/slider"
+import { Spinner } from "@/components/ui/spinner"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { Toggle } from "@/components/ui/toggle"
@@ -48,20 +54,19 @@ export function FormsSection() {
             <Label htmlFor="fm-disabled">Disabled</Label>
             <Input id="fm-disabled" placeholder="Disabled" disabled />
           </div>
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="fm-error" className="text-destructive">
-              With error
-            </Label>
+          <Field data-invalid>
+            <FieldLabel htmlFor="fm-error">With error</FieldLabel>
             <Input
               id="fm-error"
               placeholder="me@example"
               aria-invalid
+              aria-describedby="fm-error-message"
               className="border-destructive focus-visible:ring-destructive/40"
             />
-            <span className="text-xs text-destructive">
+            <FieldError id="fm-error-message">
               Please enter a valid email.
-            </span>
-          </div>
+            </FieldError>
+          </Field>
           <div className="flex flex-col gap-3 md:col-span-2">
             <Label htmlFor="fm-bio">Bio</Label>
             <Textarea
@@ -115,6 +120,80 @@ export function FormsSection() {
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
+        </div>
+      </SubSection>
+
+      <SubSection label="Control state matrix">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <Field>
+            <div className="flex items-center gap-3">
+              <Checkbox id="fm-check-on" defaultChecked />
+              <FieldLabel htmlFor="fm-check-on">Checked</FieldLabel>
+            </div>
+            <FieldDescription>
+              Check icon uses the shared opacity, scale, and blur reveal.
+            </FieldDescription>
+          </Field>
+          <Field>
+            <div className="flex items-center gap-3">
+              <Checkbox id="fm-check-disabled" disabled />
+              <FieldLabel htmlFor="fm-check-disabled">Disabled</FieldLabel>
+            </div>
+            <FieldDescription>
+              Opacity and cursor states stay visible.
+            </FieldDescription>
+          </Field>
+          <Field data-invalid>
+            <div className="flex items-center gap-3">
+              <Checkbox
+                id="fm-check-error"
+                aria-invalid
+                aria-describedby="fm-check-error-message"
+              />
+              <FieldLabel htmlFor="fm-check-error">Invalid</FieldLabel>
+            </div>
+            <FieldError id="fm-check-error-message">
+              Accept the policy before continuing.
+            </FieldError>
+          </Field>
+          <Field>
+            <div className="flex items-center gap-3">
+              <Switch id="fm-switch-on" defaultChecked />
+              <FieldLabel htmlFor="fm-switch-on">Enabled</FieldLabel>
+            </div>
+            <FieldDescription>
+              Thumb motion follows the same token pace.
+            </FieldDescription>
+          </Field>
+          <Field>
+            <div className="flex items-center gap-3">
+              <Switch id="fm-switch-disabled" disabled />
+              <FieldLabel htmlFor="fm-switch-disabled">Disabled</FieldLabel>
+            </div>
+            <FieldDescription>
+              Unavailable controls retain shape.
+            </FieldDescription>
+          </Field>
+          <Field>
+            <RadioGroup defaultValue="state-b">
+              <div className="flex items-center gap-3">
+                <RadioGroupItem value="state-a" id="fm-radio-state-a" />
+                <FieldLabel htmlFor="fm-radio-state-a">Option A</FieldLabel>
+              </div>
+              <div className="flex items-center gap-3">
+                <RadioGroupItem value="state-b" id="fm-radio-state-b" />
+                <FieldLabel htmlFor="fm-radio-state-b">Option B</FieldLabel>
+              </div>
+              <div className="flex items-center gap-3">
+                <RadioGroupItem
+                  value="state-c"
+                  id="fm-radio-state-c"
+                  disabled
+                />
+                <FieldLabel htmlFor="fm-radio-state-c">Disabled</FieldLabel>
+              </div>
+            </RadioGroup>
+          </Field>
         </div>
       </SubSection>
 
@@ -187,6 +266,16 @@ export function FormsSection() {
             </Button>
             <Button variant="secondary" disabled>
               Disabled
+            </Button>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button disabled>
+              <Spinner className="size-4" />
+              Saving
+            </Button>
+            <Button variant="outline" aria-live="polite">
+              <CheckCircle2 className="size-4 text-success" />
+              Saved
             </Button>
           </div>
         </div>

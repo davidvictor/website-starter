@@ -1,7 +1,7 @@
 import { FadeIn } from "@/components/motion/fade-in"
-import { faq } from "@/lib/brand"
+import type { FaqProps } from "../props"
 
-export function FaqEditorial() {
+export function FaqEditorial({ items }: FaqProps) {
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
@@ -28,7 +28,7 @@ export function FaqEditorial() {
           </FadeIn>
 
           <dl className="flex flex-col md:col-span-8">
-            {faq.map((item, i) => (
+            {items.map((item, i) => (
               <FadeIn
                 key={item.question}
                 delay={0.05 + (i % 3) * 0.04}

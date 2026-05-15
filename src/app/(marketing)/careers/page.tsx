@@ -4,10 +4,14 @@ import { CtaSaas, FooterSaas, StatsSaas } from "@/components/blocks"
 import { FadeIn } from "@/components/motion/fade-in"
 import { Badge } from "@/components/ui/badge"
 import { jobs, valuesList } from "@/lib/brand"
+import { getBlockProps } from "@/lib/brand-resolver"
+import { siteMetadata } from "@/lib/metadata"
 
-export const metadata = {
-  title: "Careers · Nimbus",
-}
+export const metadata = siteMetadata({
+  title: "Careers",
+  description: "A polished careers route composed from the Lookbook baseline.",
+  path: "/careers",
+})
 
 type Job = (typeof jobs)[number]
 
@@ -58,7 +62,7 @@ export default function CareersPage() {
         </div>
       </section>
 
-      <StatsSaas />
+      <StatsSaas {...getBlockProps("stats")} />
 
       <section className="border-b border-border">
         <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
@@ -113,8 +117,8 @@ export default function CareersPage() {
         </div>
       </section>
 
-      <CtaSaas />
-      <FooterSaas />
+      <CtaSaas {...getBlockProps("cta")} />
+      <FooterSaas {...getBlockProps("footer")} />
     </>
   )
 }

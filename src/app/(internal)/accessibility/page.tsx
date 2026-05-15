@@ -1,5 +1,6 @@
 import Link from "next/link"
 
+import { siteMetadata } from "@/lib/metadata"
 import { auditAllPresets } from "@/themes/a11y"
 import { baseThemes } from "@/themes/registry"
 
@@ -8,11 +9,12 @@ import { GradeBadge } from "./_components/grade-badge"
 import { SampleStrip } from "./_components/sample-strip"
 import { ThemePreviewCard } from "./_components/theme-preview-card"
 
-export const metadata = {
-  title: "Accessibility · Lookbook",
+export const metadata = siteMetadata({
+  title: "Accessibility",
   description:
     "WCAG 2.2 contrast audit for every built-in theme, in both light and dark modes.",
-}
+  path: "/accessibility",
+})
 
 export default function AccessibilityPage() {
   const results = auditAllPresets(baseThemes)
@@ -39,7 +41,7 @@ export default function AccessibilityPage() {
             {totalFailures === 1 ? "" : "s"}
           </span>
           {totalFailures === 0 && (
-            <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 font-mono text-xs text-emerald-600 dark:text-emerald-400">
+            <span className="rounded-full bg-success/15 px-2 py-0.5 font-mono text-xs text-success">
               all defaults pass
             </span>
           )}
@@ -81,7 +83,7 @@ export default function AccessibilityPage() {
                   </span>
                 </div>
                 {(light.failures.length > 0 || dark.failures.length > 0) && (
-                  <span className="rounded-full bg-red-500/15 px-2 py-0.5 font-mono text-xs text-red-600 dark:text-red-400">
+                  <span className="rounded-full bg-destructive/15 px-2 py-0.5 font-mono text-xs text-destructive">
                     {light.failures.length + dark.failures.length} failing
                   </span>
                 )}

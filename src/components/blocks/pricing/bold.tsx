@@ -1,21 +1,18 @@
 "use client"
 
-import { ArrowRight, Check } from "lucide-react"
-import { AnimatePresence, motion } from "motion/react"
-import Link from "next/link"
+import { Check } from "lucide-react"
+import { MarketingButton } from "@/components/marketing/marketing-button"
+import { AnimatedSwap } from "@/components/motion/animated-swap"
 import { FadeIn } from "@/components/motion/fade-in"
-import { Press } from "@/components/motion/press"
-import { SPRING_STANDARD } from "@/components/motion/springs"
 import {
   PricingToggle,
   usePricingPeriod,
 } from "@/components/pricing/pricing-toggle"
-import { buttonVariants } from "@/components/ui/button"
-import { pricingTiers } from "@/lib/brand"
 import { formatPrice } from "@/lib/format"
 import { cn } from "@/lib/utils"
+import type { PricingProps } from "../props"
 
-export function PricingBold() {
+export function PricingBold({ tiers }: PricingProps) {
   const period = usePricingPeriod()
 
   return (
@@ -36,7 +33,7 @@ export function PricingBold() {
         </FadeIn>
 
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
-          {pricingTiers.map((tier, i) => {
+          {tiers.map((tier, i) => {
             const featured = tier.featured
             const activePrice =
               period === "year" ? tier.priceYearly : tier.price
@@ -78,18 +75,13 @@ export function PricingBold() {
                   {tier.description}
                 </p>
                 <div className="flex items-baseline gap-1">
-                  <AnimatePresence mode="wait" initial={false}>
-                    <motion.span
-                      key={`${tier.id}-${period}`}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={SPRING_STANDARD}
-                      className="font-heading text-5xl font-bold tracking-tighter tabular md:text-6xl"
-                    >
-                      {formatted ? formatted.amount : "Talk to us"}
-                    </motion.span>
-                  </AnimatePresence>
+                  <AnimatedSwap
+                    stateKey={`${tier.id}-${period}`}
+                    offset={8}
+                    className="font-heading text-5xl font-bold tracking-tighter tabular md:text-6xl"
+                  >
+                    {formatted ? formatted.amount : "Talk to us"}
+                  </AnimatedSwap>
                   {formatted?.cadence && (
                     <span
                       className={cn(
@@ -126,24 +118,17 @@ export function PricingBold() {
                     </li>
                   ))}
                 </ul>
-                <Press
-                  className="mt-auto"
-                  render={
-                    <Link
-                      href="/contact"
-                      className={cn(
-                        buttonVariants({ size: "lg" }),
-                        "mt-auto",
-                        featured
-                          ? "border-brand-accent-foreground bg-brand-accent-foreground text-brand-accent hover:bg-brand-accent-foreground/90"
-                          : ""
-                      )}
-                    >
-                      {tier.cta}
-                      <ArrowRight className="size-4" />
-                    </Link>
-                  }
-                />
+                <MarketingButton
+                  href="/contact"
+                  icon="arrow-right"
+                  className={cn(
+                    "mt-auto",
+                    featured &&
+                      "border-brand-accent-foreground bg-brand-accent-foreground text-brand-accent hover:bg-brand-accent-foreground/90"
+                  )}
+                >
+                  {tier.cta}
+                </MarketingButton>
               </FadeIn>
             )
           })}

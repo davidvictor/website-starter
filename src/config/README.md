@@ -8,6 +8,7 @@
 |---|---|
 | `site.ts` | Project-wide source of truth: `name`, `description`, `url`, `links`, `navLinks` |
 | `env.ts` | zod-validated access to `process.env`. Throws at import time if a required var is missing. |
+| `runtime.ts` | Client-safe runtime mode helper for `NODE_ENV` only. Do not add app-specific env vars here. |
 
 ## Why
 
@@ -74,11 +75,17 @@ const envSchema = z.object({
 3. **Use it via `env.X`** — never `process.env.X`.
 4. **For client-side vars, prefix with `NEXT_PUBLIC_`** so Next.js bundles them into the client. The schema enforces nothing here — Next.js does — but be deliberate: client-side vars are visible to anyone who views your source.
 
-## The one documented exception
+## Documented exceptions
 
 `src/app/api/health/route.ts` reads `process.env` directly because the health route must respond even when `env.ts` validation would throw. If `NEXT_PUBLIC_SITE_URL` is missing in production, you want the health route to return `{ status: "ok" }` so the platform's healthcheck still passes — you don't want the entire app to crash at module load and the healthcheck to fail too.
 
-This is the only file allowed to read `process.env` directly. The exception is documented in [`AGENTS.md`](../../AGENTS.md) §5 invariant #2.
+`src/config/runtime.ts` reads `process.env.NODE_ENV` only. Next inlines that
+value in client bundles, which makes it safe for client components that need a
+development/production mode branch. Do not import `env.ts` into client
+components; full env validation belongs on server-only config paths.
+
+These are the only files allowed to read `process.env` directly. The exception
+is documented in [`AGENTS.md`](../../AGENTS.md) §5 invariant #2.
 
 ## Public vs server
 

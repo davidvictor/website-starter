@@ -25,9 +25,11 @@ type AnimatedNumberProps = {
   duration?: number
 }
 
+const defaultFormat = (value: number) => String(Math.round(value))
+
 export function AnimatedNumber({
   value,
-  format = (v) => String(Math.round(v)),
+  format = defaultFormat,
   playOn = "in-view",
   className,
   duration = 1.4,
@@ -57,10 +59,7 @@ export function AnimatedNumber({
       onUpdate: (latest) => setDisplay(format(latest)),
     })
     return () => controls.stop()
-    // value, format, duration are stable enough for marketing usage; rerunning
-    // on every render would restart the count-up.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inView, playOn, reduce, value])
+  }, [duration, format, inView, playOn, reduce, value])
 
   return (
     <span ref={ref} className={cn("tabular", className)}>

@@ -36,3 +36,14 @@ export type StatPair = {
   metric: Metric
   label: string
 }
+
+export type PricingTier = {
+  id: string
+  name: string
+  price: Price | null
+  priceYearly: Price | null
+  description: string
+  features: readonly string[]
+  cta: string
+  featured: boolean
+}

@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react"
+import Link from "next/link"
 import {
   CtaSaas,
   FooterSaas,
@@ -7,11 +8,15 @@ import {
 } from "@/components/blocks"
 import { FadeIn } from "@/components/motion/fade-in"
 import { customers } from "@/lib/brand"
+import { getBlockProps } from "@/lib/brand-resolver"
 import { formatMetric } from "@/lib/format"
+import { siteMetadata } from "@/lib/metadata"
 
-export const metadata = {
-  title: "Customers · Nimbus",
-}
+export const metadata = siteMetadata({
+  title: "Customers",
+  description: "Customer-story scaffolding for the Lookbook marketing system.",
+  path: "/customers",
+})
 
 export default function CustomersPage() {
   return (
@@ -38,7 +43,7 @@ export default function CustomersPage() {
         </div>
       </section>
 
-      <LogosSaas />
+      <LogosSaas {...getBlockProps("logos")} />
 
       <section className="border-b border-border">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
@@ -81,13 +86,13 @@ export default function CustomersPage() {
                     <span className="text-sm text-muted-foreground">
                       {c.contact}
                     </span>
-                    <a
-                      href="#"
+                    <Link
+                      href="/contact"
                       className="inline-flex items-center gap-1 text-sm font-medium hover:underline"
                     >
                       Read case study
                       <ArrowUpRight className="size-3.5" />
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </FadeIn>
@@ -96,9 +101,9 @@ export default function CustomersPage() {
         </div>
       </section>
 
-      <TestimonialsSaas />
-      <CtaSaas />
-      <FooterSaas />
+      <TestimonialsSaas {...getBlockProps("testimonials")} />
+      <CtaSaas {...getBlockProps("cta")} />
+      <FooterSaas {...getBlockProps("footer")} />
     </>
   )
 }

@@ -7,12 +7,15 @@ import {
   StatsSaas,
 } from "@/components/blocks"
 import { FadeIn } from "@/components/motion/fade-in"
+import { getBlockProps } from "@/lib/brand-resolver"
+import { siteMetadata } from "@/lib/metadata"
 
-export const metadata = {
-  title: "Pricing · Nimbus",
+export const metadata = siteMetadata({
+  title: "Pricing",
   description:
     'Three plans. Honest pricing. No "contact sales" until you want us to.',
-}
+  path: "/pricing",
+})
 
 export default function PricingPage() {
   return (
@@ -39,12 +42,12 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <PricingSaas />
-      <StatsSaas />
-      <LogosSaas />
-      <FaqSaas />
-      <CtaSaas />
-      <FooterSaas />
+      <PricingSaas {...getBlockProps("pricing")} />
+      <StatsSaas {...getBlockProps("stats")} />
+      <LogosSaas {...getBlockProps("logos")} />
+      <FaqSaas {...getBlockProps("faq")} />
+      <CtaSaas {...getBlockProps("cta")} />
+      <FooterSaas {...getBlockProps("footer")} />
     </>
   )
 }

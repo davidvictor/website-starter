@@ -1,11 +1,10 @@
 "use client"
 
-import { AnimatedNumber } from "@/components/motion/animated-number"
 import { FadeIn } from "@/components/motion/fade-in"
-import { stats } from "@/lib/brand"
-import { formatMetric } from "@/lib/format"
+import type { StatsProps } from "../props"
+import { StatValue } from "./stat-value"
 
-export function StatsEditorial() {
+export function StatsEditorial({ stats }: StatsProps) {
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
@@ -32,10 +31,7 @@ export function StatsEditorial() {
             <FadeIn key={stat.label} delay={0.05 + i * 0.04}>
               <dt className="text-xs text-muted-foreground">{stat.label}</dt>
               <dd className="font-heading mt-2 text-5xl leading-none font-medium tracking-tight">
-                <AnimatedNumber
-                  value={stat.metric.value}
-                  format={(v) => formatMetric({ ...stat.metric, value: v })}
-                />
+                <StatValue stat={stat} />
               </dd>
             </FadeIn>
           ))}

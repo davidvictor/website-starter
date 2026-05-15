@@ -15,22 +15,35 @@ import { cn } from "@/lib/utils"
  */
 export type PricingPeriod = "month" | "year"
 
+const PRICING_PERIOD_EVENT = "lookbook:pricing-period-change"
+
+function readPeriodFromLocation(): PricingPeriod {
+  const url = new URL(window.location.href)
+  return url.searchParams.get("period") === "annual" ? "year" : "month"
+}
+
 /**
  * Subscribe to the pricing period. Returns "month" during SSR / first render
  * and updates after hydration when the search param is read. Pricing blocks
- * then re-render with the actual period.
+ * then re-render with the actual period. The toggle emits a custom event
+ * because `router.replace()` does not fire `popstate`.
  */
 export function usePricingPeriod(): PricingPeriod {
   const [period, setPeriod] = useState<PricingPeriod>("month")
 
   useEffect(() => {
-    const sync = () => {
-      const url = new URL(window.location.href)
-      setPeriod(url.searchParams.get("period") === "annual" ? "year" : "month")
+    const sync = () => setPeriod(readPeriodFromLocation())
+    const syncFromToggle = (event: Event) => {
+      const next = (event as CustomEvent<PricingPeriod>).detail
+      if (next === "month" || next === "year") setPeriod(next)
     }
     sync()
     window.addEventListener("popstate", sync)
-    return () => window.removeEventListener("popstate", sync)
+    window.addEventListener(PRICING_PERIOD_EVENT, syncFromToggle)
+    return () => {
+      window.removeEventListener("popstate", sync)
+      window.removeEventListener(PRICING_PERIOD_EVENT, syncFromToggle)
+    }
   }, [])
 
   return period
@@ -43,12 +56,18 @@ function PricingToggleInner({ className }: { className?: string }) {
   const [, startTransition] = useTransition()
 
   const onChange = (next: boolean) => {
+    const nextPeriod: PricingPeriod = next ? "year" : "month"
     const url = new URL(window.location.href)
     if (next) {
       url.searchParams.set("period", "annual")
     } else {
       url.searchParams.delete("period")
     }
+    window.dispatchEvent(
+      new CustomEvent<PricingPeriod>(PRICING_PERIOD_EVENT, {
+        detail: nextPeriod,
+      })
+    )
     startTransition(() => {
       router.replace(`${url.pathname}${url.search}`, { scroll: false })
     })
@@ -84,6 +103,7 @@ export function PricingToggle({ className }: { className?: string }) {
         <div
           className={cn(
             "inline-flex h-6 w-48 animate-pulse rounded-md bg-muted/40",
+            "motion-reduce:animate-none",
             className
           )}
         />

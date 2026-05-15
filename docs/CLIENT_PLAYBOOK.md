@@ -77,7 +77,7 @@ Examples:
 - "Use a serif for headings."
 - "Higher contrast overall."
 
-What to expect: Claude updates the theme presets (or asks you to open the dev panel — press `~` while running the site — to tune visually and save). Changes apply to every page at once.
+What to expect: Claude updates the theme presets (or asks you to open the dev panel — press `~` while running the site — to tune visually, then copy the resolved JSON back into `src/themes/registry.json`). Changes apply to every page at once.
 
 ### Tier 3: page composition changes
 
@@ -191,7 +191,7 @@ A few suggestions for working effectively:
 - **Run `pnpm dev` in a terminal and keep the site open in a browser.** Press `~` to open the dev panel — instant visual tweaks without code edits.
 - **For visual changes, ask Claude to take a screenshot after the change.** Claude can drive the browser via the `preview_*` tools and send you the result before you have to switch tabs.
 - **For content changes, work in batches.** "Change all the pricing copy + the FAQ + the testimonials" is a fine single prompt; Claude will do them all in one pass.
-- **Save the dev panel settings.** When you tune theme inputs and find something that works, hit "Save" in the panel. That writes the values back to the codebase so the change persists.
+- **Persist the dev panel settings.** When you tune theme inputs and find something that works, copy the resolved JSON from the panel into `src/themes/registry.json`. The panel keeps runtime edits in localStorage; the codebase changes only when the registry file changes.
 - **Commit often.** Each Conventional Commit (`feat: change pricing copy`, `fix: bold variant alignment`, etc.) gives you a checkpoint to revert to if a change goes sideways.
 
 ## Further reading

@@ -1,11 +1,15 @@
 import { CtaSaas, FooterSaas, StatsSaas } from "@/components/blocks"
 import { FadeIn } from "@/components/motion/fade-in"
 import { brand, teamCounts, valuesList } from "@/lib/brand"
+import { getBlockProps } from "@/lib/brand-resolver"
 import { formatMetric } from "@/lib/format"
+import { siteMetadata } from "@/lib/metadata"
 
-export const metadata = {
-  title: "About · Nimbus",
-}
+export const metadata = siteMetadata({
+  title: "About",
+  description: "Company-story scaffolding for the Lookbook marketing system.",
+  path: "/about",
+})
 
 export default function AboutPage() {
   return (
@@ -115,9 +119,9 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <StatsSaas />
-      <CtaSaas />
-      <FooterSaas />
+      <StatsSaas {...getBlockProps("stats")} />
+      <CtaSaas {...getBlockProps("cta")} />
+      <FooterSaas {...getBlockProps("footer")} />
     </>
   )
 }

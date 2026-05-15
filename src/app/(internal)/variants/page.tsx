@@ -1,11 +1,18 @@
 import Link from "next/link"
-import { BLOCK_ORDER, BLOCK_REGISTRY } from "@/components/blocks"
+import {
+  BLOCK_ORDER,
+  BLOCK_REGISTRY,
+  type BlockKind,
+} from "@/components/blocks"
+import { getBlockProps } from "@/lib/brand-resolver"
+import { siteMetadata } from "@/lib/metadata"
 
-export const metadata = {
-  title: "Variants · Nimbus",
+export const metadata = siteMetadata({
+  title: "Variants",
   description:
     "Every marketing block in every composition variant — the design-system reference for composing pages.",
-}
+  path: "/variants",
+})
 
 /** Friendly labels per block kind. Add a kind → add a label. */
 const KIND_LABELS: Record<string, string> = {
@@ -78,6 +85,7 @@ export default function VariantsGalleryPage() {
 
               {variants.map((variant) => {
                 const Component = variant.Component
+                const props = getBlockProps(kind as BlockKind)
                 return (
                   <div
                     key={variant.id}
@@ -91,7 +99,7 @@ export default function VariantsGalleryPage() {
                         {kind}/{variant.id}
                       </span>
                     </div>
-                    <Component />
+                    <Component {...props} />
                   </div>
                 )
               })}

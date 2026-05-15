@@ -5,6 +5,7 @@ import { type CSSProperties, useEffect, useMemo, useRef } from "react"
 import { Shader } from "shaders/react"
 
 import { useDevPanel } from "@/components/dev-panel"
+import { runtime } from "@/config/runtime"
 import { cn } from "@/lib/utils"
 
 import { ShaderFallback } from "./fallback"
@@ -72,22 +73,20 @@ export function ThemedShader({
           <Shader className="absolute inset-0">{def.renderTree(props)}</Shader>
         ) : null /* paused: off-screen */
       }
-      {process.env.NODE_ENV === "development" &&
-        panelOpen &&
-        focusedShaderId !== id && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation()
-              setFocusedShaderId(id)
-              setOpen(true)
-              setActiveTab("controls")
-            }}
-            className="absolute right-1.5 top-1.5 z-10 rounded bg-black/50 px-1.5 py-0.5 font-mono text-[9px] text-white opacity-0 transition-opacity hover:bg-black/70 group-hover/themed-shader:opacity-100"
-          >
-            [edit]
-          </button>
-        )}
+      {runtime.isDevelopment && panelOpen && focusedShaderId !== id && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            setFocusedShaderId(id)
+            setOpen(true)
+            setActiveTab("controls")
+          }}
+          className="absolute top-1.5 right-1.5 z-10 rounded bg-foreground/70 px-1.5 py-0.5 font-mono text-[9px] text-background opacity-0 transition-opacity hover:bg-foreground/85 group-hover/themed-shader:opacity-100"
+        >
+          [edit]
+        </button>
+      )}
     </div>
   )
 }

@@ -129,7 +129,7 @@ Mirrors `experimentalScannerIgnores` in `biome.json`:
 Numbered for citability. These hold regardless of instruction; if a user request conflicts with an invariant, surface the conflict and propose a compliant alternative.
 
 1. **No hardcoded colors in app code.** All colors via CSS custom properties (`var(--primary)`, `var(--accent-foreground)`, etc.) or Tailwind utilities backed by them (`bg-primary`, `text-accent`). Hex literals only inside `src/themes/`, `src/lib/color.ts`, or static image assets.
-2. **All env access via `src/config/env.ts`** (post-Phase 2). Never `process.env.X` directly in app code. **Exception:** `src/app/api/health/route.ts` reads `process.env` directly so it always returns even when validation would fail.
+2. **All env access via `src/config/env.ts`** (post-Phase 2). Never `process.env.X` directly in app code. **Exceptions:** `src/app/api/health/route.ts` reads `process.env` directly so it always returns even when validation would fail; `src/config/runtime.ts` reads `process.env.NODE_ENV` only so client components can branch on mode without importing the full env validator.
 3. **Conventional Commits, always.** `feat/fix/docs/refactor/style/test/chore/perf/ci/build`, scope optional. Enforced by commitlint; do not bypass.
 4. **No new runtime dependencies without justification.** Adding to `package.json` `dependencies` requires (a) a check that no existing dep covers it, and (b) a note in the PR explaining why.
 5. **shadcn primitives are read-only.** No edits to `src/components/ui/**` or the listed patched blocks. Wrap them; don't fork them.
@@ -335,7 +335,7 @@ What a typical request maps to in code. Five tiers, ordered by risk. See also [`
 ## 10. Conventions
 
 - **Commits:** Conventional Commits — `feat/fix/docs/refactor/style/test/chore/perf/ci/build`. Scope optional but encouraged (e.g., `feat(hero): add minimal variant`). Enforced by commitlint.
-- **Env vars:** `import { env } from "@/config/env"` (post-Phase 2). Never `process.env.X` in app code. Health route is the documented exception.
+- **Env vars:** `import { env } from "@/config/env"` (post-Phase 2). Never `process.env.X` in app code. Health route and the `NODE_ENV`-only runtime helper are the documented exceptions.
 - **Page metadata:** `import { siteMetadata } from "@/lib/metadata"` (post-Phase 3). Pass `{ title, description, path }`.
 - **Theme reads:** CSS variables (`var(--primary)`) or Tailwind utilities (`bg-primary`). No hex.
 - **Block variants:** three minimum per type. File names = variant names.

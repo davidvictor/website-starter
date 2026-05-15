@@ -18,7 +18,7 @@ function PairRow({ pr }: { pr: PairResult }) {
     <div
       className={cn(
         "grid grid-cols-[1fr_auto_auto] items-center gap-3 px-3 py-1.5",
-        pr.fails && "bg-red-500/5"
+        pr.fails && "bg-destructive/5"
       )}
     >
       <div className="flex items-center gap-2 truncate">

@@ -1,17 +1,14 @@
 "use client"
 
 import { Check } from "lucide-react"
-import { AnimatePresence, motion } from "motion/react"
-import Link from "next/link"
-import { Press } from "@/components/motion/press"
-import { SPRING_STANDARD } from "@/components/motion/springs"
+import { MarketingButton } from "@/components/marketing/marketing-button"
+import { AnimatedSwap } from "@/components/motion/animated-swap"
 import { Stagger } from "@/components/motion/stagger"
 import {
   PricingToggle,
   usePricingPeriod,
 } from "@/components/pricing/pricing-toggle"
 import { Badge } from "@/components/ui/badge"
-import { buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -20,11 +17,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { pricingTiers } from "@/lib/brand"
 import { formatPrice } from "@/lib/format"
 import { cn } from "@/lib/utils"
+import type { PricingProps } from "../props"
 
-export function PricingSaas() {
+export function PricingSaas({ headline, subhead, tiers }: PricingProps) {
   const period = usePricingPeriod()
 
   return (
@@ -35,17 +32,17 @@ export function PricingSaas() {
             Pricing
           </p>
           <h2 className="font-heading max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
-            Start free. Scale honestly.
+            {headline ?? "Start free. Scale honestly."}
           </h2>
           <p className="max-w-xl text-balance text-muted-foreground">
-            All plans include unlimited workspaces, SOC2 by default, and a real
-            human you can email.
+            {subhead ??
+              "All plans include unlimited workspaces, SOC2 by default, and a real human you can email."}
           </p>
           <PricingToggle className="mt-2" />
         </div>
 
         <Stagger className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {pricingTiers.map((tier) => {
+          {tiers.map((tier) => {
             const activePrice =
               period === "year" ? tier.priceYearly : tier.price
             const formatted = activePrice ? formatPrice(activePrice) : null
@@ -71,18 +68,12 @@ export function PricingSaas() {
                 </CardHeader>
                 <CardContent className="flex flex-1 flex-col gap-5">
                   <div className="flex items-baseline gap-1">
-                    <AnimatePresence mode="wait" initial={false}>
-                      <motion.span
-                        key={`${tier.id}-${period}`}
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={SPRING_STANDARD}
-                        className="font-heading text-4xl font-semibold tracking-tight tabular"
-                      >
-                        {formatted ? formatted.amount : "Talk to us"}
-                      </motion.span>
-                    </AnimatePresence>
+                    <AnimatedSwap
+                      stateKey={`${tier.id}-${period}`}
+                      className="font-heading text-4xl font-semibold tracking-tight tabular"
+                    >
+                      {formatted ? formatted.amount : "Talk to us"}
+                    </AnimatedSwap>
                     {formatted?.cadence && (
                       <span className="text-sm text-muted-foreground tabular">
                         {formatted.cadence}
@@ -99,22 +90,14 @@ export function PricingSaas() {
                   </ul>
                 </CardContent>
                 <CardFooter>
-                  <Press
+                  <MarketingButton
+                    href="/contact"
+                    variant={tier.featured ? "default" : "outline"}
+                    icon="none"
                     className="w-full"
-                    render={
-                      <Link
-                        href="/contact"
-                        className={cn(
-                          buttonVariants({
-                            variant: tier.featured ? "default" : "outline",
-                          }),
-                          "w-full"
-                        )}
-                      >
-                        {tier.cta}
-                      </Link>
-                    }
-                  />
+                  >
+                    {tier.cta}
+                  </MarketingButton>
                 </CardFooter>
               </Card>
             )

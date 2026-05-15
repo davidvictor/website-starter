@@ -6,7 +6,7 @@
  * docs/adr/0008-brand-numeric-schema.md.
  */
 
-import type { Metric, Price } from "@/lib/brand-types"
+import type { Metric, PricingTier } from "@/lib/brand-types"
 
 export const brand = {
   name: "Nimbus",
@@ -38,6 +38,40 @@ export const taglines = {
   secondary:
     "Nimbus is the cognitive surface area your engineering team didn't know it needed. Until now. Until us.",
   short: "Reasoning that ships. Hallucinations that don't (mostly).",
+} as const
+
+const leadInvestor = brand.funding.led.split(",")[0] ?? brand.funding.led
+
+export const blockContent = {
+  hero: {
+    eyebrow: `${brand.funding.stage} · led by ${leadInvestor}`,
+    headline: {
+      before: "Computers that finally",
+      emphasis: "get the assignment.",
+    },
+    proof: "No credit card. SOC2 by default. 5-minute install.",
+    cta: {
+      primary: { label: "Start free", href: "/pricing" },
+      secondary: { label: `Why we built ${brand.name}`, href: "/about" },
+    },
+  },
+  pricing: {
+    headline: "Start free. Scale honestly.",
+    subhead:
+      "All plans include unlimited workspaces, SOC2 by default, and a real human you can email.",
+  },
+  cta: {
+    eyebrow: "Closing notes",
+    headline: {
+      before: "Ready to ship reasoning",
+      emphasis: "to production?",
+    },
+    body: "Start free, scale with usage. Or talk to us about volume and custom deployments.",
+    cta: {
+      primary: { label: "Start free", href: "/pricing" },
+      secondary: { label: "Talk to sales", href: "/contact" },
+    },
+  },
 } as const
 
 export const navLinks = [
@@ -202,21 +236,6 @@ export const testimonials = [
     avatar: "SM",
   },
 ] as const
-
-/**
- * Pricing tiers with both monthly and annual prices so the pricing toggle
- * can cross-fade between them. `price` is null for the talk-to-sales tier.
- */
-export type PricingTier = {
-  id: string
-  name: string
-  price: Price | null
-  priceYearly: Price | null
-  description: string
-  features: readonly string[]
-  cta: string
-  featured: boolean
-}
 
 export const pricingTiers: readonly PricingTier[] = [
   {

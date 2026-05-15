@@ -2,6 +2,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import { DevPanel, DevPanelProvider } from "@/components/dev-panel"
+import { env } from "@/config/env"
 import { ALL_FONT_VARS } from "@/lib/fonts"
 import { siteMetadata } from "@/lib/metadata"
 import { cn } from "@/lib/utils"
@@ -21,6 +22,7 @@ export const metadata = siteMetadata()
  * specificity, beating `html { @apply font-sans; }` in globals.css).
  */
 const HTML_CLASSES = cn("h-full antialiased", ...ALL_FONT_VARS)
+const ENABLE_VERCEL_INSIGHTS = Boolean(env.VERCEL_ENV)
 
 export default function RootLayout({
   children,
@@ -39,8 +41,12 @@ export default function RootLayout({
             <DevPanel />
           </DevPanelProvider>
         </ThemeProvider>
-        <Analytics />
-        <SpeedInsights />
+        {ENABLE_VERCEL_INSIGHTS && (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        )}
       </body>
     </html>
   )

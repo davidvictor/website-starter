@@ -1,8 +1,8 @@
 import { Beaker, Brain, Receipt, ShieldCheck, Wrench, Zap } from "lucide-react"
 
 import { FadeIn } from "@/components/motion/fade-in"
-import { features } from "@/lib/brand"
 import { cn } from "@/lib/utils"
+import type { FeaturesProps } from "../props"
 
 const ICONS = {
   Brain,
@@ -13,7 +13,7 @@ const ICONS = {
   Receipt,
 } as const
 
-export function FeaturesBold() {
+export function FeaturesBold({ features }: FeaturesProps) {
   return (
     <section className="border-b border-border bg-muted/20">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">

@@ -1,21 +1,18 @@
 "use client"
 
 import { Check } from "lucide-react"
-import { AnimatePresence, motion } from "motion/react"
-import Link from "next/link"
+import { MarketingButton } from "@/components/marketing/marketing-button"
+import { AnimatedSwap } from "@/components/motion/animated-swap"
 import { FadeIn } from "@/components/motion/fade-in"
-import { Press } from "@/components/motion/press"
-import { SPRING_STANDARD } from "@/components/motion/springs"
 import {
   PricingToggle,
   usePricingPeriod,
 } from "@/components/pricing/pricing-toggle"
-import { buttonVariants } from "@/components/ui/button"
-import { pricingTiers } from "@/lib/brand"
 import { formatPrice } from "@/lib/format"
 import { cn } from "@/lib/utils"
+import type { PricingProps } from "../props"
 
-export function PricingEditorial() {
+export function PricingEditorial({ headline, subhead, tiers }: PricingProps) {
   const period = usePricingPeriod()
 
   return (
@@ -33,12 +30,11 @@ export function PricingEditorial() {
         <FadeIn delay={0.05}>
           <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-12">
             <h2 className="font-heading text-4xl leading-tight font-medium tracking-tight md:col-span-7 md:text-5xl">
-              Three brackets. No surprises.
+              {headline ?? "Three brackets. No surprises."}
             </h2>
             <p className="text-balance text-muted-foreground md:col-span-5 md:pt-3">
-              We use usage-based pricing because we&apos;d rather you pay less
-              while you&apos;re still figuring it out. The pricing page is the
-              pricing page. There&apos;s no second pricing page.
+              {subhead ??
+                "We use usage-based pricing because we'd rather you pay less while you're still figuring it out. The pricing page is the pricing page. There's no second pricing page."}
             </p>
           </div>
         </FadeIn>
@@ -50,7 +46,7 @@ export function PricingEditorial() {
         </FadeIn>
 
         <div className="grid grid-cols-1 divide-y divide-border border-y border-border md:grid-cols-3 md:divide-x md:divide-y-0">
-          {pricingTiers.map((tier, i) => {
+          {tiers.map((tier, i) => {
             const activePrice =
               period === "year" ? tier.priceYearly : tier.price
             const formatted = activePrice ? formatPrice(activePrice) : null
@@ -77,18 +73,12 @@ export function PricingEditorial() {
                   {tier.description}
                 </p>
                 <div className="flex items-baseline gap-1">
-                  <AnimatePresence mode="wait" initial={false}>
-                    <motion.span
-                      key={`${tier.id}-${period}`}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
-                      transition={SPRING_STANDARD}
-                      className="font-heading text-4xl font-medium tracking-tight tabular"
-                    >
-                      {formatted ? formatted.amount : "Talk to us"}
-                    </motion.span>
-                  </AnimatePresence>
+                  <AnimatedSwap
+                    stateKey={`${tier.id}-${period}`}
+                    className="font-heading text-4xl font-medium tracking-tight tabular"
+                  >
+                    {formatted ? formatted.amount : "Talk to us"}
+                  </AnimatedSwap>
                   {formatted?.cadence && (
                     <span className="text-sm text-muted-foreground tabular">
                       {formatted.cadence}
@@ -103,23 +93,15 @@ export function PricingEditorial() {
                     </li>
                   ))}
                 </ul>
-                <Press
+                <MarketingButton
+                  href="/contact"
+                  variant={tier.featured ? "default" : "outline"}
+                  size="sm"
+                  icon="none"
                   className="mt-auto"
-                  render={
-                    <Link
-                      href="/contact"
-                      className={cn(
-                        buttonVariants({
-                          variant: tier.featured ? "default" : "outline",
-                          size: "sm",
-                        }),
-                        "mt-auto"
-                      )}
-                    >
-                      {tier.cta}
-                    </Link>
-                  }
-                />
+                >
+                  {tier.cta}
+                </MarketingButton>
               </FadeIn>
             )
           })}

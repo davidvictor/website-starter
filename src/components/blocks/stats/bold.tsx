@@ -1,11 +1,10 @@
 "use client"
 
-import { AnimatedNumber } from "@/components/motion/animated-number"
 import { FadeIn } from "@/components/motion/fade-in"
-import { stats } from "@/lib/brand"
-import { formatMetric } from "@/lib/format"
+import type { StatsProps } from "../props"
+import { StatValue } from "./stat-value"
 
-export function StatsBold() {
+export function StatsBold({ stats }: StatsProps) {
   return (
     <section className="border-b border-border bg-foreground py-20 text-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -23,10 +22,7 @@ export function StatsBold() {
               className="flex flex-col gap-3 px-2 py-6 md:py-2"
             >
               <span className="font-heading text-[clamp(3rem,8vw,6rem)] leading-none font-bold tracking-tighter">
-                <AnimatedNumber
-                  value={stat.metric.value}
-                  format={(v) => formatMetric({ ...stat.metric, value: v })}
-                />
+                <StatValue stat={stat} />
               </span>
               <span className="text-sm leading-relaxed text-background/70">
                 {stat.label}

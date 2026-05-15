@@ -2,10 +2,10 @@ import type { Grade } from "@/lib/contrast"
 import { cn } from "@/lib/utils"
 
 const STYLES: Record<Grade, string> = {
-  AAA: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
+  AAA: "bg-success/15 text-success",
   AA: "bg-foreground/10 text-foreground/80",
-  "AA-Large": "bg-amber-500/15 text-amber-700 dark:text-amber-300",
-  Fail: "bg-red-500/15 text-red-700 dark:text-red-300",
+  "AA-Large": "bg-warning/15 text-warning",
+  Fail: "bg-destructive/15 text-destructive",
   Exempt: "bg-muted text-muted-foreground",
 }
 

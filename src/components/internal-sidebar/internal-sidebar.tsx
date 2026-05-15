@@ -44,7 +44,7 @@ export function InternalSidebar() {
                 {group.items.map((item) => (
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
-                      render={<Link href={item.href} />}
+                      render={<Link href={item.href} prefetch={false} />}
                       isActive={isInternalNavActive(item.href, pathname)}
                     >
                       {item.label}

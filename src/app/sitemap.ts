@@ -5,13 +5,13 @@ import { siteConfig } from "@/config/site"
 /**
  * Marketing routes that should appear in the sitemap. Add to this list
  * when a new public route ships. Dev-only routes (`/sandbox`, `/examples/*`,
- * `/login`, `/signup`, `/dashboard`) are intentionally excluded.
+ * `/variants`, `/accessibility`, `/login`, `/signup`, `/dashboard`) are
+ * intentionally excluded.
  */
 const MARKETING_ROUTES = [
   "",
   "/editorial",
   "/bold",
-  "/variants",
   "/pricing",
   "/about",
   "/customers",

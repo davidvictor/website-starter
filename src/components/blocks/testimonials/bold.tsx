@@ -1,11 +1,19 @@
 import { Quote } from "lucide-react"
 
 import { FadeIn } from "@/components/motion/fade-in"
-import { testimonials } from "@/lib/brand"
+import type { TestimonialsProps } from "../props"
 
-export function TestimonialsBold() {
+function personInitials(
+  testimonial: TestimonialsProps["testimonials"][number]
+) {
+  return testimonial.avatar ?? testimonial.author.slice(0, 2).toUpperCase()
+}
+
+export function TestimonialsBold({ testimonials }: TestimonialsProps) {
   const featured = testimonials[0]
   const rest = testimonials.slice(1, 5)
+  if (!featured) return null
+
   return (
     <section className="border-b border-border bg-muted/20">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
@@ -31,11 +39,11 @@ export function TestimonialsBold() {
             </p>
             <div className="mt-auto flex items-center gap-3 border-t border-background/15 pt-5">
               <span className="grid size-10 place-items-center rounded-full border border-background/40 font-mono text-xs">
-                {featured.avatar}
+                {personInitials(featured)}
               </span>
               <div>
                 <p className="text-sm font-medium tracking-tight">
-                  {featured.name}
+                  {featured.author}
                 </p>
                 <p className="text-xs text-background/70">
                   {featured.title} · {featured.company}
@@ -48,7 +56,7 @@ export function TestimonialsBold() {
           <div className="grid grid-cols-1 gap-4 lg:col-span-5 lg:grid-cols-1 lg:grid-rows-2">
             {rest.slice(0, 2).map((t, i) => (
               <FadeIn
-                key={t.name}
+                key={t.author}
                 delay={0.1 + i * 0.05}
                 className="flex flex-col justify-between gap-4 rounded-2xl border border-border bg-background p-6"
               >
@@ -57,9 +65,9 @@ export function TestimonialsBold() {
                 </p>
                 <div className="flex items-center gap-2 text-xs">
                   <span className="grid size-7 place-items-center rounded-full border border-border bg-muted/40 font-mono text-[10px]">
-                    {t.avatar}
+                    {personInitials(t)}
                   </span>
-                  <span className="font-medium">{t.name}</span>
+                  <span className="font-medium">{t.author}</span>
                   <span className="text-muted-foreground">· {t.company}</span>
                 </div>
               </FadeIn>

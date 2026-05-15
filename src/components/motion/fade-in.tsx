@@ -3,6 +3,7 @@
 import { type HTMLMotionProps, motion } from "motion/react"
 
 import { useRouteTransitionPhase } from "./route-transition-context"
+import { useShouldReduceMacro } from "./use-should-reduce-macro"
 
 type FadeInProps = HTMLMotionProps<"div"> & {
   delay?: number
@@ -25,9 +26,10 @@ export function FadeIn({
   ...rest
 }: FadeInProps) {
   const phase = useRouteTransitionPhase()
+  const reduce = useShouldReduceMacro()
   const deferred = phase !== "idle"
 
-  if (deferred) {
+  if (deferred || reduce) {
     return (
       <motion.div initial={false} animate={{ opacity: 1, y: 0 }} {...rest}>
         {children}

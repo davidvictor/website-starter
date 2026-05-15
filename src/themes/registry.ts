@@ -105,6 +105,7 @@ export function applyTheme(
     el.style.setProperty(key, value)
   }
   el.dataset.theme = theme.id
+  el.dataset.accentUsage = theme.derivation.accentUsage
   if (mode === "dark") {
     el.classList.add("dark")
   } else {

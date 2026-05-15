@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next"
-
+import { env } from "@/config/env"
 import { siteConfig } from "@/config/site"
 
 /**
@@ -8,7 +8,7 @@ import { siteConfig } from "@/config/site"
  * leaked preview URLs don't get indexed.
  */
 export default function robots(): MetadataRoute.Robots {
-  const isProd = process.env.VERCEL_ENV === "production"
+  const isProd = env.VERCEL_ENV === "production"
   return {
     rules: isProd
       ? { userAgent: "*", allow: "/" }

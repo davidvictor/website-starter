@@ -180,5 +180,5 @@ export const cyberAsciiTerrainPair = definePair({
   buildInteractive,
   renderInteractive,
   fallbackBackground:
-    "radial-gradient(at 30% 30%, {{a}}, transparent 40%), radial-gradient(at 70% 70%, {{b}}, transparent 40%), linear-gradient(180deg, {{c}}, #000)",
+    "radial-gradient(at 30% 30%, {{a}}, transparent 40%), radial-gradient(at 70% 70%, {{b}}, transparent 40%), linear-gradient(180deg, {{c}}, var(--foreground))",
 })

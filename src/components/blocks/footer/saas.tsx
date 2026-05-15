@@ -1,38 +1,40 @@
 import Link from "next/link"
 
-import { brand } from "@/lib/brand"
+import type { FooterProps } from "../props"
 
-const groups = [
-  {
-    label: "Product",
-    links: [
-      { href: "/pricing", label: "Pricing" },
-      { href: "/customers", label: "Customers" },
-      { href: "/changelog", label: "Changelog" },
-      { href: "/variants", label: "Variants" },
-    ],
-  },
-  {
-    label: "Company",
-    links: [
-      { href: "/about", label: "About" },
-      { href: "/careers", label: "Careers" },
-      { href: "/blog", label: "Blog" },
-      { href: "/contact", label: "Contact" },
-    ],
-  },
-  {
-    label: "Build with us",
-    links: [
-      { href: brand.socials.github, label: "GitHub" },
-      { href: brand.socials.x, label: "X / Twitter" },
-      { href: brand.socials.linkedin, label: "LinkedIn" },
-      { href: "/sandbox", label: "Sandbox" },
-    ],
-  },
-] as const
+type FooterLink = { href: string; label: string }
 
-export function FooterSaas() {
+function linksFor(navLinks: FooterLink[] | readonly FooterLink[]) {
+  const byHref = new Map(navLinks.map((link) => [link.href, link]))
+  const pick = (href: string) => byHref.get(href)
+
+  return {
+    product: [pick("/pricing"), pick("/customers"), pick("/changelog")].filter(
+      Boolean
+    ) as FooterLink[],
+    company: [
+      pick("/about"),
+      pick("/careers"),
+      pick("/blog"),
+      pick("/contact"),
+    ].filter(Boolean) as FooterLink[],
+  }
+}
+
+export function FooterSaas({ brand, navLinks = [] }: FooterProps) {
+  const groupedLinks = linksFor(navLinks)
+  const socialLinks = [
+    { href: brand.socials?.github, label: "GitHub" },
+    { href: brand.socials?.x, label: "X / Twitter" },
+    { href: brand.socials?.linkedin, label: "LinkedIn" },
+  ].filter((link): link is FooterLink => Boolean(link.href))
+
+  const groups = [
+    { label: "Product", links: groupedLinks.product },
+    { label: "Company", links: groupedLinks.company },
+    { label: "Build with us", links: socialLinks },
+  ].filter((group) => group.links.length > 0)
+
   return (
     <footer className="border-t border-border bg-muted/20">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
@@ -81,7 +83,7 @@ export function FooterSaas() {
               Status
             </h3>
             <div className="flex items-center gap-2 text-sm">
-              <span className="size-1.5 animate-pulse rounded-full bg-emerald-500" />
+              <span className="size-1.5 animate-pulse rounded-full bg-success motion-reduce:animate-none" />
               <span className="text-foreground/85">All systems normal</span>
             </div>
             <p className="font-mono text-[10px] text-muted-foreground">

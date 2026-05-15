@@ -3,17 +3,14 @@
  * the bridge between `@/lib/brand.ts` (one big constant) and the typed
  * per-kind props contracts (`BlockPropsByKind`).
  *
- * Variants that have migrated to accept props read from these results;
- * legacy zero-arg variants still reach into `@/lib/brand` directly and
- * the props are simply ignored.
- *
- * Splitting `brand.ts` into per-kind modules is a future refactor —
- * `getBlockProps(kind)` is the seam that lets it happen one kind at a
- * time.
+ * Variants read from these results instead of importing global brand
+ * constants directly, which keeps per-page overrides and the future CMS
+ * bridge on one data path.
  */
 
 import type { BlockKind, BlockPropsByKind } from "@/components/blocks"
 import {
+  blockContent,
   brand,
   customerLogos,
   faq,
@@ -25,17 +22,22 @@ import {
   taglines,
   testimonials,
 } from "@/lib/brand"
+import { formatMetric } from "@/lib/format"
 
 const resolvers: {
   [K in BlockKind]: () => BlockPropsByKind[K]
 } = {
   hero: () => ({
     brand,
+    eyebrow: blockContent.hero.eyebrow,
+    headline: blockContent.hero.headline,
     tagline: taglines.secondary,
-    cta: {
-      primary: { label: "Read the docs", href: "/pricing" },
-      secondary: { label: `Why we built ${brand.name}`, href: "/about" },
-    },
+    proof: blockContent.hero.proof,
+    stats: stats.map((stat) => ({
+      label: stat.label,
+      value: formatMetric(stat.metric),
+    })),
+    cta: blockContent.hero.cta,
   }),
   logos: () => ({
     logos: customerLogos.map((l) => (typeof l === "string" ? { name: l } : l)),
@@ -54,14 +56,21 @@ const resolvers: {
       author: t.name,
       title: t.title,
       company: t.company,
+      avatar: t.avatar,
     })),
   }),
-  pricing: () => ({ tiers: pricingTiers }),
+  pricing: () => ({
+    tiers: pricingTiers,
+    headline: blockContent.pricing.headline,
+    subhead: blockContent.pricing.subhead,
+  }),
   faq: () => ({ items: faq }),
   cta: () => ({
     brand,
-    tagline: taglines.short,
-    cta: { label: "Start a trial", href: "/pricing" },
+    eyebrow: blockContent.cta.eyebrow,
+    headline: blockContent.cta.headline,
+    body: blockContent.cta.body,
+    cta: blockContent.cta.cta,
   }),
   footer: () => ({
     brand,

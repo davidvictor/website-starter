@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import { GLOBAL_ERROR_COLORS } from "@/themes/fallback-colors"
 
 /**
  * Root-level error boundary. Renders when the root layout itself
@@ -31,8 +32,8 @@ export default function GlobalError({
           justifyContent: "center",
           fontFamily:
             "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-          background: "#0a0a0a",
-          color: "#fafafa",
+          background: GLOBAL_ERROR_COLORS.background,
+          color: GLOBAL_ERROR_COLORS.foreground,
         }}
       >
         <main style={{ maxWidth: 480, padding: 32, textAlign: "center" }}>
@@ -77,8 +78,8 @@ export default function GlobalError({
             type="button"
             onClick={reset}
             style={{
-              background: "#fafafa",
-              color: "#0a0a0a",
+              background: GLOBAL_ERROR_COLORS.actionBackground,
+              color: GLOBAL_ERROR_COLORS.actionForeground,
               border: "none",
               padding: "10px 20px",
               borderRadius: 6,

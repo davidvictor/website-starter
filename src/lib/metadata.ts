@@ -7,6 +7,7 @@ type Args = {
   description?: string
   /** Route path with leading slash, e.g. "/pricing". Default "" = home. */
   path?: string
+  robots?: Metadata["robots"]
 }
 
 /**
@@ -21,6 +22,7 @@ export function siteMetadata({
   title,
   description,
   path = "",
+  robots,
 }: Args = {}): Metadata {
   const url = `${siteConfig.url}${path}`
   const fullTitle = title ? `${title} — ${siteConfig.name}` : siteConfig.name
@@ -43,5 +45,6 @@ export function siteMetadata({
       title: fullTitle,
       description: desc,
     },
+    robots,
   }
 }

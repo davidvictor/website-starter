@@ -1,28 +1,39 @@
 import Link from "next/link"
 
-import { brand } from "@/lib/brand"
+import type { FooterProps } from "../props"
 
-const groups = [
-  {
-    label: "Product",
-    links: [
-      { href: "/pricing", label: "Pricing" },
-      { href: "/customers", label: "Customers" },
-      { href: "/changelog", label: "Changelog" },
-    ],
-  },
-  {
-    label: "Company",
-    links: [
-      { href: "/about", label: "About" },
-      { href: "/careers", label: "Careers" },
-      { href: "/blog", label: "Blog" },
-      { href: "/contact", label: "Contact" },
-    ],
-  },
-] as const
+type FooterLink = { href: string; label: string }
 
-export function FooterBold() {
+function linksFor(navLinks: FooterLink[] | readonly FooterLink[]) {
+  const byHref = new Map(navLinks.map((link) => [link.href, link]))
+  const pick = (href: string) => byHref.get(href)
+
+  return {
+    product: [pick("/pricing"), pick("/customers"), pick("/changelog")].filter(
+      Boolean
+    ) as FooterLink[],
+    company: [
+      pick("/about"),
+      pick("/careers"),
+      pick("/blog"),
+      pick("/contact"),
+    ].filter(Boolean) as FooterLink[],
+  }
+}
+
+export function FooterBold({ brand, navLinks = [] }: FooterProps) {
+  const groupedLinks = linksFor(navLinks)
+  const socialLinks = [
+    { href: brand.socials?.x, label: "X / Twitter" },
+    { href: brand.socials?.github, label: "GitHub" },
+    { href: brand.socials?.linkedin, label: "LinkedIn" },
+  ].filter((link): link is FooterLink => Boolean(link.href))
+
+  const groups = [
+    { label: "Product", links: groupedLinks.product },
+    { label: "Company", links: groupedLinks.company },
+  ].filter((group) => group.links.length > 0)
+
   return (
     <footer className="border-t border-border bg-foreground text-background">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -59,21 +70,13 @@ export function FooterBold() {
                 Find us
               </h3>
               <ul className="flex flex-col gap-2 text-sm">
-                <li>
-                  <a href={brand.socials.x} className="hover:opacity-70">
-                    X / Twitter
-                  </a>
-                </li>
-                <li>
-                  <a href={brand.socials.github} className="hover:opacity-70">
-                    GitHub
-                  </a>
-                </li>
-                <li>
-                  <a href={brand.socials.linkedin} className="hover:opacity-70">
-                    LinkedIn
-                  </a>
-                </li>
+                {socialLinks.map((link) => (
+                  <li key={link.href}>
+                    <a href={link.href} className="hover:opacity-70">
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -81,7 +84,7 @@ export function FooterBold() {
           <p className="font-mono text-xs text-background/60">
             © {brand.currentYear} {brand.name}, Inc. ·{" "}
             <span className="inline-flex items-center gap-1.5">
-              <span className="size-1.5 rounded-full bg-emerald-400" />
+              <span className="size-1.5 rounded-full bg-success" />
               all systems normal
             </span>
           </p>

@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
+import { runtime } from "@/config/runtime"
 import { useTheme } from "@/providers/theme-provider"
 
 import { useDevPanel } from "../dev-panel-provider"
@@ -61,7 +62,7 @@ export function DataTab() {
   return (
     <div className="flex flex-col gap-4">
       <DataGroup label="environment">
-        <DataRow label="env" value={process.env.NODE_ENV} />
+        <DataRow label="env" value={runtime.nodeEnv} />
         <DataRow label="route" value={pathname} />
         <DataRow label="theme" value={theme.name} />
         <DataRow label="mode" value={resolvedMode} />

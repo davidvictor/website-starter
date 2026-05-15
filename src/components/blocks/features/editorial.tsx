@@ -1,7 +1,7 @@
 import { FadeIn } from "@/components/motion/fade-in"
-import { features } from "@/lib/brand"
+import type { FeaturesProps } from "../props"
 
-export function FeaturesEditorial() {
+export function FeaturesEditorial({ features }: FeaturesProps) {
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-32">

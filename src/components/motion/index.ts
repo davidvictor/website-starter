@@ -1,4 +1,5 @@
 export { AnimatedNumber } from "./animated-number"
+export { AnimatedSwap } from "./animated-swap"
 export { FadeIn } from "./fade-in"
 export { IconMorph } from "./icon-morph"
 export { PRESS_CLASSES, Press } from "./press"

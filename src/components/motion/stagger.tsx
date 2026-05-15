@@ -2,9 +2,10 @@
 
 import { type HTMLMotionProps, motion } from "motion/react"
 import type { ReactNode } from "react"
-import { Children } from "react"
+import { Children, isValidElement } from "react"
 
 import { useRouteTransitionPhase } from "./route-transition-context"
+import { useShouldReduceMacro } from "./use-should-reduce-macro"
 
 type StaggerProps = HTMLMotionProps<"div"> & {
   delay?: number
@@ -25,13 +26,22 @@ export function Stagger({
 }: StaggerProps) {
   const items = Children.toArray(children)
   const phase = useRouteTransitionPhase()
+  const reduce = useShouldReduceMacro()
   const deferred = phase !== "idle"
 
-  if (deferred) {
+  if (deferred || reduce) {
     return (
       <motion.div initial={false} {...rest}>
-        {items.map((child, i) => (
-          <motion.div key={i} initial={false} animate={{ opacity: 1, y: 0 }}>
+        {items.map((child) => (
+          <motion.div
+            key={
+              isValidElement(child) && child.key != null
+                ? child.key
+                : String(child)
+            }
+            initial={false}
+            animate={{ opacity: 1, y: 0 }}
+          >
             {child}
           </motion.div>
         ))}
@@ -52,9 +62,13 @@ export function Stagger({
       }}
       {...rest}
     >
-      {items.map((child, i) => (
+      {items.map((child) => (
         <motion.div
-          key={i}
+          key={
+            isValidElement(child) && child.key != null
+              ? child.key
+              : String(child)
+          }
           variants={{
             hidden: { opacity: 0, y: 12 },
             visible: {

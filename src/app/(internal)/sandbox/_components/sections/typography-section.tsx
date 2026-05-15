@@ -1,3 +1,4 @@
+import { TextEffect } from "@/components/typography/text-effect"
 import { Section } from "../section"
 import { SubSection } from "../sub-section"
 import { TypeRow } from "../type-row"
@@ -47,6 +48,35 @@ export function TypographySection() {
             sample="const greeting = `hello, ${name}`"
             className="font-mono text-sm"
           />
+        </div>
+      </SubSection>
+
+      <SubSection label="Text effects">
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="flex flex-col gap-2 rounded-md border border-border p-4">
+            <span className="font-mono text-[10px] text-muted-foreground uppercase">
+              gradient
+            </span>
+            <p className="font-heading text-3xl font-semibold tracking-tight">
+              <TextEffect effect="gradient">Premium baseline</TextEffect>
+            </p>
+          </div>
+          <div className="flex flex-col gap-2 rounded-md border border-border p-4">
+            <span className="font-mono text-[10px] text-muted-foreground uppercase">
+              shimmer
+            </span>
+            <p className="font-heading text-3xl font-semibold tracking-tight">
+              <TextEffect effect="shimmer">Small delights</TextEffect>
+            </p>
+          </div>
+          <div className="flex flex-col gap-2 rounded-md border border-border p-4">
+            <span className="font-mono text-[10px] text-muted-foreground uppercase">
+              accent
+            </span>
+            <p className="font-heading text-3xl font-semibold tracking-tight">
+              <TextEffect effect="accent">Theme-aware emphasis</TextEffect>
+            </p>
+          </div>
         </div>
       </SubSection>
 

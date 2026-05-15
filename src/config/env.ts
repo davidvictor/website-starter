@@ -10,8 +10,16 @@
 import { z } from "zod"
 
 const envSchema = z.object({
+  /** Build/runtime mode supplied by Next.js and Node. */
+  NODE_ENV: z
+    .enum(["development", "test", "production"])
+    .default("development"),
+
   /** Public site URL — used for canonical, OG, sitemap, robots. No trailing slash. */
-  NEXT_PUBLIC_SITE_URL: z.string().url(),
+  NEXT_PUBLIC_SITE_URL: z
+    .string()
+    .url()
+    .transform((value) => value.replace(/\/+$/, "")),
 
   /** Vercel-injected — "production" | "preview" | "development". */
   VERCEL_ENV: z.enum(["production", "preview", "development"]).optional(),

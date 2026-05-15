@@ -25,17 +25,14 @@ export function A11yIndicator() {
         className={cn(
           "flex items-center gap-2 rounded-md border px-2 py-1.5 text-[11px]",
           failing
-            ? "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300"
+            ? "border-warning/40 bg-warning/10 text-warning"
             : "border-border bg-muted/40 text-muted-foreground"
         )}
       >
         {failing ? (
           <AlertTriangle className="size-3.5" aria-hidden />
         ) : (
-          <CheckCircle2
-            className="size-3.5 text-emerald-600 dark:text-emerald-400"
-            aria-hidden
-          />
+          <CheckCircle2 className="size-3.5 text-success" aria-hidden />
         )}
         <span className="flex-1 truncate">
           {failing
@@ -49,7 +46,7 @@ export function A11yIndicator() {
           aria-label="Open accessibility overview for this theme"
           className={cn(
             "inline-flex items-center gap-0.5 rounded px-1 py-0.5 font-mono text-[10px] underline-offset-4 transition-colors cursor-pointer hover:bg-foreground/5",
-            failing && "text-amber-800 dark:text-amber-200"
+            failing && "text-warning"
           )}
         >
           overview
@@ -77,7 +74,7 @@ export function A11yIndicator() {
             .map((p) => (
               <li key={p.pair.id} className="flex items-center justify-between">
                 <span className="truncate">{p.pair.label}</span>
-                <span className="tabular shrink-0 pl-2 text-amber-700 dark:text-amber-300">
+                <span className="tabular shrink-0 pl-2 text-warning">
                   {p.ratio.toFixed(2)}:1
                 </span>
               </li>

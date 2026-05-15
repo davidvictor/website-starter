@@ -6,10 +6,17 @@ import { useEffect, useState } from "react"
 
 import { TransitionLink as Link } from "@/components/motion/transition-link"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { brand, navLinks } from "@/lib/brand"
 import { cn } from "@/lib/utils"
+import type { BrandCore } from "./props"
 
-export function SiteHeader() {
+const MOBILE_MENU_ID = "marketing-mobile-menu"
+
+type SiteHeaderProps = {
+  brand: BrandCore
+  navLinks: readonly { href: string; label: string }[]
+}
+
+export function SiteHeader({ brand, navLinks }: SiteHeaderProps) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -23,7 +30,7 @@ export function SiteHeader() {
 
   // Close mobile menu on route change.
   useEffect(() => {
-    setOpen(false)
+    if (pathname) setOpen(false)
   }, [pathname])
 
   return (
@@ -94,8 +101,11 @@ export function SiteHeader() {
             type="button"
             variant="ghost"
             size="icon-sm"
+            data-touch
             className="md:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls={MOBILE_MENU_ID}
             onClick={() => setOpen((o) => !o)}
           >
             {open ? <X /> : <Menu />}
@@ -104,7 +114,10 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="border-t border-border bg-background md:hidden">
+        <div
+          id={MOBILE_MENU_ID}
+          className="border-t border-border bg-background md:hidden"
+        >
           <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3">
             {navLinks.map((link) => {
               const active =

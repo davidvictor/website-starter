@@ -48,9 +48,24 @@ All live in [`src/components/motion/`](../src/components/motion):
 | `Press` | base-ui `useRender` wrapper; adds scale(0.98) + translate-y-px on active |
 | `IconMorph` | Cross-fade two icons (opacity + scale + blur, micro spring) |
 | `AnimatedNumber` | Count-up with `.tabular` baked in (respects reduced motion) |
+| `AnimatedSwap` | Reduced-motion-aware inline value swap for prices and compact state changes |
 | `RouteTransition` | Marketing route transition modes: `none` / `vertical-translate` / `blur-scale-fade` |
 | `useConcentric` | Compute inner radius token from outer + padding |
 | `useShouldReduceMacro` | Returns `true` when user prefers reduced motion (macro tier consumer hook) |
+
+## Micro-interaction baseline
+
+These are system-level defaults layered through tokens, global `data-slot`
+selectors, and motion primitives — not one-off component tricks.
+
+| Pattern | Baseline |
+| --- | --- |
+| Directional button icons | Any trailing direct `svg` inside `buttonVariants()` gets a 2px hover/focus-visible drift. Icon-only buttons are excluded. |
+| Inputs / textareas | Border, background, and ring changes transition on explicit properties (`color`, `background-color`, `border-color`, `box-shadow`). |
+| Checkbox indicators | Check marks scale `0.25 → 1`, blur `4px → 0`, and fade `0 → 1` using the canonical micro curve. |
+| Error states | Use `FieldError` (`role="alert"`) and connect controls with `aria-describedby`. Do not use raw spans for validation copy. |
+| Loading / success states | Submit buttons use `Spinner`; success confirmation uses a semantic `success` token and `aria-live`/`role="status"` where state changes in place. |
+| Text effects | Use `TextEffect` from `src/components/typography/text-effect.tsx` for `gradient`, `shimmer`, and `accent` treatments. Do not inline gradient recipes in blocks. |
 
 ## Worked examples
 
@@ -110,6 +125,22 @@ For animated values, `AnimatedNumber` bakes `.tabular` in:
 <AnimatedNumber value={9.2e12} format={(v) => formatCompact(v, 1)} />
 ```
 
+### Text effects
+
+Expressive text treatments are reusable primitives, not block-local recipes:
+
+```tsx
+import { TextEffect } from "@/components/typography/text-effect"
+
+<h1 className="font-heading text-6xl">
+  Ship with <TextEffect effect="shimmer">small delights</TextEffect>
+</h1>
+```
+
+`shimmer` respects `prefers-reduced-motion`; `gradient` and `accent` are static
+theme-token treatments. Keep them for display text, badges, and hero/CTA
+emphasis, not long body copy.
+
 ### Press feedback
 
 ```tsx
@@ -130,7 +161,10 @@ For animated values, `AnimatedNumber` bakes `.tabular` in:
 <Button size="icon-sm" data-touch><Bell /></Button>
 ```
 
-Compact Button variants (`xs`, `sm`, `icon-xs`, `icon-sm`) auto-apply `data-touch` styling — the visible button stays small but the clickable region extends.
+Compact Button variants (`xs`, `sm`, `icon-xs`, `icon-sm`) expose
+`data-compact` for inspection, but hit-area expansion is still an explicit
+call-site choice. Add `data-touch` when the control appears in a touch context
+and its expanded 40×40 area will not overlap a neighbor.
 
 ## Common mistakes
 
@@ -149,5 +183,5 @@ Compact Button variants (`xs`, `sm`, `icon-xs`, `icon-sm`) auto-apply `data-touc
 ## Where to look next
 
 - [Architecture decision records](adr/) — the 17 decisions that ground every rule above.
-- [`/sandbox/polish`](../src/app/sandbox/polish/page.tsx) — live reference renderings of every primitive and treatment.
+- [`/sandbox/polish`](../src/app/(internal)/sandbox/polish/page.tsx) — live reference renderings of every primitive and treatment.
 - [`scripts/check-polish.mjs`](../scripts/check-polish.mjs) — warn-only guardrail. Run via `pnpm check:polish`.

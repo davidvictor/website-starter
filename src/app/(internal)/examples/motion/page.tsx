@@ -67,12 +67,14 @@ export default function MotionExamplePage() {
       <section className="flex flex-col gap-4">
         <h2 className="text-sm font-medium tracking-tight">Stagger grid</h2>
         <Stagger className="grid grid-cols-3 gap-3">
-          {Array.from({ length: 9 }).map((_, i) => (
-            <div
-              key={i}
-              className="aspect-square rounded-md border border-border bg-muted/40"
-            />
-          ))}
+          {Array.from({ length: 9 }, (_, i) => `stagger-cell-${i + 1}`).map(
+            (id) => (
+              <div
+                key={id}
+                className="aspect-square rounded-md border border-border bg-muted/40"
+              />
+            )
+          )}
         </Stagger>
       </section>
 

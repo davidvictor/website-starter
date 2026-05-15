@@ -1,7 +1,13 @@
 import { FadeIn } from "@/components/motion/fade-in"
-import { testimonials } from "@/lib/brand"
+import type { TestimonialsProps } from "../props"
 
-export function TestimonialsEditorial() {
+function personInitials(
+  testimonial: TestimonialsProps["testimonials"][number]
+) {
+  return testimonial.avatar ?? testimonial.author.slice(0, 2).toUpperCase()
+}
+
+export function TestimonialsEditorial({ testimonials }: TestimonialsProps) {
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
@@ -17,7 +23,7 @@ export function TestimonialsEditorial() {
         <div className="grid grid-cols-1 gap-x-12 gap-y-16 md:grid-cols-2">
           {testimonials.slice(0, 4).map((t, i) => (
             <FadeIn
-              key={t.name}
+              key={t.author}
               delay={0.05 + (i % 2) * 0.05}
               className="flex flex-col gap-6"
             >
@@ -26,11 +32,11 @@ export function TestimonialsEditorial() {
               </p>
               <div className="flex items-center gap-3 border-t border-border pt-4">
                 <span className="grid size-9 place-items-center rounded-full border border-border bg-muted/50 font-mono text-xs">
-                  {t.avatar}
+                  {personInitials(t)}
                 </span>
                 <div className="flex flex-col gap-0">
                   <span className="text-sm font-medium tracking-tight">
-                    {t.name}
+                    {t.author}
                   </span>
                   <span className="text-xs text-muted-foreground">
                     {t.title} · {t.company}

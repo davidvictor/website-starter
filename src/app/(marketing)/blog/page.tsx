@@ -4,10 +4,15 @@ import { CtaSaas, FooterSaas } from "@/components/blocks"
 import { FadeIn } from "@/components/motion/fade-in"
 import { Badge } from "@/components/ui/badge"
 import { blogPosts } from "@/lib/brand"
+import { getBlockProps } from "@/lib/brand-resolver"
+import { siteMetadata } from "@/lib/metadata"
 
-export const metadata = {
-  title: "Blog · Nimbus",
-}
+export const metadata = siteMetadata({
+  title: "Blog",
+  description:
+    "Editorial article scaffolding for the Lookbook marketing system.",
+  path: "/blog",
+})
 
 function formatDate(iso: string) {
   const d = new Date(iso)
@@ -133,8 +138,8 @@ export default function BlogIndexPage() {
         </div>
       </section>
 
-      <CtaSaas />
-      <FooterSaas />
+      <CtaSaas {...getBlockProps("cta")} />
+      <FooterSaas {...getBlockProps("footer")} />
     </>
   )
 }

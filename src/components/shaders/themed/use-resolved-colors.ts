@@ -11,12 +11,11 @@ export function useResolvedColors(
   shaderId: ShaderId,
   slots: Record<string, ColorSlot>
 ): Record<string, string> {
-  const { themeId, resolvedMode, isOverridden } = useTheme()
+  const { theme, resolvedMode } = useTheme()
   const [overrides] = useShaderOverrides(shaderId)
 
-  // themeId / resolvedMode / isOverridden are intentional triggers — they're
-  // not closed over, but switching theme changes CSS var values that
-  // getComputedStyle reads inside the memo.
+  // `theme` is an intentional trigger: live edits keep the same theme id after
+  // the first override, but CSS vars still change and shader slots must refresh.
   // biome-ignore lint/correctness/useExhaustiveDependencies: explained above
   return useMemo(() => {
     const computed =
@@ -24,5 +23,5 @@ export function useResolvedColors(
         ? null
         : getComputedStyle(document.documentElement)
     return resolveSlotColors(slots, overrides.colorSlots, computed)
-  }, [slots, overrides.colorSlots, themeId, resolvedMode, isOverridden])
+  }, [slots, overrides.colorSlots, theme, resolvedMode])
 }
