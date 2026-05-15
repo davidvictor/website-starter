@@ -98,6 +98,7 @@ A pre-paint `<ThemeScript>` runs in the document `<head>` and applies the cached
 git clone https://github.com/davidvictor/lookbook.git
 cd lookbook
 pnpm install
+cp .env.example .env.local   # set NEXT_PUBLIC_SITE_URL=http://localhost:3000
 pnpm dev
 ```
 
@@ -106,12 +107,30 @@ Open [http://localhost:3000](http://localhost:3000).
 Press `~` (tilde / backtick — same physical key, no modifier) to open the dev panel.
 
 ```bash
-# Production build (run before opening a PR)
-pnpm build
-
-# Format / lint with Biome
-pnpm check
+pnpm dev        # next dev
+pnpm build      # production build (also runs in CI before merge)
+pnpm check      # Biome lint + format + polish check
+pnpm typecheck  # tsc --noEmit
+pnpm test       # vitest run
 ```
+
+## Deploy
+
+The repo is set up for one-click deploy to Vercel:
+
+1. Push to GitHub.
+2. In Vercel, "Import Project" pointed at the repo. Framework auto-detected as Next.js — no `vercel.json` needed.
+3. Set the production env var: **`NEXT_PUBLIC_SITE_URL=https://yourdomain.com`** (Settings → Environment Variables).
+4. (Optional) Add a custom domain in Settings → Domains.
+
+For per-client setup of a Lookbook-based project, follow [`docs/PROJECT_SETUP.md`](docs/PROJECT_SETUP.md) — clone-and-rename checklist.
+
+## Workflow
+
+- **Conventional Commits** are enforced via commitlint. Pattern: `<type>(<scope>): <subject>` with types `feat`, `fix`, `docs`, `refactor`, `style`, `test`, `chore`, `perf`, `ci`, `build`.
+- **Pre-commit hook** runs `lint-staged` (Biome on staged files) + `tsc --noEmit` + Vitest on changed-since-main tests.
+- **CI** (GitHub Actions) runs `pnpm check && pnpm typecheck && pnpm test && pnpm build` on every PR.
+- **Agents**: read [`AGENTS.md`](AGENTS.md) first. Claude-specific notes in [`CLAUDE.md`](CLAUDE.md). The client-facing playbook for vibe-coding changes is at [`docs/CLIENT_PLAYBOOK.md`](docs/CLIENT_PLAYBOOK.md).
 
 ## Where to look first
 

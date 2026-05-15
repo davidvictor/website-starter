@@ -1,18 +1,16 @@
-import type { Metadata } from "next"
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import { DevPanel, DevPanelProvider } from "@/components/dev-panel"
 import { ALL_FONT_VARS } from "@/lib/fonts"
+import { siteMetadata } from "@/lib/metadata"
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/providers/theme-provider"
 import { ThemeScript } from "@/providers/theme-script"
 
 import "./globals.css"
 
-export const metadata: Metadata = {
-  title: "Lookbook",
-  description:
-    "A Next.js base for moving from design direction to clickable page in one sitting.",
-}
+export const metadata = siteMetadata()
 
 /**
  * Only the next/font *variable* classes go on <html> — they inject
@@ -41,6 +39,8 @@ export default function RootLayout({
             <DevPanel />
           </DevPanelProvider>
         </ThemeProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
