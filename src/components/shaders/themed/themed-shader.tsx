@@ -33,6 +33,9 @@ export function ThemedShader({
     open: panelOpen,
     activeTab,
     focusedShaderId,
+    setFocusedShaderId,
+    setOpen,
+    setActiveTab,
     registerMountedShader,
     unregisterMountedShader,
   } = useDevPanel()
@@ -59,7 +62,7 @@ export function ThemedShader({
     <div
       ref={ref}
       data-shader-id={id}
-      className={cn("relative", className)}
+      className={cn("group/themed-shader relative", className)}
       style={style}
     >
       {perfMode === "fallback" ? (
@@ -67,6 +70,22 @@ export function ThemedShader({
       ) : inView ? (
         <Shader className="absolute inset-0">{def.renderTree(props)}</Shader>
       ) : null /* paused: off-screen */}
+      {process.env.NODE_ENV === "development" &&
+        panelOpen &&
+        focusedShaderId !== id && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              setFocusedShaderId(id)
+              setOpen(true)
+              setActiveTab("controls")
+            }}
+            className="absolute right-1.5 top-1.5 z-10 rounded bg-black/50 px-1.5 py-0.5 font-mono text-[9px] text-white opacity-0 transition-opacity hover:bg-black/70 group-hover/themed-shader:opacity-100"
+          >
+            [edit]
+          </button>
+        )}
     </div>
   )
 }
