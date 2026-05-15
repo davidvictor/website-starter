@@ -261,9 +261,9 @@ export type AuditResult = {
  * The decorative `border` token is exempt because it grades as category
  * "decorative" (always PASS).
  *
- * Audited tokens with alpha < 1 currently:
- *   - `--input` (until Task 4b makes it opaque). The audit overstates
- *     `input-bg` contrast by a small margin in dark mode.
+ * As of Task 4b, all audited tokens are opaque — `--input` derives from
+ * `neutral.inputBorder` with no alpha so the audit number matches the
+ * perceived contrast exactly.
  */
 export function parseOklch(s: string): { l: number; c: number; h: number } {
   // Accept "oklch(0.62 0.18 290)" or "oklch(0.62 0.18 290 / 0.6)".

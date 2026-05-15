@@ -34,7 +34,8 @@ export type NeutralPalette = {
   muted: OKLCH
   mutedFg: OKLCH
   border: OKLCH
-  input: OKLCH
+  /** Input/textarea border. Required to clear 3:1 vs bg (WCAG 1.4.11). */
+  inputBorder: OKLCH
   /** shadcn `accent` — used as hover/highlighted surface, NOT the brand accent. */
   surfaceAccent: OKLCH
   ring: OKLCH
@@ -64,6 +65,16 @@ export function buildDeriveCtx(
   const anchors = resolveContrast(derivation.contrast).anchors[mode]
   const c = warmChroma
   const h = warmHue
+  // Input border: separately picked so 3:1 vs bg is guaranteed (WCAG 1.4.11).
+  // Light bg L=1.0 → need OKLCH L ≤ ~0.585 to clear 3:1.
+  // Dark  bg L=~0.13 → need OKLCH L ≥ ~0.45 to clear 3:1.
+  // Pick a value comfortably inside that range, biased toward the existing
+  // border tone so the visual delta from `border` is small.
+  const inputBorder: OKLCH = {
+    l: mode === "dark" ? 0.5 : 0.58,
+    c,
+    h,
+  }
   const neutral: NeutralPalette = {
     bg: { l: anchors.bg, c, h },
     fg: { l: anchors.fg, c: c * 1.5, h },
@@ -71,7 +82,7 @@ export function buildDeriveCtx(
     muted: { l: anchors.muted, c: c * 1.4, h },
     mutedFg: { l: mode === "dark" ? 0.7 : 0.5, c: c * 1.4, h },
     border: { l: anchors.border, c, h },
-    input: { l: anchors.border, c, h },
+    inputBorder,
     surfaceAccent: { l: anchors.muted, c: c * 1.8, h },
     ring: { l: mode === "dark" ? 0.7 : 0.55, c, h },
     secondary: { l: anchors.muted, c: c * 1.4, h },
@@ -247,8 +258,7 @@ export const COLOR_TOKENS = {
   input: {
     cssVar: "--input",
     category: "surface",
-    derive: (ctx) =>
-      oklchToCss(ctx.neutral.input, ctx.mode === "dark" ? 0.6 : 1),
+    derive: (ctx) => oklchToCss(ctx.neutral.inputBorder),
   },
   ring: {
     cssVar: "--ring",
