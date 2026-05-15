@@ -281,8 +281,19 @@ export function parseOklch(s: string): { l: number; c: number; h: number } {
   if (m) {
     return { l: +m[1], c: +m[2], h: +m[3] }
   }
-  // Fallback: try hex.
-  return hexToOklch(s)
+  // Hex fallback — tolerate `#abc`, `#aabbcc`, or trimmed hex without `#`.
+  if (/^#?[0-9a-f]{3,6}$/i.test(s.trim())) {
+    return hexToOklch(s)
+  }
+  // Unknown CSS format. Throw so the audit fails loudly rather than
+  // silently grading against pure black (which would produce a false
+  // PASS for any non-black bg). If a new color function is introduced
+  // upstream, this is where it surfaces.
+  throw new Error(
+    `parseOklch: unrecognized color string "${s}". Expected oklch(L C H) ` +
+      `or oklch(L C H / alpha), or a hex literal. The audit module needs ` +
+      `to be updated to handle the new format.`
+  )
 }
 
 export function auditTheme(theme: ControllerTheme, mode: Mode): AuditResult {

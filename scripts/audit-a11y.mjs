@@ -113,7 +113,7 @@ function tuneBrand(raw, mode, bg, floor = 4.5) {
     const rBg = ratio(test, bg)
     const rBestFg = Math.max(ratio(NEAR_WHITE, test), ratio(NEAR_BLACK, test))
     attempt = test
-    if (rBg >= floor && rBestFg >= floor) return test
+    if (rBg >= floor && rBestFg >= floor) break
   }
   return attempt
 }
