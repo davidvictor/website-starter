@@ -46,6 +46,27 @@ deriveTokens()      ← derive.ts
 ColorTokens object → CSS variables on <html> → entire site rerenders
 ```
 
+## Accessibility
+
+Every preset is held to WCAG 2.2 AA on text pairs (≥ 4.5:1) and 1.4.11
+on UI components (≥ 3.0:1). Anything below shows up:
+
+- as a red row on [`/accessibility`](../app/(marketing)/accessibility) — the overview page,
+- as an amber chip at the top of the **Themes** tab in the dev panel.
+
+The pair catalog lives in [`a11y.ts`](a11y.ts). Adding a new color
+token to [`tokens.ts`](tokens.ts) is one entry there; if the token is
+text-bearing or interactive, also add it to the catalog so it's audited.
+
+Foreground colors for filled surfaces (`primaryForeground`,
+`accentForeground`, etc.) are picked by **measured contrast** in
+`foregroundFor(bg)` — there is no L threshold. Brand colors (`primary`,
+`accent`) are tone-adjusted per mode via `tuneBrandForMode` so they
+clear AA against the mode's background.
+
+`pnpm audit:a11y` runs the audit from the command line; it exits
+non-zero on any failure and is part of CI.
+
 ## What's safe to do
 
 - **Tune an existing preset** — edit the matching entry in `registry.json`. Each `themes[]` entry has `inputs` (Primary hue+vibrancy, Accent hue+vibrancy+anchor, Warmth) and a `derivation` (`chromaBoost`, `contrast`, `semanticIntensity`, `accentUsage`, `radius`, `fonts`, `routeTransition`). Toggle values and reload.
