@@ -38,11 +38,7 @@ import {
 } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import { useTheme } from "@/providers/theme-provider"
-import type {
-  AccentInput,
-  ColorInput,
-  DerivationProfile,
-} from "@/themes/controller-types"
+import type { AccentInput, ColorInput } from "@/themes/controller-types"
 import {
   ACCENT_USAGE_LEVELS,
   CONTRAST_LEVELS,
@@ -486,7 +482,7 @@ function DisclosureSection({
         <div
           className={cn(
             "flex flex-col gap-3 rounded-md border border-border bg-muted/20 p-2.5",
-            "[&>*:where(.concentric-inner)]:" + innerRadius
+            `[&>*:where(.concentric-inner)]:${innerRadius}`
           )}
         >
           {children}

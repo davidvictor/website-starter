@@ -13,7 +13,7 @@
 
 export type OKLCH = { l: number; c: number; h: number }
 
-const TAU = Math.PI * 2
+const _TAU = Math.PI * 2
 
 function clamp01(n: number) {
   return Math.max(0, Math.min(1, n))
@@ -147,7 +147,7 @@ export function vibrancyToLC(vibrancy: number): { l: number; c: number } {
   return { l, c }
 }
 
-export function lcToVibrancy(l: number, c: number): number {
+export function lcToVibrancy(_l: number, c: number): number {
   const t = Math.max(0, Math.min(1, (c - 0.015) / 0.21))
   return Math.round(t ** (1 / 0.85) * 100)
 }

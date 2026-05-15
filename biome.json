@@ -34,12 +34,21 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "suspicious": { "noExplicitAny": "off" },
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noArrayIndexKey": "warn"
+      },
       "style": {
         "useImportType": "off",
         "noNonNullAssertion": "off"
       },
-      "a11y": { "useKeyWithClickEvents": "off" }
+      "a11y": {
+        "useKeyWithClickEvents": "off",
+        "useValidAnchor": "warn"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "warn"
+      }
     }
   },
   "javascript": {
@@ -48,6 +57,11 @@
       "semicolons": "asNeeded",
       "trailingCommas": "es5",
       "arrowParentheses": "always"
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
     }
   }
 }
