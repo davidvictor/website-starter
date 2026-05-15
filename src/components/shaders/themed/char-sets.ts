@@ -1,6 +1,7 @@
 import type { ShaderId } from "./types"
 
 const editorial2 = { marks: " .:-=+", rule: "─│┼", dots: "·:∶" } as const
+const saas3 = { data: ".+×▪█", dots: "·•◦●", blocks: "░▒▓█" } as const
 
 /**
  * Per-shader curated glyph ramps. Each ASCII shader's preset names map to
@@ -10,6 +11,8 @@ const editorial2 = { marks: " .:-=+", rule: "─│┼", dots: "·:∶" } as con
 export const CHAR_SETS: Partial<Record<ShaderId, Record<string, string>>> = {
   "editorial.2.idle": editorial2,
   "editorial.2.interactive": editorial2,
+  "saas.3.idle": saas3,
+  "saas.3.interactive": saas3,
 }
 
 export function getCharSet(shaderId: ShaderId, preset: string): string {
