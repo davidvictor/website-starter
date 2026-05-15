@@ -283,6 +283,60 @@ function passes(r, category, displayOnly = false) {
   return r >= 4.5
 }
 
+// Drift guard: the runtime catalog (src/themes/a11y.ts PAIRS) is the source
+// of truth. This script's local pair list is allowed to be a strict subset
+// (some runtime pairs reuse anchors and don't add information at the audit
+// floor), but the script must never have a pair id unknown to the runtime
+// catalog. If they diverge, fail loudly BEFORE running the audit.
+const RUNTIME_PAIR_IDS = [
+  "fg-bg",
+  "fg-card",
+  "fg-popover",
+  "muted-bg",
+  "muted-muted",
+  "muted-card",
+  "primary-fill",
+  "secondary-fill",
+  "accent-fill",
+  "brand-fill",
+  "destr-fill",
+  "sb-fg",
+  "sb-primary",
+  "sb-accent",
+  "primary-link",
+  "accent-link",
+  "brand-link",
+  "ring-bg",
+  "input-bg",
+  "destr-bg",
+  "success-bg",
+  "warning-bg",
+  "info-bg",
+  "border-bg",
+]
+
+function assertNoDrift() {
+  const sampleTokens = buildTokens(registry.themes[0], "light")
+  const scriptIds = new Set(pairsFor(sampleTokens).map((p) => p[0]))
+  const missing = RUNTIME_PAIR_IDS.filter((id) => !scriptIds.has(id))
+  // The script is allowed to have FEWER ids than the runtime — some pairs
+  // (popover, secondary, sidebar) reuse anchors and don't add new
+  // information at the audit floor. Surface unknowns the other way:
+  const extras = [...scriptIds].filter((id) => !RUNTIME_PAIR_IDS.includes(id))
+  if (extras.length) {
+    console.error("\nAudit script has pair ids unknown to runtime catalog:")
+    for (const id of extras) console.error("  -", id)
+    console.error("Update RUNTIME_PAIR_IDS or src/themes/a11y.ts PAIRS.\n")
+    process.exit(2)
+  }
+  if (missing.length) {
+    console.warn(
+      `\nNote: ${missing.length} runtime pair(s) not exercised by this script: ${missing.join(", ")}\n`
+    )
+  }
+}
+assertNoDrift()
+
 let failures = 0
 console.log("\nWCAG 2.x audit — built-in presets × {light, dark}\n")
 for (const theme of registry.themes) {
