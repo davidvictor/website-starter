@@ -2,23 +2,26 @@
   "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
   "files": {
-    "includes": ["src/**", "*.ts", "*.tsx", "*.json"],
-    "ignoreUnknown": true,
-    "experimentalScannerIgnores": [
-      "node_modules",
-      ".next",
-      "next-env.d.ts",
-      "src/components/ui/**",
-      "src/components/data-table.tsx",
-      "src/components/nav-*.tsx",
-      "src/components/team-switcher.tsx",
-      "src/components/app-sidebar.tsx",
-      "src/components/chart-area-interactive.tsx",
-      "src/components/section-cards.tsx",
-      "src/components/site-header.tsx",
-      "src/components/login-form.tsx",
-      "src/components/signup-form.tsx"
-    ]
+    "includes": [
+      "src/**",
+      "*.ts",
+      "*.tsx",
+      "*.json",
+      "!!**/node_modules",
+      "!!**/.next",
+      "!!**/next-env.d.ts",
+      "!!**/src/components/ui",
+      "!!**/src/components/data-table.tsx",
+      "!!**/src/components/nav-*.tsx",
+      "!!**/src/components/team-switcher.tsx",
+      "!!**/src/components/app-sidebar.tsx",
+      "!!**/src/components/chart-area-interactive.tsx",
+      "!!**/src/components/section-cards.tsx",
+      "!!**/src/components/site-header.tsx",
+      "!!**/src/components/login-form.tsx",
+      "!!**/src/components/signup-form.tsx"
+    ],
+    "ignoreUnknown": true
   },
   "formatter": {
     "enabled": true,
