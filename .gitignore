@@ -26,6 +26,7 @@
 
 # local agent / tooling state
 .claude/
+.worktrees/
 
 # debug
 npm-debug.log*
