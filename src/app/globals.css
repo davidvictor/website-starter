@@ -66,6 +66,13 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ------------------------------------------------------------------ */
+/* :root + .dark blocks are FALLBACKS ONLY — the inline ThemeScript in   */
+/* <head> derives the active theme's tokens from `src/themes/tokens.ts`  */
+/* and applies them before paint. These :root values only matter if      */
+/* JS is disabled or the script errors. Treat them as a static no-JS     */
+/* safety net, not as the canonical theme.                               */
+/* ------------------------------------------------------------------ */
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

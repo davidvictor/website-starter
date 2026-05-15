@@ -23,7 +23,6 @@ export function ThemeScript() {
     {
       light: Record<string, string>
       dark: Record<string, string>
-      meta: { accentUsage: string; contrast: string }
     }
   > = {}
 
@@ -31,18 +30,14 @@ export function ThemeScript() {
     themeMap[theme.id] = {
       light: tokensToCssVars(
         resolveTokens(theme, "light"),
-        deriveShadows("light"),
+        deriveShadows("light", theme),
         theme
       ),
       dark: tokensToCssVars(
         resolveTokens(theme, "dark"),
-        deriveShadows("dark"),
+        deriveShadows("dark", theme),
         theme
       ),
-      meta: {
-        accentUsage: theme.derivation.accentUsage,
-        contrast: theme.derivation.contrast,
-      },
     }
   }
 
@@ -62,8 +57,6 @@ export function ThemeScript() {
     if (!entry) return;
     var html = document.documentElement;
     html.setAttribute("data-theme", themeId);
-    html.setAttribute("data-accent-usage", entry.meta.accentUsage);
-    html.setAttribute("data-contrast", entry.meta.contrast);
     if (resolved === "dark") html.classList.add("dark");
     var vars = entry[resolved];
     for (var key in vars) {

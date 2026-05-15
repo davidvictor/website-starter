@@ -6,10 +6,8 @@ import { usePathname } from "next/navigation"
 import { ACCENT_ANCHORS, oklchToHex, vibrancyToLC } from "@/lib/color"
 import {
   COMPOSITIONS,
-  type CompositionId,
   findCompositionByPath,
-  THEME_DEFAULT_COMPOSITION,
-  type ThemeId,
+  QUICK_COMBOS,
 } from "@/lib/compositions"
 import { devRoutes } from "@/lib/routes"
 import { cn } from "@/lib/utils"
@@ -125,19 +123,20 @@ export function NavTab() {
         </div>
       </NavSection>
 
-      {/* QUICK COMBOS — set both axes at once (theme + its canonical composition) */}
+      {/* QUICK COMBOS — opinionated theme × composition pairings */}
       <NavSection label="quick combos" sublabel="theme × composition">
         <div className="grid grid-cols-2 gap-1">
-          {(Object.keys(THEME_DEFAULT_COMPOSITION) as ThemeId[]).map((tid) => {
-            const compId: CompositionId = THEME_DEFAULT_COMPOSITION[tid]
-            const comp = COMPOSITIONS.find((c) => c.id === compId)
+          {QUICK_COMBOS.map((combo) => {
+            const comp = COMPOSITIONS.find((c) => c.id === combo.compositionId)
             if (!comp) return null
-            const active = themeId === tid && activeComposition === compId
+            const active =
+              themeId === combo.themeId &&
+              activeComposition === combo.compositionId
             return (
               <Link
-                key={tid}
+                key={`${combo.themeId}-${combo.compositionId}`}
                 href={comp.path}
-                onClick={() => setThemeId(tid)}
+                onClick={() => setThemeId(combo.themeId)}
                 className={cn(
                   "flex flex-col gap-0.5 rounded-md border px-2 py-1.5 transition-colors cursor-pointer",
                   active
@@ -146,10 +145,10 @@ export function NavTab() {
                 )}
               >
                 <span className="text-xs font-medium capitalize leading-none">
-                  {tid}
+                  {combo.label ?? combo.themeId}
                 </span>
                 <span className="font-mono text-[9px] text-muted-foreground">
-                  {tid} · {comp.id}
+                  {combo.themeId} · {combo.compositionId}
                 </span>
               </Link>
             )

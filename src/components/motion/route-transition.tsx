@@ -59,7 +59,8 @@ export function RouteTransition({ mode, children }: RouteTransitionProps) {
   const { theme } = useTheme()
   const transitionCtx = useOptionalRouteTransitionContext()
 
-  const themeMode = theme.derivation.routeTransition ?? "vertical-translate"
+  const themeMode = (theme.derivation.routeTransition ??
+    "vertical-translate") as RouteTransitionMode
   const resolved = mode ?? themeMode
   const effective: RouteTransitionMode = reduce ? "none" : resolved
 

@@ -16,11 +16,11 @@ import type {
   DerivationProfile,
   PresetId,
 } from "@/themes/controller-types"
-import { PRESETS } from "@/themes/presets"
 import {
   applyTheme,
   baseThemes,
   defaultThemeId,
+  findPreset,
   findTheme,
 } from "@/themes/registry"
 
@@ -161,7 +161,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const applyPreset = useCallback(
     (id: PresetId) => {
       if (id === "custom") return
-      const preset = PRESETS[id]
+      const preset = findPreset(id)
       if (!preset) return
       // Stamp preset onto the active theme (preserving theme.id/name).
       const next: ControllerTheme = {

@@ -393,6 +393,12 @@ for (const f of GOOGLE_FONTS) GOOGLE_FONT_BY_FAMILY.set(f.family, f)
 /* Curated font sets per theme                                          */
 /* ------------------------------------------------------------------ */
 
+/**
+ * A curated font triple. `vibe` is an opinionated tag the dev panel
+ * uses to filter sets when a preset is active — but the array itself
+ * is theme-agnostic. Adding a 5th theme doesn't require touching this
+ * file; sets without a matching vibe simply fall through to "all".
+ */
 export type FontSet = {
   id: string
   label: string
@@ -400,180 +406,205 @@ export type FontSet = {
   sans: FontKey
   heading: FontKey
   mono: FontKey
+  /** Optional opinionated tag used by the dev panel to filter sets. */
+  vibe?: string
 }
 
-export const FONT_SETS: Record<
-  "editorial" | "saas" | "bold" | "cyber",
-  FontSet[]
-> = {
-  editorial: [
-    {
-      id: "editorial-classic",
-      label: "Classic",
-      hint: "Geist · Instrument Serif",
-      sans: "geist-sans",
-      heading: "instrument-serif",
-      mono: "ibm-plex-mono",
-    },
-    {
-      id: "editorial-fraunces",
-      label: "Fraunces",
-      hint: "Inter · Fraunces",
-      sans: "google:Inter",
-      heading: "google:Fraunces",
-      mono: "google:IBM Plex Mono",
-    },
-    {
-      id: "editorial-playfair",
-      label: "Playfair",
-      hint: "Lato · Playfair Display",
-      sans: "google:Lato",
-      heading: "google:Playfair Display",
-      mono: "ibm-plex-mono",
-    },
-    {
-      id: "editorial-newsreader",
-      label: "Newsreader",
-      hint: "Public Sans · Newsreader",
-      sans: "google:Public Sans",
-      heading: "google:Newsreader",
-      mono: "ibm-plex-mono",
-    },
-    {
-      id: "editorial-garamond",
-      label: "Garamond",
-      hint: "Albert Sans · EB Garamond",
-      sans: "google:Albert Sans",
-      heading: "google:EB Garamond",
-      mono: "ibm-plex-mono",
-    },
-  ],
-  saas: [
-    {
-      id: "saas-geist",
-      label: "Geist",
-      hint: "Geist Sans + Mono",
-      sans: "geist-sans",
-      heading: "geist-sans",
-      mono: "geist-mono",
-    },
-    {
-      id: "saas-inter",
-      label: "Inter",
-      hint: "Inter · JetBrains Mono",
-      sans: "google:Inter",
-      heading: "google:Inter",
-      mono: "google:JetBrains Mono",
-    },
-    {
-      id: "saas-manrope",
-      label: "Manrope",
-      hint: "Manrope · DM Mono",
-      sans: "google:Manrope",
-      heading: "google:Manrope",
-      mono: "google:DM Mono",
-    },
-    {
-      id: "saas-jakarta",
-      label: "Jakarta",
-      hint: "Plus Jakarta · Geist Mono",
-      sans: "google:Plus Jakarta Sans",
-      heading: "google:Plus Jakarta Sans",
-      mono: "geist-mono",
-    },
-    {
-      id: "saas-dm",
-      label: "DM",
-      hint: "DM Sans · DM Mono",
-      sans: "google:DM Sans",
-      heading: "google:DM Sans",
-      mono: "google:DM Mono",
-    },
-  ],
-  bold: [
-    {
-      id: "bold-grotesk",
-      label: "Grotesk",
-      hint: "Space Grotesk · JetBrains Mono",
-      sans: "google:Space Grotesk",
-      heading: "google:Space Grotesk",
-      mono: "google:JetBrains Mono",
-    },
-    {
-      id: "bold-bricolage",
-      label: "Bricolage",
-      hint: "Inter · Bricolage Grotesque",
-      sans: "google:Inter",
-      heading: "google:Bricolage Grotesque",
-      mono: "google:JetBrains Mono",
-    },
-    {
-      id: "bold-syne",
-      label: "Syne",
-      hint: "Inter · Syne",
-      sans: "google:Inter",
-      heading: "google:Syne",
-      mono: "google:JetBrains Mono",
-    },
-    {
-      id: "bold-unbounded",
-      label: "Unbounded",
-      hint: "Inter · Unbounded",
-      sans: "google:Inter",
-      heading: "google:Unbounded",
-      mono: "geist-mono",
-    },
-    {
-      id: "bold-archivo",
-      label: "Archivo",
-      hint: "Manrope · Archivo Black",
-      sans: "google:Manrope",
-      heading: "google:Archivo Black",
-      mono: "google:JetBrains Mono",
-    },
-  ],
-  cyber: [
-    {
-      id: "cyber-plex",
-      label: "IBM Plex",
-      hint: "IBM Plex Mono everywhere",
-      sans: "ibm-plex-mono",
-      heading: "ibm-plex-mono",
-      mono: "jetbrains-mono",
-    },
-    {
-      id: "cyber-jetbrains",
-      label: "JetBrains",
-      hint: "JetBrains Mono everywhere",
-      sans: "google:JetBrains Mono",
-      heading: "google:JetBrains Mono",
-      mono: "google:JetBrains Mono",
-    },
-    {
-      id: "cyber-space",
-      label: "Space Mono",
-      hint: "Space Mono · Fira Code",
-      sans: "google:Space Mono",
-      heading: "google:Space Mono",
-      mono: "google:Fira Code",
-    },
-    {
-      id: "cyber-vt323",
-      label: "VT323",
-      hint: "VT323 · Share Tech Mono",
-      sans: "google:Share Tech Mono",
-      heading: "google:VT323",
-      mono: "google:Share Tech Mono",
-    },
-    {
-      id: "cyber-major",
-      label: "Major",
-      hint: "Inconsolata · Major Mono",
-      sans: "google:Inconsolata",
-      heading: "google:Major Mono Display",
-      mono: "google:Inconsolata",
-    },
-  ],
+/** Curated font triples, flat list. Filter by `vibe` in the dev panel. */
+export const FONT_SETS: readonly FontSet[] = [
+  // editorial vibe
+  {
+    id: "editorial-classic",
+    label: "Classic",
+    hint: "Geist · Instrument Serif",
+    sans: "geist-sans",
+    heading: "instrument-serif",
+    mono: "ibm-plex-mono",
+    vibe: "editorial",
+  },
+  {
+    id: "editorial-fraunces",
+    label: "Fraunces",
+    hint: "Inter · Fraunces",
+    sans: "google:Inter",
+    heading: "google:Fraunces",
+    mono: "google:IBM Plex Mono",
+    vibe: "editorial",
+  },
+  {
+    id: "editorial-playfair",
+    label: "Playfair",
+    hint: "Lato · Playfair Display",
+    sans: "google:Lato",
+    heading: "google:Playfair Display",
+    mono: "ibm-plex-mono",
+    vibe: "editorial",
+  },
+  {
+    id: "editorial-newsreader",
+    label: "Newsreader",
+    hint: "Public Sans · Newsreader",
+    sans: "google:Public Sans",
+    heading: "google:Newsreader",
+    mono: "ibm-plex-mono",
+    vibe: "editorial",
+  },
+  {
+    id: "editorial-garamond",
+    label: "Garamond",
+    hint: "Albert Sans · EB Garamond",
+    sans: "google:Albert Sans",
+    heading: "google:EB Garamond",
+    mono: "ibm-plex-mono",
+    vibe: "editorial",
+  },
+  // saas vibe
+  {
+    id: "saas-geist",
+    label: "Geist",
+    hint: "Geist Sans + Mono",
+    sans: "geist-sans",
+    heading: "geist-sans",
+    mono: "geist-mono",
+    vibe: "saas",
+  },
+  {
+    id: "saas-inter",
+    label: "Inter",
+    hint: "Inter · JetBrains Mono",
+    sans: "google:Inter",
+    heading: "google:Inter",
+    mono: "google:JetBrains Mono",
+    vibe: "saas",
+  },
+  {
+    id: "saas-manrope",
+    label: "Manrope",
+    hint: "Manrope · DM Mono",
+    sans: "google:Manrope",
+    heading: "google:Manrope",
+    mono: "google:DM Mono",
+    vibe: "saas",
+  },
+  {
+    id: "saas-jakarta",
+    label: "Jakarta",
+    hint: "Plus Jakarta · Geist Mono",
+    sans: "google:Plus Jakarta Sans",
+    heading: "google:Plus Jakarta Sans",
+    mono: "geist-mono",
+    vibe: "saas",
+  },
+  {
+    id: "saas-dm",
+    label: "DM",
+    hint: "DM Sans · DM Mono",
+    sans: "google:DM Sans",
+    heading: "google:DM Sans",
+    mono: "google:DM Mono",
+    vibe: "saas",
+  },
+  // bold vibe
+  {
+    id: "bold-grotesk",
+    label: "Grotesk",
+    hint: "Space Grotesk · JetBrains Mono",
+    sans: "google:Space Grotesk",
+    heading: "google:Space Grotesk",
+    mono: "google:JetBrains Mono",
+    vibe: "bold",
+  },
+  {
+    id: "bold-bricolage",
+    label: "Bricolage",
+    hint: "Inter · Bricolage Grotesque",
+    sans: "google:Inter",
+    heading: "google:Bricolage Grotesque",
+    mono: "google:JetBrains Mono",
+    vibe: "bold",
+  },
+  {
+    id: "bold-syne",
+    label: "Syne",
+    hint: "Inter · Syne",
+    sans: "google:Inter",
+    heading: "google:Syne",
+    mono: "google:JetBrains Mono",
+    vibe: "bold",
+  },
+  {
+    id: "bold-unbounded",
+    label: "Unbounded",
+    hint: "Inter · Unbounded",
+    sans: "google:Inter",
+    heading: "google:Unbounded",
+    mono: "geist-mono",
+    vibe: "bold",
+  },
+  {
+    id: "bold-archivo",
+    label: "Archivo",
+    hint: "Manrope · Archivo Black",
+    sans: "google:Manrope",
+    heading: "google:Archivo Black",
+    mono: "google:JetBrains Mono",
+    vibe: "bold",
+  },
+  // cyber vibe
+  {
+    id: "cyber-plex",
+    label: "IBM Plex",
+    hint: "IBM Plex Mono everywhere",
+    sans: "ibm-plex-mono",
+    heading: "ibm-plex-mono",
+    mono: "jetbrains-mono",
+    vibe: "cyber",
+  },
+  {
+    id: "cyber-jetbrains",
+    label: "JetBrains",
+    hint: "JetBrains Mono everywhere",
+    sans: "google:JetBrains Mono",
+    heading: "google:JetBrains Mono",
+    mono: "google:JetBrains Mono",
+    vibe: "cyber",
+  },
+  {
+    id: "cyber-space",
+    label: "Space Mono",
+    hint: "Space Mono · Fira Code",
+    sans: "google:Space Mono",
+    heading: "google:Space Mono",
+    mono: "google:Fira Code",
+    vibe: "cyber",
+  },
+  {
+    id: "cyber-vt323",
+    label: "VT323",
+    hint: "VT323 · Share Tech Mono",
+    sans: "google:Share Tech Mono",
+    heading: "google:VT323",
+    mono: "google:Share Tech Mono",
+    vibe: "cyber",
+  },
+  {
+    id: "cyber-major",
+    label: "Major",
+    hint: "Inconsolata · Major Mono",
+    sans: "google:Inconsolata",
+    heading: "google:Major Mono Display",
+    mono: "google:Inconsolata",
+    vibe: "cyber",
+  },
+]
+
+/**
+ * Filter the curated font sets by vibe. Falls back to all sets if no
+ * vibe matches.
+ */
+export function fontSetsForVibe(vibe: string): readonly FontSet[] {
+  const matched = FONT_SETS.filter((s) => s.vibe === vibe)
+  return matched.length > 0 ? matched : FONT_SETS
 }
 
 /* ------------------------------------------------------------------ */

@@ -30,9 +30,9 @@ import {
   warmthToNeutral,
 } from "@/lib/color"
 import {
-  FONT_SETS,
   type FontKey,
   fontLabel,
+  fontSetsForVibe,
   loadFontIfRemote,
   resolveFontFamily,
 } from "@/lib/fonts"
@@ -42,16 +42,13 @@ import type {
   AccentInput,
   ColorInput,
   DerivationProfile,
-  PresetId,
 } from "@/themes/controller-types"
-import { PRESETS } from "@/themes/presets"
-
-const PRESET_ORDER: Exclude<PresetId, "custom">[] = [
-  "editorial",
-  "saas",
-  "bold",
-  "cyber",
-]
+import {
+  ACCENT_USAGE_LEVELS,
+  CONTRAST_LEVELS,
+  ROUTE_TRANSITION_MODES,
+} from "@/themes/derivation-axes"
+import { presetIds, presetsById } from "@/themes/registry"
 
 const ANCHOR_OPTIONS: { label: string; value: AccentAnchor }[] = [
   { label: "Free", value: "free" },
@@ -59,19 +56,6 @@ const ANCHOR_OPTIONS: { label: string; value: AccentAnchor }[] = [
   { label: "+120°", value: "triadic" },
   { label: "+180°", value: "complementary" },
   { label: "−60°", value: "split" },
-]
-
-const CONTRAST_OPTIONS: DerivationProfile["contrast"][] = [
-  "low",
-  "medium",
-  "high",
-]
-
-const ACCENT_USAGE_OPTIONS: DerivationProfile["accentUsage"][] = [
-  "rare",
-  "primary-only",
-  "broad",
-  "maximal",
 ]
 
 export function ThemesTab() {
@@ -129,11 +113,10 @@ export function ThemesTab() {
     { value: "system", icon: SunMoon, label: "System" },
   ]
 
-  // Curated font sets for the active preset (falls back to saas).
-  const presetKey = (
-    theme.presetId === "custom" ? "saas" : theme.presetId
-  ) as keyof typeof FONT_SETS
-  const activeFontSets = FONT_SETS[presetKey] ?? []
+  // Curated font sets matching the active preset's vibe — falls back
+  // to the full catalog when nothing matches.
+  const vibeKey = theme.presetId === "custom" ? "saas" : theme.presetId
+  const activeFontSets = fontSetsForVibe(vibeKey)
 
   return (
     <div className="flex flex-col gap-4">
@@ -176,9 +159,10 @@ export function ThemesTab() {
         label="preset"
         sublabel="stamps inputs + derivation onto the active theme"
       >
-        <div className="grid grid-cols-4 gap-1">
-          {PRESET_ORDER.map((id) => {
+        <div className="flex flex-wrap gap-1">
+          {presetIds.map((id) => {
             const active = theme.presetId === id && !isOverridden
+            const preset = presetsById[id]
             return (
               <Press
                 key={id}
@@ -187,13 +171,13 @@ export function ThemesTab() {
                     type="button"
                     onClick={() => applyPreset(id)}
                     className={cn(
-                      "h-7 rounded-md border text-xs font-medium capitalize transition-colors cursor-pointer",
+                      "h-7 flex-1 min-w-[3.5rem] rounded-md border text-xs font-medium capitalize transition-colors cursor-pointer",
                       active
                         ? "border-foreground bg-foreground text-background"
                         : "border-border hover:bg-muted"
                     )}
                   >
-                    {PRESETS[id].name}
+                    {preset?.name ?? id}
                   </button>
                 }
               />
@@ -307,19 +291,19 @@ export function ThemesTab() {
         />
         <div className="flex flex-col gap-1">
           <SubLabel>contrast</SubLabel>
-          <div className="grid grid-cols-3 gap-1">
-            {CONTRAST_OPTIONS.map((c) => (
+          <div className="flex flex-wrap gap-1">
+            {CONTRAST_LEVELS.map((c) => (
               <Button
-                key={c}
+                key={c.id}
                 type="button"
                 variant={
-                  theme.derivation.contrast === c ? "default" : "outline"
+                  theme.derivation.contrast === c.id ? "default" : "outline"
                 }
                 size="xs"
-                onClick={() => patchDerivation({ contrast: c })}
-                className="text-[10px] capitalize"
+                onClick={() => patchDerivation({ contrast: c.id })}
+                className="flex-1 min-w-[3.5rem] text-[10px]"
               >
-                {c}
+                {c.label}
               </Button>
             ))}
           </div>
@@ -327,18 +311,19 @@ export function ThemesTab() {
         <div className="flex flex-col gap-1">
           <SubLabel>accent usage</SubLabel>
           <div className="grid grid-cols-2 gap-1">
-            {ACCENT_USAGE_OPTIONS.map((u) => (
+            {ACCENT_USAGE_LEVELS.map((u) => (
               <Button
-                key={u}
+                key={u.id}
                 type="button"
                 variant={
-                  theme.derivation.accentUsage === u ? "default" : "outline"
+                  theme.derivation.accentUsage === u.id ? "default" : "outline"
                 }
                 size="xs"
-                onClick={() => patchDerivation({ accentUsage: u })}
+                onClick={() => patchDerivation({ accentUsage: u.id })}
                 className="text-[10px]"
+                title={u.description}
               >
-                {u}
+                {u.label}
               </Button>
             ))}
           </div>
@@ -354,24 +339,22 @@ export function ThemesTab() {
         <div className="flex flex-col gap-1">
           <SubLabel>route transition</SubLabel>
           <div className="flex flex-wrap gap-1">
-            {(["none", "vertical-translate", "blur-scale-fade"] as const).map(
-              (m) => (
-                <Button
-                  key={m}
-                  size="xs"
-                  variant={
-                    (theme.derivation.routeTransition ??
-                      "vertical-translate") === m
-                      ? "default"
-                      : "outline"
-                  }
-                  className="h-6 text-[10px]"
-                  onClick={() => patchDerivation({ routeTransition: m })}
-                >
-                  {m}
-                </Button>
-              )
-            )}
+            {ROUTE_TRANSITION_MODES.map((m) => (
+              <Button
+                key={m.id}
+                size="xs"
+                variant={
+                  (theme.derivation.routeTransition ?? "vertical-translate") ===
+                  m.id
+                    ? "default"
+                    : "outline"
+                }
+                className="h-6 flex-1 min-w-[5rem] text-[10px]"
+                onClick={() => patchDerivation({ routeTransition: m.id })}
+              >
+                {m.label}
+              </Button>
+            ))}
           </div>
         </div>
       </DisclosureSection>
@@ -960,7 +943,7 @@ function TypographyControl({
   sans: FontKey
   heading: FontKey
   mono: FontKey
-  presetSets: {
+  presetSets: readonly {
     id: string
     label: string
     hint: string

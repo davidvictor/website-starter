@@ -29,6 +29,22 @@ export function findTheme(
 }
 
 /**
+ * Map of preset id → theme, derived from the registry. Each entry is a
+ * "stampable" preset for the dev panel's preset chips. Adding a preset
+ * is a single entry in `registry.json` — no other code touches required.
+ */
+export const presetsById: Readonly<Record<string, ControllerTheme>> =
+  Object.fromEntries(baseThemes.map((t) => [t.id, t]))
+
+/** Ordered list of preset ids — used by the dev panel for stable display order. */
+export const presetIds: readonly string[] = baseThemes.map((t) => t.id)
+
+/** Look up a preset by id. Returns undefined for `"custom"` or unknown ids. */
+export function findPreset(id: string): ControllerTheme | undefined {
+  return presetsById[id]
+}
+
+/**
  * Derive resolved color tokens for a theme + mode. Returns a fresh
  * ColorTokens object with semantic, surface, and brand tokens filled in.
  * Per-token overrides on the theme are applied on top.
@@ -66,8 +82,8 @@ export function tokensToCssVars(
 }
 
 /**
- * Apply a theme to a target element. Sets CSS variables, data-theme,
- * data-accent-usage, and toggles `.dark`.
+ * Apply a theme to a target element. Sets CSS variables, `data-theme`
+ * (for devtools/test selectors), and toggles `.dark`.
  *
  * Side effect: loads any remote (Google) fonts referenced by the theme.
  */
@@ -83,14 +99,12 @@ export function applyTheme(
   loadFontIfRemote(theme.derivation.fonts.heading)
 
   const tokens = resolveTokens(theme, mode)
-  const shadows = deriveShadows(mode)
+  const shadows = deriveShadows(mode, theme)
   const vars = tokensToCssVars(tokens, shadows, theme)
   for (const [key, value] of Object.entries(vars)) {
     el.style.setProperty(key, value)
   }
   el.dataset.theme = theme.id
-  el.dataset.accentUsage = theme.derivation.accentUsage
-  el.dataset.contrast = theme.derivation.contrast
   if (mode === "dark") {
     el.classList.add("dark")
   } else {
