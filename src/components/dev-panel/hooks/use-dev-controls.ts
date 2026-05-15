@@ -166,8 +166,13 @@ export function useDevControls<S extends DevControlSchema>(
 
   // useControls must be unconditional (React rules of hooks).
   // Pass empty object when disabled — registers nothing with Leva.
+  // The deps array is required: without it, Leva registers the schema once
+  // on first render and ignores subsequent shape changes (e.g. enabled
+  // flipping from false to true). Re-running on enabled/group means flipping
+  // the gate properly re-registers / un-registers the folder.
   const levaValues = useControls(
-    (folderSchema ?? {}) as never
+    (folderSchema ?? {}) as never,
+    [enabled, group]
   ) as Record<string, unknown>
 
   return useMemo(() => {

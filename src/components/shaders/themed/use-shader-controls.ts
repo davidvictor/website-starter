@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useDevControls } from "@/components/dev-panel/hooks/use-dev-controls"
 import type { DevControlSchema, DevControlValues } from "@/components/dev-panel/types"
 import { getShaderDef } from "./registry"
@@ -20,10 +20,17 @@ export function useShaderControls<S extends DevControlSchema>(
     values: overrides.controls,
   })
 
+  // Write-back guard: only persist when the serialized values actually change.
+  // Without this guard, the cycle is:
+  //   patch -> overrides.controls (new ref) -> useDevControls re-memo -> values (new ref) -> useEffect -> patch
+  // which trips React's max-update-depth.
+  const lastWrittenRef = useRef<string>("")
   useEffect(() => {
     if (!isActive) return
+    const serialized = JSON.stringify(values)
+    if (serialized === lastWrittenRef.current) return
+    lastWrittenRef.current = serialized
     patch({ controls: values })
-    // intentionally exhaustive: write back any change while active
   }, [isActive, values, patch])
 
   return values

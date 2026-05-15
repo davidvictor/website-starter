@@ -29,10 +29,20 @@ export function ThemedShader({
   const colors = useResolvedColors(id, def.slots)
   const inView = useInView(ref, "200px")
   const perfMode = useShaderPerfMode(def.variant)
-  const { focusedShaderId, registerMountedShader, unregisterMountedShader } =
-    useDevPanel()
-  // "Active in dev panel" = either nothing is focused (show all folders) or this shader is.
-  const isActive = focusedShaderId === null || focusedShaderId === id
+  const {
+    open: panelOpen,
+    activeTab,
+    focusedShaderId,
+    registerMountedShader,
+    unregisterMountedShader,
+  } = useDevPanel()
+  // Register controls only when the user could actually see them. Without this gate,
+  // Leva renders its default floating GUI on every page since controls would be
+  // registered but no <Leva> host is in the tree to absorb them.
+  const isActive =
+    panelOpen &&
+    activeTab === "controls" &&
+    (focusedShaderId === null || focusedShaderId === id)
   const controls = useShaderControls(id, def.schema, isActive)
 
   useEffect(() => {
