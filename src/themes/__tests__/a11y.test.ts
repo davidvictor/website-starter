@@ -21,7 +21,7 @@ vi.mock("next/font/google", () => {
 })
 
 import { describe, expect, it } from "vitest"
-import { auditTheme } from "../a11y"
+import { auditTheme, parseOklch } from "../a11y"
 import type { ControllerTheme } from "../controller-types"
 import { deriveTokens } from "../derive"
 import registryJson from "../registry.json"
@@ -83,5 +83,59 @@ describe("deriveTokens — sanity for the audit fixtures", () => {
     expect(typeof tokens.success).toBe("string")
     expect(typeof tokens.warning).toBe("string")
     expect(typeof tokens.info).toBe("string")
+  })
+})
+
+describe("parseOklch", () => {
+  it("round-trips an oklch() string with no alpha", () => {
+    expect(parseOklch("oklch(0.5 0.1 290)")).toEqual({
+      l: 0.5,
+      c: 0.1,
+      h: 290,
+    })
+  })
+
+  it("round-trips an oklch() string with alpha (alpha is dropped)", () => {
+    expect(parseOklch("oklch(0.5 0.1 290 / 0.6)")).toEqual({
+      l: 0.5,
+      c: 0.1,
+      h: 290,
+    })
+  })
+
+  it("tolerates extra whitespace inside the oklch() function call", () => {
+    expect(parseOklch("oklch(  0.5   0.1   290  )")).toEqual({
+      l: 0.5,
+      c: 0.1,
+      h: 290,
+    })
+  })
+
+  it("hex fallback — `#ff0000` parses as a non-zero OKLCH near red's hue", () => {
+    const r = parseOklch("#ff0000")
+    expect(r.l).toBeGreaterThan(0)
+    expect(r.c).toBeGreaterThan(0)
+    // Red's hue in OKLCH lives near 29.
+    expect(r.h).toBeGreaterThan(15)
+    expect(r.h).toBeLessThan(45)
+  })
+
+  it("hex fallback — six-digit hex without `#` parses to a non-zero result", () => {
+    const r = parseOklch("abc123")
+    expect(r.l).toBeGreaterThan(0)
+  })
+
+  it("throws on an unrecognized color function", () => {
+    expect(() => parseOklch("color(display-p3 1 0 0)")).toThrow(
+      /unrecognized|expected/i
+    )
+  })
+
+  it("throws on garbage input", () => {
+    expect(() => parseOklch("not a color")).toThrow(/unrecognized|expected/i)
+  })
+
+  it("throws on an empty string", () => {
+    expect(() => parseOklch("")).toThrow(/unrecognized|expected/i)
   })
 })
