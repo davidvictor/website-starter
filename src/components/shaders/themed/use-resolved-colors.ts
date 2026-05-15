@@ -4,8 +4,8 @@
 import { useMemo } from "react"
 import { useTheme } from "@/providers/theme-provider"
 import { resolveSlotColors } from "./resolve-colors"
-import { useShaderOverrides } from "./use-shader-overrides"
 import type { ColorSlot, ShaderId } from "./types"
+import { useShaderOverrides } from "./use-shader-overrides"
 
 export function useResolvedColors(
   shaderId: ShaderId,
@@ -14,12 +14,15 @@ export function useResolvedColors(
   const { themeId, resolvedMode, isOverridden } = useTheme()
   const [overrides] = useShaderOverrides(shaderId)
 
+  // themeId / resolvedMode / isOverridden are intentional triggers — they're
+  // not closed over, but switching theme changes CSS var values that
+  // getComputedStyle reads inside the memo.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: explained above
   return useMemo(() => {
     const computed =
       typeof window === "undefined"
         ? null
         : getComputedStyle(document.documentElement)
     return resolveSlotColors(slots, overrides.colorSlots, computed)
-    // re-run when theme/mode/overrides change
   }, [slots, overrides.colorSlots, themeId, resolvedMode, isOverridden])
 }
