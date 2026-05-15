@@ -16,6 +16,7 @@ import {
   vibrancyToLC,
   warmthToNeutral,
 } from "@/lib/color"
+import { wcagRatioOklch } from "@/lib/contrast"
 
 import type { ControllerInputs, DerivationProfile } from "./controller-types"
 import { resolveContrast } from "./derivation-axes"
@@ -102,9 +103,20 @@ export function buildDeriveCtx(
 /* Helpers used by individual token derive functions                    */
 /* ------------------------------------------------------------------ */
 
-/** Pick a readable near-black/near-white foreground for the given bg. */
+const NEAR_BLACK: OKLCH = { l: 0.13, c: 0, h: 0 }
+const NEAR_WHITE: OKLCH = { l: 0.97, c: 0, h: 0 }
+
+/**
+ * Pick the readable near-black/near-white foreground for `bg` by
+ * *measured* WCAG contrast — not by an L threshold. For vivid hues
+ * the chroma can pull the perceived darkness across the simple L=0.6
+ * cutoff, producing a too-low ratio. Measuring fixes that without
+ * adding new tokens.
+ */
 export function foregroundFor(bg: OKLCH): OKLCH {
-  return bg.l > 0.6 ? { l: 0.13, c: 0, h: 0 } : { l: 0.97, c: 0, h: 0 }
+  const rBlack = wcagRatioOklch(NEAR_BLACK, bg)
+  const rWhite = wcagRatioOklch(NEAR_WHITE, bg)
+  return rBlack >= rWhite ? NEAR_BLACK : NEAR_WHITE
 }
 
 /** Build a semantic OKLCH at the given hue, modulated by intensity. */
