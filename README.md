@@ -99,6 +99,17 @@ ColorTokens object → CSS variables on <html> → entire site rerenders
 
 A pre-paint `<ThemeScript>` runs in the document `<head>` and applies the cached theme's CSS variables before React hydrates, so there's no flash between the static stylesheet and the user's last-selected theme.
 
+## Rules of engagement
+
+Lookbook is meant to stay forkable. Client-specific changes should move through the system's existing seams instead of turning into one-off patches:
+
+- **Content lives in [`src/lib/brand.ts`](src/lib/brand.ts).** Pages compose sections; blocks consume the shared brand data. If copy is missing a field, add the field there instead of inlining marketing strings in JSX.
+- **Visual direction starts with variants and tokens.** Pick a block variant, tune Primary / Accent / Warmth / Preset, and let the derivation engine produce the token surface. Avoid hardcoded colors, local typography hacks, and isolated visual overrides.
+- **The internal routes are part of the workflow.** Use `/variants`, `/sandbox`, and `/accessibility` to review the live theme against real sections, primitives, and contrast pairs.
+- **Accessibility and polish are shipping constraints.** The dev-panel indicator, `/accessibility`, `pnpm audit:a11y`, and `pnpm check:polish` are there to catch regressions before a theme or section ships.
+- **Sensitive systems need a reason.** Be deliberate with `src/themes/derive.ts`, `src/lib/color.ts`, dev-panel runtime files, build config, shadcn primitives, and polish checks. Prefer wrappers, presets, and typed data changes over changing load-bearing internals.
+- **Agents should read [`AGENTS.md`](AGENTS.md) first.** It carries the stricter codebase contract for safe / care / sensitive / off-bounds surfaces.
+
 ## Quick start
 
 ```bash
@@ -140,6 +151,13 @@ For per-client setup of a Lookbook-based project, follow [`docs/PROJECT_SETUP.md
 - **CI** (GitHub Actions) runs `pnpm check → typecheck → test → audit:a11y → build` on every PR.
 - **Agents**: read [`AGENTS.md`](AGENTS.md) first. Claude-specific notes in [`CLAUDE.md`](CLAUDE.md). The client-facing playbook for vibe-coding changes is at [`docs/CLIENT_PLAYBOOK.md`](docs/CLIENT_PLAYBOOK.md).
 
+Use the smallest verification loop that matches the change while you work:
+
+- **Content edits**: run `pnpm check` and `pnpm typecheck`.
+- **Visual edits**: run `pnpm dev`, inspect the affected route plus `/variants` or `/sandbox`, then run `pnpm check`, `pnpm typecheck`, and `pnpm audit:a11y`.
+- **Structural, theme, or runtime edits**: run the full local chain — `pnpm check`, `pnpm typecheck`, `pnpm test`, `pnpm audit:a11y`, and `pnpm build`.
+- **Before a PR or push**: match CI locally whenever possible: `pnpm check && pnpm typecheck && pnpm test && pnpm audit:a11y && pnpm build`.
+
 ## Where to look first
 
 | Path | What's there |
@@ -171,7 +189,7 @@ For per-client setup of a Lookbook-based project, follow [`docs/PROJECT_SETUP.md
 
 ### `(internal)` — design-system + playgrounds (shared sidebar)
 
-These live in an `(internal)` route group with its own sidebar layout. Always available in dev; per-project you choose whether to deploy them publicly or strip them out.
+These live in an `(internal)` route group with its own sidebar layout. Always available in dev; per-project, decide before launch whether these routes stay public and noindexed, move behind auth, or get removed from the deployed client site.
 
 | Route | Purpose |
 |---|---|
@@ -189,18 +207,19 @@ These live in an `(internal)` route group with its own sidebar layout. Always av
 |---|---|
 | `/api/health` | Health check — reads raw `process.env` directly so it stays up even when env validation would fail |
 
-## Tweaking the demo brand
+## New client workflow
 
 The whole fictional company lives in [`src/lib/brand.ts`](src/lib/brand.ts) — taglines, features, customers, pricing tiers, testimonials, FAQ, blog posts, jobs, values. Replace one constant at a time and the pages update.
 
 For real prototypes (including MetaModern), the recommended path is:
 
-1. Pick a preset that's in the rough neighborhood of the direction.
-2. Tune Primary / Accent / Warmth until the colors feel right.
-3. Open `/variants` (under the internal sidebar) to decide which block style suits each section.
-4. Compose your home from the chosen variant components.
-5. Edit `brand.ts` and the page files for content.
-6. Run `pnpm audit:a11y` before shipping — the dev panel's live indicator should already be green.
+1. Decide what happens to the internal routes for this client: keep noindexed, protect, or remove before launch.
+2. Pick a preset that's in the rough neighborhood of the direction.
+3. Tune Primary / Accent / Warmth until the colors feel right.
+4. Open `/variants` to decide which block style suits each section.
+5. Compose the page from the chosen variant components.
+6. Replace the Nimbus data in `brand.ts`; keep page files focused on composition.
+7. Review `/accessibility` and run the appropriate verification loop before shipping — the dev panel's live indicator should already be green.
 
 ## Tech stack
 
