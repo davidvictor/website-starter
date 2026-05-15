@@ -1,3 +1,5 @@
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+patchedDependencies:
+  '@base-ui/utils@0.2.8': patches/@base-ui__utils@0.2.8.patch

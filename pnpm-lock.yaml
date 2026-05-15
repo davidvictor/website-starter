@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@base-ui/utils@0.2.8':
+    hash: 748ee50bc3f5565cdc4753f56376670cc7b59bf7b3a9e0e73265feb1840b07b0
+    path: patches/@base-ui__utils@0.2.8.patch
+
 importers:
 
   .:
@@ -3078,7 +3083,7 @@ snapshots:
   '@base-ui/react@1.4.1(@date-fns/tz@1.4.1)(@types/react@19.2.14)(date-fns@4.1.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@babel/runtime': 7.29.2
-      '@base-ui/utils': 0.2.8(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@base-ui/utils': 0.2.8(patch_hash=748ee50bc3f5565cdc4753f56376670cc7b59bf7b3a9e0e73265feb1840b07b0)(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@floating-ui/react-dom': 2.1.8(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@floating-ui/utils': 0.2.11
       react: 19.2.4
@@ -3089,7 +3094,7 @@ snapshots:
       '@types/react': 19.2.14
       date-fns: 4.1.0
 
-  '@base-ui/utils@0.2.8(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+  '@base-ui/utils@0.2.8(patch_hash=748ee50bc3f5565cdc4753f56376670cc7b59bf7b3a9e0e73265feb1840b07b0)(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@babel/runtime': 7.29.2
       '@floating-ui/utils': 0.2.11

@@ -1,0 +1,36 @@
+diff --git a/esm/useStableCallback.js b/esm/useStableCallback.js
+index b1eab526bf6dbee03bc4587a5e7d1b51798b452a..433e00968900db247e76701db17499c61a8bc9a2 100644
+--- a/esm/useStableCallback.js
++++ b/esm/useStableCallback.js
+@@ -3,8 +3,11 @@
+ import * as React from 'react';
+ import { useRefWithInit } from "./useRefWithInit.js";
+ 
+-// https://github.com/mui/material-ui/issues/41190#issuecomment-2040873379
+-const useInsertionEffect = React[`useInsertionEffect${Math.random().toFixed(1)}`.slice(0, -3)];
++// Original: React[`useInsertionEffect${Math.random().toFixed(1)}`.slice(0, -3)]
++// Patched: equivalent without module-level Math.random() (Next.js 16 prerender).
++// The original `.toFixed(1).slice(0, -3)` always evaluates to "" so the dynamic
++// lookup deterministically resolves to React.useInsertionEffect.
++const useInsertionEffect = React.useInsertionEffect;
+ const useSafeInsertionEffect =
+ // React 17 doesn't have useInsertionEffect.
+ useInsertionEffect &&
+diff --git a/useStableCallback.js b/useStableCallback.js
+index 9643aa6fb0c713e66f4ff78cafe3a2b6e37f56f7..61f059ac8f121071adacd9417948114d777e0400 100644
+--- a/useStableCallback.js
++++ b/useStableCallback.js
+@@ -8,8 +8,11 @@ Object.defineProperty(exports, "__esModule", {
+ exports.useStableCallback = useStableCallback;
+ var React = _interopRequireWildcard(require("react"));
+ var _useRefWithInit = require("./useRefWithInit");
+-// https://github.com/mui/material-ui/issues/41190#issuecomment-2040873379
+-const useInsertionEffect = React[`useInsertionEffect${Math.random().toFixed(1)}`.slice(0, -3)];
++// Original: React[`useInsertionEffect${Math.random().toFixed(1)}`.slice(0, -3)]
++// Patched: equivalent without module-level Math.random() (Next.js 16 prerender).
++// The original `.toFixed(1).slice(0, -3)` always evaluates to "" so the dynamic
++// lookup deterministically resolves to React.useInsertionEffect.
++const useInsertionEffect = React.useInsertionEffect;
+ const useSafeInsertionEffect =
+ // React 17 doesn't have useInsertionEffect.
+ useInsertionEffect &&
