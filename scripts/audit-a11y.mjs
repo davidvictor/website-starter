@@ -55,8 +55,7 @@ function oklchToRgb({ l, c, h }) {
   }
 }
 function relLum({ r, g, b }) {
-  const lin = (c) => srgbToLinear(c)
-  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b)
+  return 0.2126 * srgbToLinear(r) + 0.7152 * srgbToLinear(g) + 0.0722 * srgbToLinear(b)
 }
 function ratio(a, b) {
   const L1 = relLum(oklchToRgb(a))
@@ -195,6 +194,10 @@ function buildTokens(theme, mode) {
 
 // Pair ids match src/themes/a11y.ts PAIRS catalog. Drift guard: when the
 // runtime catalog changes, update this list in lockstep.
+//
+// Pair tuples: [id, label, fg, bg, category, displayOnly?]
+// The `displayOnly: true` flag mirrors src/themes/a11y.ts PairSpec.displayOnly
+// from Task 2 — pairs marked displayOnly accept AA-Large (3.0) instead of AA (4.5).
 function pairsFor(t) {
   return [
     ["fg-bg", "Body text on background", t.neutral.fg, t.neutral.bg, "text"],
@@ -240,14 +243,16 @@ function pairsFor(t) {
       "Primary as link/display",
       t.primary,
       t.neutral.bg,
-      "text-display",
+      "text",
+      true,
     ],
     [
       "accent-link",
       "Accent as link/display",
       t.accent,
       t.neutral.bg,
-      "text-display",
+      "text",
+      true,
     ],
     [
       "ring-bg",
@@ -270,9 +275,11 @@ function pairsFor(t) {
   ]
 }
 
-function passes(r, category) {
+function passes(r, category, displayOnly = false) {
   if (category === "ui") return r >= 3.0
-  if (category === "text-display") return r >= 3.0
+  if (category === "decorative") return true
+  // text
+  if (displayOnly) return r >= 3.0 // AA-Large allowance for headings/links
   return r >= 4.5
 }
 
@@ -281,9 +288,9 @@ console.log("\nWCAG 2.x audit — built-in presets × {light, dark}\n")
 for (const theme of registry.themes) {
   for (const mode of ["light", "dark"]) {
     const t = buildTokens(theme, mode)
-    const rows = pairsFor(t).map(([id, label, fg, bg, cat]) => {
+    const rows = pairsFor(t).map(([id, label, fg, bg, cat, displayOnly]) => {
       const r = ratio(fg, bg)
-      const ok = passes(r, cat)
+      const ok = passes(r, cat, displayOnly)
       if (!ok) failures++
       return { id, label, r, ok, cat }
     })

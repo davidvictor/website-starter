@@ -49,6 +49,8 @@ export const MODERATE_BASELINE: Record<Category, number> = {
 /** Grade a ratio against a category. */
 export function gradeRatio(ratio: number, category: Category): Grade {
   if (category === "decorative") return "Exempt"
+  // UI components (1.4.11): a single 3:1 threshold. No AAA level exists
+  // for non-text contrast in WCAG 2.x, so we cap at AA.
   if (category === "ui") return ratio >= 3.0 ? "AA" : "Fail"
   // text
   if (ratio >= 7.0) return "AAA"
