@@ -2,7 +2,7 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation"
-import { useCallback, useMemo } from "react"
+import { Suspense, useCallback, useMemo } from "react"
 
 import { useDevPanel } from "@/components/dev-panel"
 import { useTheme } from "@/providers/theme-provider"
@@ -47,6 +47,15 @@ function useBandVariants(): [
 }
 
 export default function ShadersExamplePage() {
+  // Suspense boundary required by Next.js 16 Cache Components for useSearchParams.
+  return (
+    <Suspense fallback={null}>
+      <ShadersShowcase />
+    </Suspense>
+  )
+}
+
+function ShadersShowcase() {
   const [variants, setVariants] = useBandVariants()
   const { themeId, setThemeId, themes } = useTheme()
   const { forceReducedMotion, setForceReducedMotion } = useDevPanel()
