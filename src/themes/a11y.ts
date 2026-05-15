@@ -158,10 +158,18 @@ export const PAIRS: readonly PairSpec[] = [
     category: "text",
     displayOnly: true,
   },
+  // `accent-link` and `brand-link` both grade the vivid brand-accent
+  // color used as link/display text on background. The `--accent` CSS
+  // var is shadcn's *surface* accent (muted hover), so it would always
+  // be near-bg lightness and produce a meaningless ~1.1:1 ratio. The
+  // brand accent is exposed via `--brand-accent` (token key
+  // `brandAccent`). The two ids are kept separate so the overview page
+  // and dev panel can label "accent" and "brand accent" usage distinctly
+  // if they diverge later; today they grade identically.
   {
     id: "accent-link",
     label: "Accent as link / display",
-    fg: "accent",
+    fg: "brandAccent",
     bg: "background",
     category: "text",
     displayOnly: true,
