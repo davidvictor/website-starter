@@ -6,11 +6,14 @@ import {
   darkenForMode,
   hexToOklch,
   lcToVibrancy,
+  type OKLCH,
   oklchToCss,
   oklchToHex,
+  tuneBrandForMode,
   vibrancyToLC,
   warmthToNeutral,
 } from "../color"
+import { wcagRatioOklch } from "../contrast"
 
 describe("hexToOklch / oklchToHex round-trip", () => {
   it("round-trips common brand-ish hexes within 1 unit per channel", () => {
@@ -179,5 +182,83 @@ describe("oklchToCss formatting", () => {
   it("does not append alpha when undefined or 1", () => {
     expect(oklchToCss({ l: 0.5, c: 0.1, h: 200 })).not.toContain("/")
     expect(oklchToCss({ l: 0.5, c: 0.1, h: 200 }, 1)).not.toContain("/")
+  })
+})
+
+describe("tuneBrandForMode", () => {
+  // Near-black / near-white anchors that the implementation uses internally
+  // for the "best-fg" constraint.
+  const NEAR_BLACK_FG: OKLCH = { l: 0.13, c: 0, h: 0 }
+  const NEAR_WHITE_FG: OKLCH = { l: 0.97, c: 0, h: 0 }
+
+  const bestFgContrast = (brand: OKLCH) =>
+    Math.max(
+      wcagRatioOklch(NEAR_WHITE_FG, brand),
+      wcagRatioOklch(NEAR_BLACK_FG, brand)
+    )
+
+  it("returns a valid OKLCH triple with finite values for any input", () => {
+    // Even on the (theoretical) exhaustion path the function should
+    // return a finite OKLCH — it falls back to the last attempted L.
+    const raw: OKLCH = { l: 0.5, c: 0.3, h: 290 }
+    const bg: OKLCH = { l: 0.13, c: 0, h: 0 }
+    const tuned = tuneBrandForMode(raw, "dark", bg)
+    expect(Number.isFinite(tuned.l)).toBe(true)
+    expect(Number.isFinite(tuned.c)).toBe(true)
+    expect(Number.isFinite(tuned.h)).toBe(true)
+    // L always stays in [0, 1] due to the internal clamp.
+    expect(tuned.l).toBeGreaterThanOrEqual(0)
+    expect(tuned.l).toBeLessThanOrEqual(1)
+  })
+
+  it("pulls a too-light brand DOWN in light mode to clear both constraints", () => {
+    // Raw cyan at L=0.65 fails 4.5:1 vs white (~2.7:1).
+    const raw: OKLCH = { l: 0.65, c: 0.18, h: 190 }
+    const bg: OKLCH = { l: 1.0, c: 0, h: 0 }
+    const tuned = tuneBrandForMode(raw, "light", bg)
+    // Should be pulled darker than the starting point.
+    expect(tuned.l).toBeLessThan(0.55)
+    // Both constraints clear the 4.5 floor.
+    expect(wcagRatioOklch(tuned, bg)).toBeGreaterThanOrEqual(4.5)
+    expect(bestFgContrast(tuned)).toBeGreaterThanOrEqual(4.5)
+  })
+
+  it("pushes a too-dark brand UP in dark mode to clear both constraints", () => {
+    // Raw purple at L=0.3 against a near-black dark bg fails.
+    const raw: OKLCH = { l: 0.3, c: 0.2, h: 290 }
+    const bg: OKLCH = { l: 0.13, c: 0, h: 0 }
+    const tuned = tuneBrandForMode(raw, "dark", bg)
+    // The mode-baseline lift alone bumps L to >=0.55; tuning may push higher.
+    expect(tuned.l).toBeGreaterThanOrEqual(0.55)
+    // Both constraints clear the 4.5 floor.
+    expect(wcagRatioOklch(tuned, bg)).toBeGreaterThanOrEqual(4.5)
+    expect(bestFgContrast(tuned)).toBeGreaterThanOrEqual(4.5)
+  })
+
+  it("preserves chroma and hue (only lightness is tuned)", () => {
+    const raw: OKLCH = { l: 0.5, c: 0.18, h: 250 }
+    const bg: OKLCH = { l: 0.13, c: 0, h: 0 }
+    const tuned = tuneBrandForMode(raw, "dark", bg)
+    expect(tuned.c).toBe(raw.c)
+    expect(tuned.h).toBe(raw.h)
+  })
+
+  it("is deterministic — same inputs produce the same output", () => {
+    const raw: OKLCH = { l: 0.5, c: 0.18, h: 250 }
+    const bg: OKLCH = { l: 0.13, c: 0, h: 0 }
+    const a = tuneBrandForMode(raw, "dark", bg)
+    const b = tuneBrandForMode(raw, "dark", bg)
+    expect(a).toEqual(b)
+  })
+
+  it("honors a custom floor", () => {
+    // A very low floor (1.5) should accept the brand at (or near) its
+    // baseline lifted L without further tuning.
+    const raw: OKLCH = { l: 0.5, c: 0.05, h: 250 }
+    const bg: OKLCH = { l: 0.13, c: 0, h: 0 }
+    const lowFloor = tuneBrandForMode(raw, "dark", bg, 1.5)
+    // The mode-baseline lift puts the L at clamp(raw.l + 0.08, 0.55, 0.85).
+    const l0 = Math.max(0.55, Math.min(0.85, raw.l + 0.08))
+    expect(lowFloor.l).toBe(l0)
   })
 })

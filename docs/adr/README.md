@@ -21,3 +21,5 @@ The decisions below shaped the lookbook polish system. Each is a one-pager with 
 | [0015](0015-brand-phasing.md) | brand.ts migration lands in 4a | Accepted |
 | [0016](0016-feature-scope.md) | Feature scope (count-up, pricing toggle, route transitions) | Accepted |
 | [0017](0017-primitive-location.md) | Polish primitives in `components/motion/` | Accepted |
+| [0018](0018-route-transition-coordination.md) | Route-transition coordination via state machine | Accepted |
+| [0019](0019-theme-accessibility.md) | Theme accessibility enforcement (WCAG 2.2 AA) | Accepted |

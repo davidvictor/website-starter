@@ -14,7 +14,7 @@
       "derivation": {
         "chromaBoost": 0.7,
         "contrast": "high",
-        "semanticIntensity": 0.75,
+        "semanticIntensity": 0.85,
         "accentUsage": "rare",
         "radius": "0.25rem",
         "fonts": {

@@ -10,12 +10,13 @@
 
 import {
   applyAccentAnchor,
-  darkenForMode,
   type OKLCH,
   oklchToCss,
+  tuneBrandForMode,
   vibrancyToLC,
   warmthToNeutral,
 } from "@/lib/color"
+import { wcagRatioOklch } from "@/lib/contrast"
 
 import type { ControllerInputs, DerivationProfile } from "./controller-types"
 import { resolveContrast } from "./derivation-axes"
@@ -33,7 +34,8 @@ export type NeutralPalette = {
   muted: OKLCH
   mutedFg: OKLCH
   border: OKLCH
-  input: OKLCH
+  /** Input/textarea border. Required to clear 3:1 vs bg (WCAG 1.4.11). */
+  inputBorder: OKLCH
   /** shadcn `accent` — used as hover/highlighted surface, NOT the brand accent. */
   surfaceAccent: OKLCH
   ring: OKLCH
@@ -54,27 +56,8 @@ export function buildDeriveCtx(
   derivation: DerivationProfile,
   mode: Mode
 ): DeriveCtx {
-  // Primary
-  const pLC = vibrancyToLC(inputs.primary.vibrancy)
-  const primary: OKLCH = {
-    l: mode === "dark" ? darkenForMode(pLC.l, { kind: "brand" }) : pLC.l,
-    c: pLC.c * derivation.chromaBoost,
-    h: inputs.primary.hue,
-  }
-
-  // Accent (anchor applied)
-  const aLC = vibrancyToLC(inputs.accent.vibrancy)
-  const accent: OKLCH = {
-    l: mode === "dark" ? darkenForMode(aLC.l, { kind: "brand" }) : aLC.l,
-    c: aLC.c * derivation.chromaBoost,
-    h: applyAccentAnchor(
-      inputs.primary.hue,
-      inputs.accent.hue,
-      inputs.accent.anchor
-    ),
-  }
-
-  // Neutral palette (driven by warmth + contrast)
+  // Neutral palette (driven by warmth + contrast). Built first so brand
+  // tones can consult `neutral.bg` for legibility tuning.
   const { hue: warmHue, chroma: warmChroma } = warmthToNeutral(
     inputs.warmth,
     inputs.primary.hue
@@ -82,6 +65,16 @@ export function buildDeriveCtx(
   const anchors = resolveContrast(derivation.contrast).anchors[mode]
   const c = warmChroma
   const h = warmHue
+  // Input border: separately picked so 3:1 vs bg is guaranteed (WCAG 1.4.11).
+  // Light bg L=1.0 → need OKLCH L ≤ ~0.585 to clear 3:1.
+  // Dark  bg L=~0.13 → need OKLCH L ≥ ~0.45 to clear 3:1.
+  // Pick a value comfortably inside that range, biased toward the existing
+  // border tone so the visual delta from `border` is small.
+  const inputBorder: OKLCH = {
+    l: mode === "dark" ? 0.5 : 0.58,
+    c,
+    h,
+  }
   const neutral: NeutralPalette = {
     bg: { l: anchors.bg, c, h },
     fg: { l: anchors.fg, c: c * 1.5, h },
@@ -89,11 +82,42 @@ export function buildDeriveCtx(
     muted: { l: anchors.muted, c: c * 1.4, h },
     mutedFg: { l: mode === "dark" ? 0.7 : 0.5, c: c * 1.4, h },
     border: { l: anchors.border, c, h },
-    input: { l: anchors.border, c, h },
+    inputBorder,
     surfaceAccent: { l: anchors.muted, c: c * 1.8, h },
     ring: { l: mode === "dark" ? 0.7 : 0.55, c, h },
     secondary: { l: anchors.muted, c: c * 1.4, h },
   }
+
+  // Primary — tuned so it clears AA against neutral.bg AND against its
+  // own near-B/W foreground (so filled buttons read).
+  const pLC = vibrancyToLC(inputs.primary.vibrancy)
+  const primary: OKLCH = tuneBrandForMode(
+    {
+      l: pLC.l,
+      c: pLC.c * derivation.chromaBoost,
+      h: inputs.primary.hue,
+    },
+    mode,
+    neutral.bg,
+    4.5
+  )
+
+  // Accent (anchor applied) — same tuning treatment.
+  const aLC = vibrancyToLC(inputs.accent.vibrancy)
+  const accent: OKLCH = tuneBrandForMode(
+    {
+      l: aLC.l,
+      c: aLC.c * derivation.chromaBoost,
+      h: applyAccentAnchor(
+        inputs.primary.hue,
+        inputs.accent.hue,
+        inputs.accent.anchor
+      ),
+    },
+    mode,
+    neutral.bg,
+    4.5
+  )
 
   return { inputs, derivation, mode, primary, accent, neutral }
 }
@@ -102,9 +126,20 @@ export function buildDeriveCtx(
 /* Helpers used by individual token derive functions                    */
 /* ------------------------------------------------------------------ */
 
-/** Pick a readable near-black/near-white foreground for the given bg. */
+const NEAR_BLACK: OKLCH = { l: 0.13, c: 0, h: 0 }
+const NEAR_WHITE: OKLCH = { l: 0.97, c: 0, h: 0 }
+
+/**
+ * Pick the readable near-black/near-white foreground for `bg` by
+ * *measured* WCAG contrast — not by an L threshold. For vivid hues
+ * the chroma can pull the perceived darkness across the simple L=0.6
+ * cutoff, producing a too-low ratio. Measuring fixes that without
+ * adding new tokens.
+ */
 export function foregroundFor(bg: OKLCH): OKLCH {
-  return bg.l > 0.6 ? { l: 0.13, c: 0, h: 0 } : { l: 0.97, c: 0, h: 0 }
+  const rBlack = wcagRatioOklch(NEAR_BLACK, bg)
+  const rWhite = wcagRatioOklch(NEAR_WHITE, bg)
+  return rBlack >= rWhite ? NEAR_BLACK : NEAR_WHITE
 }
 
 /** Build a semantic OKLCH at the given hue, modulated by intensity. */
@@ -223,8 +258,7 @@ export const COLOR_TOKENS = {
   input: {
     cssVar: "--input",
     category: "surface",
-    derive: (ctx) =>
-      oklchToCss(ctx.neutral.input, ctx.mode === "dark" ? 0.6 : 1),
+    derive: (ctx) => oklchToCss(ctx.neutral.inputBorder),
   },
   ring: {
     cssVar: "--ring",
