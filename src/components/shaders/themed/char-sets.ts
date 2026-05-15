@@ -2,8 +2,16 @@ import type { ShaderId } from "./types"
 
 const editorial2 = { marks: " .:-=+", rule: "─│┼", dots: "·:∶" } as const
 const saas3 = { data: ".+×▪█", dots: "·•◦●", blocks: "░▒▓█" } as const
-const bold2 = { blocks: "█▓▒░ ", digits: "0123456789", letters: "MWHEX#-:." } as const
-const cyber1 = { density: "#@%*+-: ", sparse: ". : ;", blocks: "█▓▒░ " } as const
+const bold2 = {
+  blocks: "█▓▒░ ",
+  digits: "0123456789",
+  letters: "MWHEX#-:.",
+} as const
+const cyber1 = {
+  density: "#@%*+-: ",
+  sparse: ". : ;",
+  blocks: "█▓▒░ ",
+} as const
 const cyber2 = {
   binary: "01",
   hex: "0123456789ABCDEF",

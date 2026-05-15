@@ -11,15 +11,57 @@ const SLOTS: Record<string, ColorSlot> = {
 }
 
 const BASE_SCHEMA: DevControlSchema = {
-  scale: { type: "number", default: 1.5, min: 0.5, max: 3, step: 0.05, label: "scale" },
-  turbulence: { type: "number", default: 8, min: 0, max: 20, step: 0.5, label: "turbulence" },
-  speed: { type: "number", default: 0.04, min: 0, max: 0.1, step: 0.005, label: "speed" },
-  grainOverride: { type: "number", default: 0, min: 0, max: 0.4, step: 0.01, label: "grain (0 = auto)" },
+  scale: {
+    type: "number",
+    default: 1.5,
+    min: 0.5,
+    max: 3,
+    step: 0.05,
+    label: "scale",
+  },
+  turbulence: {
+    type: "number",
+    default: 8,
+    min: 0,
+    max: 20,
+    step: 0.5,
+    label: "turbulence",
+  },
+  speed: {
+    type: "number",
+    default: 0.04,
+    min: 0,
+    max: 0.1,
+    step: 0.005,
+    label: "speed",
+  },
+  grainOverride: {
+    type: "number",
+    default: 0,
+    min: 0,
+    max: 0.4,
+    step: 0.01,
+    label: "grain (0 = auto)",
+  },
 }
 
 const INTERACTIVE_SCHEMA: DevControlSchema = {
-  liquifyIntensity: { type: "number", default: 4, min: 0, max: 20, step: 0.1, label: "liquify" },
-  liquifyStiffness: { type: "number", default: 8, min: 1, max: 30, step: 0.5, label: "stiffness" },
+  liquifyIntensity: {
+    type: "number",
+    default: 4,
+    min: 0,
+    max: 20,
+    step: 0.1,
+    label: "liquify",
+  },
+  liquifyStiffness: {
+    type: "number",
+    default: 8,
+    min: 1,
+    max: 30,
+    step: 0.5,
+    label: "stiffness",
+  },
 }
 
 function parseOklchL(value: string): number {
@@ -35,7 +77,14 @@ function calibratedGrain(bgColor: string, override: number): number {
 }
 
 type Props = {
-  marble: { colorA: string; colorB: string; colorC: string; scale: number; turbulence: number; speed: number }
+  marble: {
+    colorA: string
+    colorB: string
+    colorC: string
+    scale: number
+    turbulence: number
+    speed: number
+  }
   film: { strength: number }
   liquify?: { intensity: number; stiffness: number }
 }
@@ -51,7 +100,9 @@ function buildIdle({ colors, controls, perfMode }: BuildPropsContext): Props {
       turbulence: controls.turbulence as number,
       speed: (controls.speed as number) * speedMul,
     },
-    film: { strength: calibratedGrain(colors.a, controls.grainOverride as number) },
+    film: {
+      strength: calibratedGrain(colors.a, controls.grainOverride as number),
+    },
   }
 }
 
@@ -87,7 +138,12 @@ function renderInteractive(props: unknown): ReactNode {
   const p = props as Props
   return (
     <>
-      <Liquify intensity={p.liquify!.intensity} stiffness={p.liquify!.stiffness} damping={4} radius={0.6}>
+      <Liquify
+        intensity={p.liquify!.intensity}
+        stiffness={p.liquify!.stiffness}
+        damping={4}
+        radius={0.6}
+      >
         <Marble
           colorA={p.marble.colorA}
           colorB={p.marble.colorB}

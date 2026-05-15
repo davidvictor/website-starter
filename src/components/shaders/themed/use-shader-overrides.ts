@@ -26,11 +26,7 @@ function read(key: string, currentVersion: number): ShaderOverrides {
 
 export function useShaderOverrides(
   shaderId: ShaderId
-): [
-  ShaderOverrides,
-  (patch: Partial<ShaderOverrides>) => void,
-  () => void,
-] {
+): [ShaderOverrides, (patch: Partial<ShaderOverrides>) => void, () => void] {
   const def = getShaderDef(shaderId)
   const key = `${STORAGE_PREFIX}${shaderId}`
 

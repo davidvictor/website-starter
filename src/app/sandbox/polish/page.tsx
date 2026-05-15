@@ -1,7 +1,7 @@
 "use client"
 
-import { motion } from "motion/react"
 import { Bell, Moon, Sun } from "lucide-react"
+import { motion } from "motion/react"
 import { useState } from "react"
 
 import { AnimatedNumber } from "@/components/motion/animated-number"
@@ -141,10 +141,7 @@ export default function PolishSandboxPage() {
           slides 80px on the same trigger.
         </p>
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setSpringPlay((n) => n + 1)}
-          >
+          <Button variant="outline" onClick={() => setSpringPlay((n) => n + 1)}>
             Play
           </Button>
           <span className="text-xs text-muted-foreground">

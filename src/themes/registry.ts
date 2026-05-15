@@ -11,8 +11,8 @@ import { deriveShadows, deriveTokens } from "./derive"
 import registryJson from "./registry.json"
 import {
   COLOR_TOKEN_TO_CSS_VAR,
-  SHADOW_TOKEN_TO_CSS_VAR,
   type ColorTokens,
+  SHADOW_TOKEN_TO_CSS_VAR,
   type ShadowTokens,
 } from "./types"
 

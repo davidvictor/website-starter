@@ -12,16 +12,65 @@ const SLOTS: Record<string, ColorSlot> = {
 }
 
 const BASE_SCHEMA: DevControlSchema = {
-  speed: { type: "number", default: 0.4, min: 0, max: 2, step: 0.05, label: "speed" },
-  distortion: { type: "number", default: 0.6, min: 0, max: 2, step: 0.05, label: "distortion" },
-  paperGrain: { type: "number", default: 0.2, min: 0, max: 0.5, step: 0.01, label: "paper" },
-  grainScale: { type: "number", default: 1.2, min: 0.1, max: 3, step: 0.05, label: "grain scale" },
-  seed: { type: "number", default: 0, min: 0, max: 100, step: 1, label: "seed" },
+  speed: {
+    type: "number",
+    default: 0.4,
+    min: 0,
+    max: 2,
+    step: 0.05,
+    label: "speed",
+  },
+  distortion: {
+    type: "number",
+    default: 0.6,
+    min: 0,
+    max: 2,
+    step: 0.05,
+    label: "distortion",
+  },
+  paperGrain: {
+    type: "number",
+    default: 0.2,
+    min: 0,
+    max: 0.5,
+    step: 0.01,
+    label: "paper",
+  },
+  grainScale: {
+    type: "number",
+    default: 1.2,
+    min: 0.1,
+    max: 3,
+    step: 0.05,
+    label: "grain scale",
+  },
+  seed: {
+    type: "number",
+    default: 0,
+    min: 0,
+    max: 100,
+    step: 1,
+    label: "seed",
+  },
 }
 
 const INTERACTIVE_SCHEMA: DevControlSchema = {
-  rippleIntensity: { type: "number", default: 3, min: 0, max: 20, step: 0.1, label: "ripple" },
-  rippleRadius: { type: "number", default: 0.6, min: 0.1, max: 1, step: 0.05, label: "radius" },
+  rippleIntensity: {
+    type: "number",
+    default: 3,
+    min: 0,
+    max: 20,
+    step: 0.1,
+    label: "ripple",
+  },
+  rippleRadius: {
+    type: "number",
+    default: 0.6,
+    min: 0.1,
+    max: 1,
+    step: 0.05,
+    label: "radius",
+  },
 }
 
 type IdleProps = {
@@ -41,7 +90,11 @@ type InteractiveProps = IdleProps & {
   ripple: { intensity: number; radius: number }
 }
 
-function buildIdle({ colors, controls, perfMode }: BuildPropsContext): IdleProps {
+function buildIdle({
+  colors,
+  controls,
+  perfMode,
+}: BuildPropsContext): IdleProps {
   const speedMul = perfMode === "reduced" ? 0.5 : 1
   return {
     flowing: {
@@ -84,7 +137,11 @@ function renderIdle(props: unknown) {
         seed={p.flowing.seed}
         colorSpace="oklch"
       />
-      <Paper roughness={p.paper.roughness} grainScale={p.paper.grainScale} displacement={0.08} />
+      <Paper
+        roughness={p.paper.roughness}
+        grainScale={p.paper.grainScale}
+        displacement={0.08}
+      />
     </>
   )
 }
@@ -110,7 +167,11 @@ function renderInteractive(props: unknown) {
           colorSpace="oklch"
         />
       </CursorRipples>
-      <Paper roughness={p.paper.roughness} grainScale={p.paper.grainScale} displacement={0.08} />
+      <Paper
+        roughness={p.paper.roughness}
+        grainScale={p.paper.grainScale}
+        displacement={0.08}
+      />
     </>
   )
 }

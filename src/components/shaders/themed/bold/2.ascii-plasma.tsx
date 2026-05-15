@@ -11,12 +11,54 @@ const SLOTS: Record<string, ColorSlot> = {
 }
 
 const BASE_SCHEMA: DevControlSchema = {
-  cellSize: { type: "number", default: 26, min: 16, max: 50, step: 1, label: "cell size" },
-  density: { type: "number", default: 2.5, min: 0, max: 4, step: 0.1, label: "density" },
-  speed: { type: "number", default: 1.8, min: 0, max: 5, step: 0.1, label: "speed" },
-  warp: { type: "number", default: 0.5, min: 0, max: 1, step: 0.01, label: "warp" },
-  contrast: { type: "number", default: 1.4, min: 0, max: 3, step: 0.05, label: "contrast" },
-  gamma: { type: "number", default: 1.4, min: 0.5, max: 3, step: 0.05, label: "gamma" },
+  cellSize: {
+    type: "number",
+    default: 26,
+    min: 16,
+    max: 50,
+    step: 1,
+    label: "cell size",
+  },
+  density: {
+    type: "number",
+    default: 2.5,
+    min: 0,
+    max: 4,
+    step: 0.1,
+    label: "density",
+  },
+  speed: {
+    type: "number",
+    default: 1.8,
+    min: 0,
+    max: 5,
+    step: 0.1,
+    label: "speed",
+  },
+  warp: {
+    type: "number",
+    default: 0.5,
+    min: 0,
+    max: 1,
+    step: 0.01,
+    label: "warp",
+  },
+  contrast: {
+    type: "number",
+    default: 1.4,
+    min: 0,
+    max: 3,
+    step: 0.05,
+    label: "contrast",
+  },
+  gamma: {
+    type: "number",
+    default: 1.4,
+    min: 0.5,
+    max: 3,
+    step: 0.05,
+    label: "gamma",
+  },
   charSet: {
     type: "select",
     default: "blocks",
@@ -31,14 +73,42 @@ const BASE_SCHEMA: DevControlSchema = {
 }
 
 const INTERACTIVE_SCHEMA: DevControlSchema = {
-  liquifyIntensity: { type: "number", default: 6, min: 0, max: 20, step: 0.1, label: "liquify" },
-  liquifyStiffness: { type: "number", default: 4, min: 1, max: 30, step: 0.5, label: "stiffness" },
-  liquifyDamping: { type: "number", default: 3, min: 0, max: 10, step: 0.1, label: "damping" },
+  liquifyIntensity: {
+    type: "number",
+    default: 6,
+    min: 0,
+    max: 20,
+    step: 0.1,
+    label: "liquify",
+  },
+  liquifyStiffness: {
+    type: "number",
+    default: 4,
+    min: 1,
+    max: 30,
+    step: 0.5,
+    label: "stiffness",
+  },
+  liquifyDamping: {
+    type: "number",
+    default: 3,
+    min: 0,
+    max: 10,
+    step: 0.1,
+    label: "damping",
+  },
 }
 
 type Props = {
   ascii: { characters: string; cellSize: number; gamma: number }
-  plasma: { colorA: string; colorB: string; density: number; speed: number; warp: number; contrast: number }
+  plasma: {
+    colorA: string
+    colorB: string
+    density: number
+    speed: number
+    warp: number
+    contrast: number
+  }
   liquify?: { intensity: number; stiffness: number; damping: number }
 }
 

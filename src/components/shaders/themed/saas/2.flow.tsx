@@ -17,28 +17,80 @@ const INTERACTIVE_EXTRA_SLOTS: Record<string, ColorSlot> = {
 }
 
 const BASE_SCHEMA: DevControlSchema = {
-  speed: { type: "number", default: 0.8, min: 0, max: 2, step: 0.05, label: "speed" },
-  distortion: { type: "number", default: 0.7, min: 0, max: 2, step: 0.05, label: "distortion" },
+  speed: {
+    type: "number",
+    default: 0.8,
+    min: 0,
+    max: 2,
+    step: 0.05,
+    label: "speed",
+  },
+  distortion: {
+    type: "number",
+    default: 0.7,
+    min: 0,
+    max: 2,
+    step: 0.05,
+    label: "distortion",
+  },
 }
 
 const INTERACTIVE_SCHEMA: DevControlSchema = {
-  intensity: { type: "number", default: 1.0, min: 0.5, max: 1.5, step: 0.05, label: "intensity" },
-  radius: { type: "number", default: 2.5, min: 0, max: 5, step: 0.1, label: "radius" },
-  momentum: { type: "number", default: 28, min: 10, max: 60, step: 1, label: "momentum" },
+  intensity: {
+    type: "number",
+    default: 1.0,
+    min: 0.5,
+    max: 1.5,
+    step: 0.05,
+    label: "intensity",
+  },
+  radius: {
+    type: "number",
+    default: 2.5,
+    min: 0,
+    max: 5,
+    step: 0.1,
+    label: "radius",
+  },
+  momentum: {
+    type: "number",
+    default: 28,
+    min: 10,
+    max: 60,
+    step: 1,
+    label: "momentum",
+  },
 }
 
 type IdleProps = {
-  flowing: { colorA: string; colorB: string; colorC: string; colorD: string; speed: number; distortion: number }
+  flowing: {
+    colorA: string
+    colorB: string
+    colorC: string
+    colorD: string
+    speed: number
+    distortion: number
+  }
 }
 
 type InteractiveProps = {
   chroma: {
-    baseColor: string; upColor: string; downColor: string; leftColor: string; rightColor: string
-    intensity: number; radius: number; momentum: number
+    baseColor: string
+    upColor: string
+    downColor: string
+    leftColor: string
+    rightColor: string
+    intensity: number
+    radius: number
+    momentum: number
   }
 }
 
-function buildIdle({ colors, controls, perfMode }: BuildPropsContext): IdleProps {
+function buildIdle({
+  colors,
+  controls,
+  perfMode,
+}: BuildPropsContext): IdleProps {
   const speedMul = perfMode === "reduced" ? 0.5 : 1
   return {
     flowing: {
@@ -52,7 +104,10 @@ function buildIdle({ colors, controls, perfMode }: BuildPropsContext): IdleProps
   }
 }
 
-function buildInteractive({ colors, controls }: BuildPropsContext): InteractiveProps {
+function buildInteractive({
+  colors,
+  controls,
+}: BuildPropsContext): InteractiveProps {
   return {
     chroma: {
       baseColor: colors.b,
@@ -112,5 +167,6 @@ export const saasFlowPair = definePair({
   renderIdle,
   buildInteractive,
   renderInteractive,
-  fallbackBackground: "linear-gradient(135deg, {{a}}, {{b}} 40%, {{c}} 70%, {{d}})",
+  fallbackBackground:
+    "linear-gradient(135deg, {{a}}, {{b}} 40%, {{c}} 70%, {{d}})",
 })

@@ -16,12 +16,54 @@ const INTERACTIVE_EXTRA_SLOTS: Record<string, ColorSlot> = {
 }
 
 const BASE_SCHEMA: DevControlSchema = {
-  density: { type: "number", default: 28, min: 10, max: 40, step: 1, label: "columns" },
-  speed: { type: "number", default: 0.8, min: 0, max: 2, step: 0.05, label: "speed" },
-  trailLength: { type: "number", default: 0.65, min: 0.2, max: 1, step: 0.05, label: "trail" },
-  strokeWidth: { type: "number", default: 0.7, min: 0.3, max: 1, step: 0.05, label: "stroke" },
-  cellSize: { type: "number", default: 24, min: 16, max: 40, step: 1, label: "cell size" },
-  gamma: { type: "number", default: 0.9, min: 0.5, max: 2, step: 0.05, label: "gamma" },
+  density: {
+    type: "number",
+    default: 28,
+    min: 10,
+    max: 40,
+    step: 1,
+    label: "columns",
+  },
+  speed: {
+    type: "number",
+    default: 0.8,
+    min: 0,
+    max: 2,
+    step: 0.05,
+    label: "speed",
+  },
+  trailLength: {
+    type: "number",
+    default: 0.65,
+    min: 0.2,
+    max: 1,
+    step: 0.05,
+    label: "trail",
+  },
+  strokeWidth: {
+    type: "number",
+    default: 0.7,
+    min: 0.3,
+    max: 1,
+    step: 0.05,
+    label: "stroke",
+  },
+  cellSize: {
+    type: "number",
+    default: 24,
+    min: 16,
+    max: 40,
+    step: 1,
+    label: "cell size",
+  },
+  gamma: {
+    type: "number",
+    default: 0.9,
+    min: 0.5,
+    max: 2,
+    step: 0.05,
+    label: "gamma",
+  },
   charSet: {
     type: "select",
     default: "binary",
@@ -37,15 +79,48 @@ const BASE_SCHEMA: DevControlSchema = {
 }
 
 const INTERACTIVE_SCHEMA: DevControlSchema = {
-  cursorBrightness: { type: "number", default: 0.3, min: 0, max: 0.6, step: 0.05, label: "cursor brightness" },
-  smokeRadius: { type: "number", default: 0.15, min: 0.02, max: 0.5, step: 0.01, label: "smoke radius" },
-  smokeIntensity: { type: "number", default: 0.5, min: 0, max: 2, step: 0.05, label: "smoke influence" },
+  cursorBrightness: {
+    type: "number",
+    default: 0.3,
+    min: 0,
+    max: 0.6,
+    step: 0.05,
+    label: "cursor brightness",
+  },
+  smokeRadius: {
+    type: "number",
+    default: 0.15,
+    min: 0.02,
+    max: 0.5,
+    step: 0.01,
+    label: "smoke radius",
+  },
+  smokeIntensity: {
+    type: "number",
+    default: 0.5,
+    min: 0,
+    max: 2,
+    step: 0.05,
+    label: "smoke influence",
+  },
 }
 
 type Props = {
   ascii: { characters: string; cellSize: number; gamma: number }
-  rain: { colorA: string; speed: number; density: number; trailLength: number; strokeWidth: number }
-  cursor?: { brightness: number; smokeColorA: string; smokeColorB: string; smokeRadius: number; smokeIntensity: number }
+  rain: {
+    colorA: string
+    speed: number
+    density: number
+    trailLength: number
+    strokeWidth: number
+  }
+  cursor?: {
+    brightness: number
+    smokeColorA: string
+    smokeColorB: string
+    smokeRadius: number
+    smokeIntensity: number
+  }
 }
 
 function buildIdle({ colors, controls, perfMode }: BuildPropsContext): Props {
@@ -118,7 +193,10 @@ function CodeRainInteractive({ p }: { p: Props }) {
     let raf = 0
     let lastClient = { x: 0.5, y: 0.5 }
     const onMove = (e: PointerEvent) => {
-      lastClient = { x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight }
+      lastClient = {
+        x: e.clientX / window.innerWidth,
+        y: e.clientY / window.innerHeight,
+      }
     }
     const loop = () => {
       const dx = lastClient.x - 0.5

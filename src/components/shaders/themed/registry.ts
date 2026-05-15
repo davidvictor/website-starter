@@ -1,15 +1,15 @@
-import { boldAsciiPlasmaPair } from "./bold/2.ascii-plasma"
 import { boldAuroraPair } from "./bold/1.aurora"
+import { boldAsciiPlasmaPair } from "./bold/2.ascii-plasma"
 import { boldSwirlPair } from "./bold/3.swirl"
 import { cyberAsciiTerrainPair } from "./cyber/1.ascii-terrain"
 import { cyberCodeRainPair } from "./cyber/2.code-rain"
 import { cyberPhosphorConsolePair } from "./cyber/3.phosphor-console"
+import { editorialVeilPair } from "./editorial/1.veil"
 import { editorialLetterpressPair } from "./editorial/2.letterpress"
 import { editorialMarblePair } from "./editorial/3.marble"
-import { editorialVeilPair } from "./editorial/1.veil"
+import { saasMeshPair } from "./saas/1.mesh"
 import { saasFlowPair } from "./saas/2.flow"
 import { saasGlyphMeshPair } from "./saas/3.glyph-mesh"
-import { saasMeshPair } from "./saas/1.mesh"
 import type { ShaderDef, ShaderId } from "./types"
 
 const allPairs: ReadonlyArray<readonly [ShaderDef, ShaderDef]> = [
@@ -28,9 +28,9 @@ const allPairs: ReadonlyArray<readonly [ShaderDef, ShaderDef]> = [
 ]
 
 export const SHADER_REGISTRY: Partial<Record<ShaderId, ShaderDef>> =
-  Object.fromEntries(
-    allPairs.flat().map((d) => [d.id, d] as const)
-  ) as Partial<Record<ShaderId, ShaderDef>>
+  Object.fromEntries(allPairs.flat().map((d) => [d.id, d] as const)) as Partial<
+    Record<ShaderId, ShaderDef>
+  >
 
 export const SHADER_IDS: readonly ShaderId[] = (
   Object.keys(SHADER_REGISTRY) as ShaderId[]

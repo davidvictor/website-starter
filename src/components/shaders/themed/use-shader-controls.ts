@@ -2,10 +2,13 @@
 
 import { useEffect, useRef } from "react"
 import { useDevControls } from "@/components/dev-panel/hooks/use-dev-controls"
-import type { DevControlSchema, DevControlValues } from "@/components/dev-panel/types"
+import type {
+  DevControlSchema,
+  DevControlValues,
+} from "@/components/dev-panel/types"
 import { getShaderDef } from "./registry"
-import { useShaderOverrides } from "./use-shader-overrides"
 import type { ShaderId } from "./types"
+import { useShaderOverrides } from "./use-shader-overrides"
 
 export function useShaderControls<S extends DevControlSchema>(
   shaderId: ShaderId,

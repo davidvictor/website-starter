@@ -10,14 +10,12 @@ import {
   Trash2,
   Type,
 } from "lucide-react"
-
-import { clearAllShaderOverrides } from "@/components/shaders/themed/use-shader-overrides"
-import { SHADER_IDS } from "@/components/shaders/themed/registry"
 import { useEffect, useMemo, useRef, useState } from "react"
-
 import { IconMorph } from "@/components/motion/icon-morph"
 import { Press } from "@/components/motion/press"
 import { useConcentric } from "@/components/motion/use-concentric"
+import { SHADER_IDS } from "@/components/shaders/themed/registry"
+import { clearAllShaderOverrides } from "@/components/shaders/themed/use-shader-overrides"
 import { Button } from "@/components/ui/button"
 import { FontPicker } from "@/components/ui/font-picker"
 import { Input } from "@/components/ui/input"
@@ -356,28 +354,24 @@ export function ThemesTab() {
         <div className="flex flex-col gap-1">
           <SubLabel>route transition</SubLabel>
           <div className="flex flex-wrap gap-1">
-            {(
-              [
-                "none",
-                "vertical-translate",
-                "blur-scale-fade",
-              ] as const
-            ).map((m) => (
-              <Button
-                key={m}
-                size="xs"
-                variant={
-                  (theme.derivation.routeTransition ?? "vertical-translate") ===
-                  m
-                    ? "default"
-                    : "outline"
-                }
-                className="h-6 text-[10px]"
-                onClick={() => patchDerivation({ routeTransition: m })}
-              >
-                {m}
-              </Button>
-            ))}
+            {(["none", "vertical-translate", "blur-scale-fade"] as const).map(
+              (m) => (
+                <Button
+                  key={m}
+                  size="xs"
+                  variant={
+                    (theme.derivation.routeTransition ??
+                      "vertical-translate") === m
+                      ? "default"
+                      : "outline"
+                  }
+                  className="h-6 text-[10px]"
+                  onClick={() => patchDerivation({ routeTransition: m })}
+                >
+                  {m}
+                </Button>
+              )
+            )}
           </div>
         </div>
       </DisclosureSection>

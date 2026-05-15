@@ -2,12 +2,14 @@
 
 import { Leva } from "leva"
 import { RotateCcw, Settings2, X } from "lucide-react"
-
-import { useDevPanel, useMountedShaderCount } from "../dev-panel-provider"
-import { useShaderOverrides } from "@/components/shaders/themed/use-shader-overrides"
 import { getShaderDef } from "@/components/shaders/themed/registry"
-import { THEME_SENTINEL, type ShaderId } from "@/components/shaders/themed/types"
+import {
+  type ShaderId,
+  THEME_SENTINEL,
+} from "@/components/shaders/themed/types"
+import { useShaderOverrides } from "@/components/shaders/themed/use-shader-overrides"
 import { cn } from "@/lib/utils"
+import { useDevPanel, useMountedShaderCount } from "../dev-panel-provider"
 
 export function ControlsTab() {
   return (
@@ -47,7 +49,8 @@ function FocusChip() {
     if (mountedCount === 0) return null
     return (
       <p className="px-2.5 py-1.5 text-[10px] text-muted-foreground">
-        {mountedCount} shader{mountedCount === 1 ? "" : "s"} visible · click a tile to focus
+        {mountedCount} shader{mountedCount === 1 ? "" : "s"} visible · click a
+        tile to focus
       </p>
     )
   }
@@ -56,7 +59,9 @@ function FocusChip() {
   return (
     <div className="m-1.5 flex items-center justify-between gap-2 rounded-md border border-border bg-muted/40 px-2 py-1.5">
       <div className="flex min-w-0 flex-col">
-        <span className="font-mono text-[10px] text-muted-foreground">{focusedShaderId}</span>
+        <span className="font-mono text-[10px] text-muted-foreground">
+          {focusedShaderId}
+        </span>
         <span className="truncate text-xs font-medium">{def.label}</span>
       </div>
       <div className="flex items-center gap-1">
@@ -112,7 +117,8 @@ function ResetSlotMenu({ id }: { id: ShaderId }) {
       <option value="">↺ slot</option>
       {slotKeys.map((k) => {
         const slot = def.slots[k]
-        const label = slot.kind === "theme" ? `${k} · ${slot.token}` : `${k} · literal`
+        const label =
+          slot.kind === "theme" ? `${k} · ${slot.token}` : `${k} · literal`
         return (
           <option key={k} value={k}>
             {label}

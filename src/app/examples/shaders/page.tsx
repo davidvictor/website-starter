@@ -5,15 +5,15 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useCallback, useMemo } from "react"
 
 import { useDevPanel } from "@/components/dev-panel"
-import { useTheme } from "@/providers/theme-provider"
-import { ShaderTile } from "@/components/shaders/themed/showcase-tile"
 import { SHADER_REGISTRY } from "@/components/shaders/themed/registry"
+import { ShaderTile } from "@/components/shaders/themed/showcase-tile"
 import type {
   ShaderId,
   ThemeId,
   Variant,
 } from "@/components/shaders/themed/types"
 import { cn } from "@/lib/utils"
+import { useTheme } from "@/providers/theme-provider"
 
 const THEMES: readonly ThemeId[] = ["editorial", "saas", "bold", "cyber"]
 
@@ -102,9 +102,7 @@ function ShadersShowcase() {
             key={theme}
             theme={theme}
             variant={variants[theme]}
-            onVariantChange={(v) =>
-              setVariants({ ...variants, [theme]: v })
-            }
+            onVariantChange={(v) => setVariants({ ...variants, [theme]: v })}
           />
         ))}
       </div>

@@ -10,9 +10,8 @@ import {
   useMemo,
   useState,
 } from "react"
-
-import type { DevDataEntry } from "./types"
 import type { ShaderId } from "@/components/shaders/themed/types"
+import type { DevDataEntry } from "./types"
 
 type DevPanelContextValue = {
   open: boolean
@@ -118,7 +117,11 @@ export function DevPanelProvider({ children }: { children: ReactNode }) {
           target.isContentEditable)
 
       // ~ / backtick toggles
-      const isTilde = (e.key === "~" || e.key === "`") && !e.metaKey && !e.ctrlKey && !e.altKey
+      const isTilde =
+        (e.key === "~" || e.key === "`") &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        !e.altKey
       if (isTilde && !inEditable) {
         e.preventDefault()
         toggle()

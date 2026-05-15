@@ -11,24 +11,92 @@ const SLOTS: Record<string, ColorSlot> = {
 }
 
 const BASE_SCHEMA: DevControlSchema = {
-  intensity: { type: "number", default: 85, min: 0, max: 100, step: 1, label: "intensity" },
-  curtains: { type: "select", default: "4", options: ["1", "2", "3", "4"] as const, label: "curtains" },
-  speed: { type: "number", default: 3.5, min: -10, max: 10, step: 0.1, label: "speed" },
-  waviness: { type: "number", default: 80, min: 0, max: 200, step: 1, label: "waviness" },
-  rayDensity: { type: "number", default: 35, min: 0, max: 100, step: 1, label: "rays" },
-  height: { type: "number", default: 140, min: 10, max: 200, step: 1, label: "height" },
+  intensity: {
+    type: "number",
+    default: 85,
+    min: 0,
+    max: 100,
+    step: 1,
+    label: "intensity",
+  },
+  curtains: {
+    type: "select",
+    default: "4",
+    options: ["1", "2", "3", "4"] as const,
+    label: "curtains",
+  },
+  speed: {
+    type: "number",
+    default: 3.5,
+    min: -10,
+    max: 10,
+    step: 0.1,
+    label: "speed",
+  },
+  waviness: {
+    type: "number",
+    default: 80,
+    min: 0,
+    max: 200,
+    step: 1,
+    label: "waviness",
+  },
+  rayDensity: {
+    type: "number",
+    default: 35,
+    min: 0,
+    max: 100,
+    step: 1,
+    label: "rays",
+  },
+  height: {
+    type: "number",
+    default: 140,
+    min: 10,
+    max: 200,
+    step: 1,
+    label: "height",
+  },
 }
 
 const INTERACTIVE_SCHEMA: DevControlSchema = {
-  rippleIntensity: { type: "number", default: 8, min: 0, max: 20, step: 0.1, label: "ripple" },
-  rippleRadius: { type: "number", default: 0.6, min: 0.1, max: 1, step: 0.05, label: "radius" },
-  chromaticSplit: { type: "number", default: 1.2, min: 0, max: 3, step: 0.1, label: "chroma split" },
+  rippleIntensity: {
+    type: "number",
+    default: 8,
+    min: 0,
+    max: 20,
+    step: 0.1,
+    label: "ripple",
+  },
+  rippleRadius: {
+    type: "number",
+    default: 0.6,
+    min: 0.1,
+    max: 1,
+    step: 0.05,
+    label: "radius",
+  },
+  chromaticSplit: {
+    type: "number",
+    default: 1.2,
+    min: 0,
+    max: 3,
+    step: 0.1,
+    label: "chroma split",
+  },
 }
 
 type Props = {
   aurora: {
-    colorA: string; colorB: string; colorC: string
-    intensity: number; curtainCount: number; speed: number; waviness: number; rayDensity: number; height: number
+    colorA: string
+    colorB: string
+    colorC: string
+    intensity: number
+    curtainCount: number
+    speed: number
+    waviness: number
+    rayDensity: number
+    height: number
   }
   ripple?: { intensity: number; radius: number; chromaticSplit: number }
 }
@@ -38,7 +106,9 @@ function buildIdle({ colors, controls, perfMode }: BuildPropsContext): Props {
   const intensityMul = perfMode === "reduced" ? 0.7 : 1
   return {
     aurora: {
-      colorA: colors.a, colorB: colors.b, colorC: colors.c,
+      colorA: colors.a,
+      colorB: colors.b,
+      colorC: colors.c,
       intensity: (controls.intensity as number) * intensityMul,
       curtainCount: Number(controls.curtains as string),
       speed: (controls.speed as number) * speedMul,

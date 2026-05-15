@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useShouldReduceMacro } from "@/components/motion/use-should-reduce-macro"
 import { useDevPanel } from "@/components/dev-panel"
+import { useShouldReduceMacro } from "@/components/motion/use-should-reduce-macro"
 import type { PerfMode, Variant } from "./types"
 
 let webgl2Cached: boolean | null = null

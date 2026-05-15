@@ -9,11 +9,11 @@ import { cn } from "@/lib/utils"
 
 import { ShaderFallback } from "./fallback"
 import { getShaderDef } from "./registry"
+import type { ShaderId } from "./types"
 import { useInView } from "./use-in-view"
 import { useResolvedColors } from "./use-resolved-colors"
 import { useShaderControls } from "./use-shader-controls"
 import { useShaderPerfMode } from "./use-shader-perf-mode"
-import type { ShaderId } from "./types"
 
 export function ThemedShader({
   id,
@@ -65,11 +65,13 @@ export function ThemedShader({
       className={cn("group/themed-shader relative", className)}
       style={style}
     >
-      {perfMode === "fallback" ? (
-        <ShaderFallback def={def} colors={colors} />
-      ) : inView ? (
-        <Shader className="absolute inset-0">{def.renderTree(props)}</Shader>
-      ) : null /* paused: off-screen */}
+      {
+        perfMode === "fallback" ? (
+          <ShaderFallback def={def} colors={colors} />
+        ) : inView ? (
+          <Shader className="absolute inset-0">{def.renderTree(props)}</Shader>
+        ) : null /* paused: off-screen */
+      }
       {process.env.NODE_ENV === "development" &&
         panelOpen &&
         focusedShaderId !== id && (

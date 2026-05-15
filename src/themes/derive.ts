@@ -9,9 +9,9 @@ import {
 
 import type { ControllerInputs, DerivationProfile } from "./controller-types"
 import {
+  type ColorTokens,
   DEFAULT_SHADOWS_DARK,
   DEFAULT_SHADOWS_LIGHT,
-  type ColorTokens,
   type ShadowTokens,
 } from "./types"
 

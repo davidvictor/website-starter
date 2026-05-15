@@ -1,8 +1,8 @@
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { FadeIn } from "@/components/motion/fade-in"
-import { MeshGradient } from "@/components/shaders/mesh-gradient"
 import { Press } from "@/components/motion/press"
+import { MeshGradient } from "@/components/shaders/mesh-gradient"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 

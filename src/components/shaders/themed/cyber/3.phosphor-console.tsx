@@ -13,13 +13,62 @@ const SLOTS: Record<string, ColorSlot> = {
 }
 
 const BASE_SCHEMA: DevControlSchema = {
-  gradientSpeed: { type: "number", default: 1, min: 0, max: 3, step: 0.05, label: "gradient speed" },
-  gradientDistortion: { type: "number", default: 0.8, min: 0, max: 2, step: 0.05, label: "distortion" },
-  cellSize: { type: "number", default: 22, min: 16, max: 40, step: 1, label: "cell size" },
-  scanlineIntensity: { type: "number", default: 0.55, min: 0, max: 1, step: 0.05, label: "scanlines" },
-  colorShift: { type: "number", default: 2.2, min: 0, max: 5, step: 0.1, label: "color shift" },
-  vignetteRadius: { type: "number", default: 0.4, min: 0, max: 1, step: 0.05, label: "vignette" },
-  gamma: { type: "number", default: 1.1, min: 0.5, max: 2, step: 0.05, label: "gamma" },
+  gradientSpeed: {
+    type: "number",
+    default: 1,
+    min: 0,
+    max: 3,
+    step: 0.05,
+    label: "gradient speed",
+  },
+  gradientDistortion: {
+    type: "number",
+    default: 0.8,
+    min: 0,
+    max: 2,
+    step: 0.05,
+    label: "distortion",
+  },
+  cellSize: {
+    type: "number",
+    default: 22,
+    min: 16,
+    max: 40,
+    step: 1,
+    label: "cell size",
+  },
+  scanlineIntensity: {
+    type: "number",
+    default: 0.55,
+    min: 0,
+    max: 1,
+    step: 0.05,
+    label: "scanlines",
+  },
+  colorShift: {
+    type: "number",
+    default: 2.2,
+    min: 0,
+    max: 5,
+    step: 0.1,
+    label: "color shift",
+  },
+  vignetteRadius: {
+    type: "number",
+    default: 0.4,
+    min: 0,
+    max: 1,
+    step: 0.05,
+    label: "vignette",
+  },
+  gamma: {
+    type: "number",
+    default: 1.1,
+    min: 0.5,
+    max: 2,
+    step: 0.05,
+    label: "gamma",
+  },
   charSet: {
     type: "select",
     default: "phosphor",
@@ -34,14 +83,35 @@ const BASE_SCHEMA: DevControlSchema = {
 }
 
 const INTERACTIVE_SCHEMA: DevControlSchema = {
-  trailLength: { type: "number", default: 0.4, min: 0.1, max: 2, step: 0.05, label: "trail length" },
-  trailRadius: { type: "number", default: 0.6, min: 0.5, max: 2, step: 0.05, label: "trail radius" },
+  trailLength: {
+    type: "number",
+    default: 0.4,
+    min: 0.1,
+    max: 2,
+    step: 0.05,
+    label: "trail length",
+  },
+  trailRadius: {
+    type: "number",
+    default: 0.6,
+    min: 0.5,
+    max: 2,
+    step: 0.05,
+    label: "trail radius",
+  },
 }
 
 type Props = {
   ascii: { characters: string; cellSize: number; gamma: number }
   crt: { scanlineIntensity: number; colorShift: number; vignetteRadius: number }
-  gradient: { colorA: string; colorB: string; colorC: string; colorD: string; speed: number; distortion: number }
+  gradient: {
+    colorA: string
+    colorB: string
+    colorC: string
+    colorD: string
+    speed: number
+    distortion: number
+  }
   trail?: { colorA: string; colorB: string; length: number; radius: number }
 }
 
@@ -60,7 +130,10 @@ function buildIdle({ colors, controls, perfMode }: BuildPropsContext): Props {
       vignetteRadius: controls.vignetteRadius as number,
     },
     gradient: {
-      colorA: colors.a, colorB: colors.b, colorC: colors.c, colorD: colors.d,
+      colorA: colors.a,
+      colorB: colors.b,
+      colorC: colors.c,
+      colorD: colors.d,
       speed: (controls.gradientSpeed as number) * speedMul,
       distortion: controls.gradientDistortion as number,
     },

@@ -14,20 +14,74 @@ const INTERACTIVE_EXTRA_SLOTS: Record<string, ColorSlot> = {
 }
 
 const BASE_SCHEMA: DevControlSchema = {
-  speed: { type: "number", default: 1.4, min: 0, max: 5, step: 0.1, label: "speed" },
-  detail: { type: "number", default: 1.8, min: 0, max: 5, step: 0.1, label: "detail" },
-  blend: { type: "number", default: 50, min: 0, max: 100, step: 1, label: "blend" },
+  speed: {
+    type: "number",
+    default: 1.4,
+    min: 0,
+    max: 5,
+    step: 0.1,
+    label: "speed",
+  },
+  detail: {
+    type: "number",
+    default: 1.8,
+    min: 0,
+    max: 5,
+    step: 0.1,
+    label: "detail",
+  },
+  blend: {
+    type: "number",
+    default: 50,
+    min: 0,
+    max: 100,
+    step: 1,
+    label: "blend",
+  },
 }
 
 const INTERACTIVE_SCHEMA: DevControlSchema = {
-  smokeIntensity: { type: "number", default: 0.5, min: 0.1, max: 1, step: 0.05, label: "smoke" },
-  mouseInfluence: { type: "number", default: 0.8, min: 0, max: 2, step: 0.05, label: "cursor pull" },
-  mouseRadius: { type: "number", default: 0.2, min: 0.02, max: 0.5, step: 0.01, label: "cursor radius" },
+  smokeIntensity: {
+    type: "number",
+    default: 0.5,
+    min: 0.1,
+    max: 1,
+    step: 0.05,
+    label: "smoke",
+  },
+  mouseInfluence: {
+    type: "number",
+    default: 0.8,
+    min: 0,
+    max: 2,
+    step: 0.05,
+    label: "cursor pull",
+  },
+  mouseRadius: {
+    type: "number",
+    default: 0.2,
+    min: 0.02,
+    max: 0.5,
+    step: 0.01,
+    label: "cursor radius",
+  },
 }
 
 type Props = {
-  swirl: { colorA: string; colorB: string; speed: number; detail: number; blend: number }
-  smoke?: { colorA: string; colorB: string; intensity: number; mouseInfluence: number; mouseRadius: number }
+  swirl: {
+    colorA: string
+    colorB: string
+    speed: number
+    detail: number
+    blend: number
+  }
+  smoke?: {
+    colorA: string
+    colorB: string
+    intensity: number
+    mouseInfluence: number
+    mouseRadius: number
+  }
 }
 
 function buildIdle({ colors, controls, perfMode }: BuildPropsContext): Props {

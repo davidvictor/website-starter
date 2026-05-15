@@ -13,24 +13,63 @@ const SLOTS: Record<string, ColorSlot> = {
 }
 
 const BASE_SCHEMA: DevControlSchema = {
-  smoothness: { type: "number", default: 2.5, min: 0, max: 5, step: 0.05, label: "smoothness" },
+  smoothness: {
+    type: "number",
+    default: 2.5,
+    min: 0,
+    max: 5,
+    step: 0.05,
+    label: "smoothness",
+  },
 }
 
 const INTERACTIVE_SCHEMA: DevControlSchema = {
-  rippleIntensity: { type: "number", default: 6, min: 0, max: 20, step: 0.1, label: "ripple" },
-  rippleRadius: { type: "number", default: 0.5, min: 0.1, max: 1, step: 0.05, label: "radius" },
-  chromaticSplit: { type: "number", default: 0.6, min: 0, max: 3, step: 0.1, label: "chroma split" },
+  rippleIntensity: {
+    type: "number",
+    default: 6,
+    min: 0,
+    max: 20,
+    step: 0.1,
+    label: "ripple",
+  },
+  rippleRadius: {
+    type: "number",
+    default: 0.5,
+    min: 0.1,
+    max: 1,
+    step: 0.05,
+    label: "radius",
+  },
+  chromaticSplit: {
+    type: "number",
+    default: 0.6,
+    min: 0,
+    max: 3,
+    step: 0.1,
+    label: "chroma split",
+  },
 }
 
 type Props = {
-  mesh: { colorA: string; colorB: string; colorC: string; colorD: string; colorE: string; smoothness: number }
+  mesh: {
+    colorA: string
+    colorB: string
+    colorC: string
+    colorD: string
+    colorE: string
+    smoothness: number
+  }
   ripple?: { intensity: number; radius: number; chromaticSplit: number }
 }
 
 function buildIdle({ colors, controls }: BuildPropsContext): Props {
   return {
     mesh: {
-      colorA: colors.a, colorB: colors.b, colorC: colors.c, colorD: colors.d, colorE: colors.e,
+      colorA: colors.a,
+      colorB: colors.b,
+      colorC: colors.c,
+      colorD: colors.d,
+      colorE: colors.e,
       smoothness: controls.smoothness as number,
     },
   }
@@ -50,11 +89,16 @@ function buildInteractive(ctx: BuildPropsContext): Props {
 function meshNode(p: Props): ReactNode {
   return (
     <MultiPointGradient
-      colorA={p.mesh.colorA} positionA={{ x: 0.2, y: 0.2 }}
-      colorB={p.mesh.colorB} positionB={{ x: 0.8, y: 0.15 }}
-      colorC={p.mesh.colorC} positionC={{ x: 0.85, y: 0.85 }}
-      colorD={p.mesh.colorD} positionD={{ x: 0.15, y: 0.85 }}
-      colorE={p.mesh.colorE} positionE={{ x: 0.5, y: 0.5 }}
+      colorA={p.mesh.colorA}
+      positionA={{ x: 0.2, y: 0.2 }}
+      colorB={p.mesh.colorB}
+      positionB={{ x: 0.8, y: 0.15 }}
+      colorC={p.mesh.colorC}
+      positionC={{ x: 0.85, y: 0.85 }}
+      colorD={p.mesh.colorD}
+      positionD={{ x: 0.15, y: 0.85 }}
+      colorE={p.mesh.colorE}
+      positionE={{ x: 0.5, y: 0.5 }}
       smoothness={p.mesh.smoothness}
     />
   )

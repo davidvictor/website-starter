@@ -21,10 +21,7 @@ type UseDevControlsOptions = {
   values?: Record<string, unknown>
 }
 
-function specToLevaInput(
-  spec: DevControlSpec,
-  seedValue: unknown
-): LevaInput {
+function specToLevaInput(spec: DevControlSpec, seedValue: unknown): LevaInput {
   const value = seedValue ?? spec.default
 
   if (spec.renderIf) {
@@ -65,7 +62,9 @@ function specToLevaInput(
         }
       }
       case "vec3": {
-        const v = value as [number, number, number] | { x: number; y: number; z: number }
+        const v = value as
+          | [number, number, number]
+          | { x: number; y: number; z: number }
         const seed = Array.isArray(v) ? { x: v[0], y: v[1], z: v[2] } : v
         return { value: seed, label: spec.label, ...renderProp }
       }
@@ -100,7 +99,9 @@ function specToLevaInput(
       }
     }
     case "vec3": {
-      const v = value as [number, number, number] | { x: number; y: number; z: number }
+      const v = value as
+        | [number, number, number]
+        | { x: number; y: number; z: number }
       const seed = Array.isArray(v) ? { x: v[0], y: v[1], z: v[2] } : v
       return { value: seed, label: spec.label }
     }
@@ -170,10 +171,10 @@ export function useDevControls<S extends DevControlSchema>(
   // on first render and ignores subsequent shape changes (e.g. enabled
   // flipping from false to true). Re-running on enabled/group means flipping
   // the gate properly re-registers / un-registers the folder.
-  const levaValues = useControls(
-    (folderSchema ?? {}) as never,
-    [enabled, group]
-  ) as Record<string, unknown>
+  const levaValues = useControls((folderSchema ?? {}) as never, [
+    enabled,
+    group,
+  ]) as Record<string, unknown>
 
   return useMemo(() => {
     if (!enabled) {
@@ -184,7 +185,13 @@ export function useDevControls<S extends DevControlSchema>(
     for (const [key, spec] of Object.entries(schema)) {
       const raw = levaValues[key]
       if (spec.type === "vec3") {
-        if (raw && typeof raw === "object" && "x" in raw && "y" in raw && "z" in raw) {
+        if (
+          raw &&
+          typeof raw === "object" &&
+          "x" in raw &&
+          "y" in raw &&
+          "z" in raw
+        ) {
           const v = raw as { x: number; y: number; z: number }
           normalized[key] = [v.x, v.y, v.z]
         } else if (Array.isArray(raw) && raw.length === 3) {

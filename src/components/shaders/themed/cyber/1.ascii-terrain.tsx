@@ -12,10 +12,38 @@ const SLOTS: Record<string, ColorSlot> = {
 }
 
 const BASE_SCHEMA: DevControlSchema = {
-  cellSize: { type: "number", default: 20, min: 12, max: 36, step: 1, label: "cell size" },
-  voronoiScale: { type: "number", default: 8, min: 2, max: 15, step: 0.5, label: "scale" },
-  voronoiSpeed: { type: "number", default: 0.4, min: 0, max: 2, step: 0.05, label: "speed" },
-  gamma: { type: "number", default: 1, min: 0.5, max: 2, step: 0.05, label: "gamma" },
+  cellSize: {
+    type: "number",
+    default: 20,
+    min: 12,
+    max: 36,
+    step: 1,
+    label: "cell size",
+  },
+  voronoiScale: {
+    type: "number",
+    default: 8,
+    min: 2,
+    max: 15,
+    step: 0.5,
+    label: "scale",
+  },
+  voronoiSpeed: {
+    type: "number",
+    default: 0.4,
+    min: 0,
+    max: 2,
+    step: 0.05,
+    label: "speed",
+  },
+  gamma: {
+    type: "number",
+    default: 1,
+    min: 0.5,
+    max: 2,
+    step: 0.05,
+    label: "gamma",
+  },
   charSet: {
     type: "select",
     default: "density",
@@ -30,13 +58,33 @@ const BASE_SCHEMA: DevControlSchema = {
 }
 
 const INTERACTIVE_SCHEMA: DevControlSchema = {
-  distortionIntensity: { type: "number", default: 1.2, min: 0, max: 5, step: 0.05, label: "distortion" },
-  distortionRadius: { type: "number", default: 1.2, min: 0, max: 3, step: 0.1, label: "radius" },
+  distortionIntensity: {
+    type: "number",
+    default: 1.2,
+    min: 0,
+    max: 5,
+    step: 0.05,
+    label: "distortion",
+  },
+  distortionRadius: {
+    type: "number",
+    default: 1.2,
+    min: 0,
+    max: 3,
+    step: 0.1,
+    label: "radius",
+  },
 }
 
 type Props = {
   ascii: { characters: string; cellSize: number; gamma: number }
-  voronoi: { colorA: string; colorB: string; colorBorder: string; scale: number; speed: number }
+  voronoi: {
+    colorA: string
+    colorB: string
+    colorBorder: string
+    scale: number
+    speed: number
+  }
   distortion?: { intensity: number; radius: number }
 }
 
