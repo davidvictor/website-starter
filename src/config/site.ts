@@ -7,13 +7,13 @@
 import { env } from "./env"
 
 export const siteConfig = {
-  name: "Lookbook",
+  name: "Website Starter",
   description:
-    "A Next.js base for moving from design direction to clickable page in one sitting. Three style variants per block, a typed dev panel, and a controller-driven color system.",
+    "A reusable Next.js marketing website starter with block variants, seed content, a typed dev panel, and a controller-driven theme system.",
   url: env.NEXT_PUBLIC_SITE_URL,
   ogImage: `${env.NEXT_PUBLIC_SITE_URL}/opengraph-image`,
   links: {
-    github: "https://github.com/davidvictor/lookbook",
+    github: "https://github.com/davidvictor/website-starter",
   },
   navLinks: [
     { href: "/", label: "Home" },

@@ -3,7 +3,7 @@ import { siteMetadata } from "@/lib/metadata"
 
 export const metadata = siteMetadata({
   title: "Editorial",
-  description: "A single-column print-paced Lookbook composition.",
+  description: "A single-column print-paced starter composition.",
   path: "/editorial",
 })
 

@@ -7,7 +7,7 @@ import { siteMetadata } from "@/lib/metadata"
 
 export const metadata = siteMetadata({
   title: "Changelog",
-  description: "A release-notes route for the Lookbook marketing system.",
+  description: "A release-notes route for the website starter.",
   path: "/changelog",
 })
 

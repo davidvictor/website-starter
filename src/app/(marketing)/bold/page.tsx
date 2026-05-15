@@ -3,7 +3,7 @@ import { siteMetadata } from "@/lib/metadata"
 
 export const metadata = siteMetadata({
   title: "Bold",
-  description: "An expressive, high-contrast Lookbook composition.",
+  description: "An expressive, high-contrast starter composition.",
   path: "/bold",
 })
 

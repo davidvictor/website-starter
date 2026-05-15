@@ -27,9 +27,9 @@ import {
 type Mode = "light" | "dark" | "system"
 type ResolvedMode = "light" | "dark"
 
-const THEME_STORAGE_KEY = "lookbook:theme-id"
-const MODE_STORAGE_KEY = "lookbook:theme-mode"
-const OVERRIDES_STORAGE_KEY = "lookbook:theme-overrides"
+const THEME_STORAGE_KEY = "website-starter:theme-id"
+const MODE_STORAGE_KEY = "website-starter:theme-mode"
+const OVERRIDES_STORAGE_KEY = "website-starter:theme-overrides"
 
 type ThemeContextValue = {
   themes: readonly ControllerTheme[]

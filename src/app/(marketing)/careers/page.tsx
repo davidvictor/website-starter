@@ -9,7 +9,7 @@ import { siteMetadata } from "@/lib/metadata"
 
 export const metadata = siteMetadata({
   title: "Careers",
-  description: "A polished careers route composed from the Lookbook baseline.",
+  description: "A polished careers route composed from the starter baseline.",
   path: "/careers",
 })
 

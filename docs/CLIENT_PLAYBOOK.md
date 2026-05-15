@@ -4,7 +4,7 @@
 
 ## What this is
 
-You cloned a website from a base system called **Lookbook**, and you're using **Claude Code** to make changes — copy edits, design tweaks, new pages, new sections. This document shows what kinds of requests work well, how to phrase them, and what to expect back.
+You cloned a website from the **Website Starter**, and you're using **Claude Code** or another coding agent to make changes — copy edits, design tweaks, new pages, new sections. This document shows what kinds of requests work well, how to phrase them, and what to expect back.
 
 Claude follows a set of conventions documented in [`AGENTS.md`](../AGENTS.md). You don't need to read that file — but knowing it exists explains why Claude sometimes says "let me put this in the brand file" instead of editing the visible page directly. Those conventions are what keeps the site stable when you make a lot of changes quickly.
 
@@ -165,7 +165,7 @@ Mapping from common requests to what changes:
 
 These requests will trigger a pause. They're not refusals — they're "let me confirm" moments because the change is bigger than it sounds:
 
-- **"Add a CMS so we can edit copy in a browser."** Lookbook is designed to grow into a CMS-backed product eventually (using Payload), but adding one is a separate project. Claude will point you at the future-state document and ask for a sign-off before starting.
+- **"Add a CMS so we can edit copy in a browser."** The starter is designed to grow into a CMS-backed product eventually (using Payload), but adding one is a separate project. Claude will point you at the future-state document and ask for a sign-off before starting.
 - **"Make the site multi-language."** Internationalization touches every route. Worth a designer/developer conversation first.
 - **"Switch to a different design system (Chakra, MUI, Mantine)."** The site is built on Tailwind + shadcn. Claude will explain the cost before proceeding.
 - **"Disable the commit hooks; they're slow."** The hooks are guardrails. If they're slow, Claude will investigate the cause rather than disable them.
@@ -197,6 +197,6 @@ A few suggestions for working effectively:
 ## Further reading
 
 - [`AGENTS.md`](../AGENTS.md) — the agent contract. Required reading if you're modifying conventions, not just using them.
-- [`README.md`](../README.md) — the human-facing project pitch, including the architecture diagram for how the theme system works.
+- [`README.md`](../README.md) — the starter overview, setup flow, routes, and commands.
 - [`docs/UI_POLISH.md`](UI_POLISH.md) — the polish primitives (motion, surfaces, hit areas, tabular numbers).
 - [`docs/PAYLOAD_CMS_FUTURE.md`](PAYLOAD_CMS_FUTURE.md) — what the eventual CMS migration looks like, and why content stays in `brand.ts` for now.

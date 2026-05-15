@@ -12,7 +12,7 @@ The polish rollout includes three feature additions (not just parity):
 
 ## Why
 
-Lookbook is a starter people clone for prototypes. Shipping the typed data layer without using it for anything visible means future contributors won't see what it unlocks. The three features validate the full motion + data stack in real surfaces, and they're the kind of things every "polished" marketing site has.
+This repo is a starter people clone for prototypes and client sites. Shipping the typed data layer without using it for anything visible means future contributors won't see what it unlocks. The three features validate the full motion + data stack in real surfaces, and they're the kind of things every "polished" marketing site has.
 
 ## How to apply
 

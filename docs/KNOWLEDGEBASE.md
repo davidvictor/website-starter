@@ -1,6 +1,6 @@
 # Knowledgebase contract
 
-Lookbook's docs should work like a small Obsidian vault inside the repo:
+The starter docs should work like a small Obsidian vault inside the repo:
 linked, current, searchable, and opinionated about what belongs where. The goal
 is not to accumulate every thought. The goal is to preserve decisions, plans,
 evidence, and operating rules in the place a future agent will actually find

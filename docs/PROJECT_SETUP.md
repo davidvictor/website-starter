@@ -1,74 +1,75 @@
-# Project setup — per-clone checklist
+# Project setup - per-clone checklist
 
-> Use this when spinning up a new client project from Lookbook. Order matters for some steps; ordered list is followed by per-step detail.
+Use this when spinning up a new website from the upstream starter. The starter
+itself should stay generic and reusable; client/project-specific work belongs in
+the new clone.
 
-## The checklist
+## Checklist
 
-1. [ ] Clone Lookbook → new private GitHub repo
-2. [ ] Rename in `package.json` (name, description, repository, homepage, author)
-3. [ ] Update `LICENSE` if needed
-4. [ ] Update `src/config/site.ts`: name, description, url, links, navLinks
-5. [ ] Replace `src/lib/brand.ts` with the client's content
-6. [ ] Pick a starting preset (dev panel `~` → copy JSON into `src/themes/registry.json`)
-7. [ ] Copy `.env.example` → `.env.local`, set `NEXT_PUBLIC_SITE_URL=http://localhost:3000`
-8. [ ] Update `SECURITY.md` contact if this clone ships one
-9. [ ] `vercel link` — connect to a new Vercel project; set production domain
-10. [ ] Configure GitHub branch protection (require CI green to merge)
-11. [ ] Decide whether to keep, guard, or remove the internal reference routes
-12. [ ] Review [`KNOWLEDGEBASE.md`](KNOWLEDGEBASE.md) and remove/archive stale inherited plans
-13. [ ] Run through representative content/theme/composition requests from [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md) to verify the playbook works on this clone
-14. [ ] Hand off [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md) + the deployed preview URL to the client
+1. [ ] Clone the starter into a new project repo.
+2. [ ] Rename `package.json` metadata.
+3. [ ] Update `LICENSE` if needed.
+4. [ ] Update `src/config/site.ts`.
+5. [ ] Replace the Nimbus seed content in `src/lib/brand.ts`.
+6. [ ] Pick a starting theme preset and persist it in `src/themes/registry.json`.
+7. [ ] Copy `.env.example` to `.env.local`.
+8. [ ] Update `SECURITY.md` contact details.
+9. [ ] Link the project to Vercel and set the production URL.
+10. [ ] Configure GitHub branch protection.
+11. [ ] Decide whether to keep, guard, or remove internal review routes.
+12. [ ] Review inherited docs and remove anything not useful to the project.
+13. [ ] Run the verification loop.
+14. [ ] Keep a path for upstream starter updates.
 
-## Detail per step
-
-### 1. Clone & create the new repo
+## 1. Clone the starter
 
 ```bash
-# Locally
-git clone https://github.com/davidvictor/lookbook.git client-foo
+git clone https://github.com/davidvictor/website-starter.git client-foo
 cd client-foo
 rm -rf .git
 git init
 git add .
-git commit -m "chore: initial commit from lookbook base"
+git commit -m "chore: initial commit from website starter"
+```
 
-# Create the new private repo on GitHub
+Create the new GitHub repo and push:
+
+```bash
 gh repo create davidvictor/client-foo --private --source . --push
 ```
 
-Pick a name that reflects the client, not the date (`client-foo`, not `client-2026-05-14`).
+Pick a durable project name, not a temporary date-based name.
 
-### 2. Rename in `package.json`
+## 2. Rename package metadata
 
-Open `package.json` and update:
+Update `package.json`:
 
-- `"name"` — kebab-case project name (e.g., `"client-foo-site"`).
-- `"version"` — reset to `"0.1.0"` for a fresh project.
-- `"description"` — one sentence describing what the client does.
-- `"repository.url"` — the new GitHub URL.
-- `"homepage"` — the new GitHub URL or production domain.
-- `"author"` — your name + email.
-- Keep `"private": false` if the repo is genuinely public; flip to `true` for client work.
-- Keep `"license": "MIT"` unless the client requires otherwise.
+- `name`: kebab-case project name, such as `client-foo-site`.
+- `version`: usually reset to `0.1.0`.
+- `description`: one sentence for the project.
+- `repository.url`: the new GitHub URL.
+- `homepage`: the new GitHub URL or production domain.
+- `author`: project owner or agency owner.
+- `private`: `true` for private client projects.
+- `license`: keep MIT only when appropriate.
 
-### 3. Update `LICENSE`
+## 3. Update license
 
-If MIT works, just update the copyright line. Otherwise, replace the file.
+If MIT still applies, update the copyright line. Otherwise replace `LICENSE`
+with the required project license.
 
-### 4. Update `src/config/site.ts`
+## 4. Update site config
 
-Update the `siteConfig` object:
+Edit `src/config/site.ts`:
 
 ```ts
 export const siteConfig = {
-  name: "Client Foo",                                  // ← the brand name
-  description: "Short tagline for the client.",        // ← used in meta + OG
-  url: env.NEXT_PUBLIC_SITE_URL,                       // ← driven by .env.local
+  name: "Client Foo",
+  description: "Short tagline for the client.",
+  url: env.NEXT_PUBLIC_SITE_URL,
   ogImage: `${env.NEXT_PUBLIC_SITE_URL}/opengraph-image`,
   links: {
     github: "https://github.com/davidvictor/client-foo",
-    // x: "https://x.com/clientfoo",
-    // linkedin: "https://linkedin.com/company/client-foo",
   },
   navLinks: [
     { href: "/", label: "Home" },
@@ -79,137 +80,164 @@ export const siteConfig = {
 } as const
 ```
 
-### 5. Replace `src/lib/brand.ts`
+## 5. Replace Nimbus content
 
-This is where the demo "Nimbus" copy lives. Replace **wholesale** with the client's content. Keep the typed shape from `src/lib/brand-types.ts` — TypeScript will tell you if you miss a field.
+Nimbus is the starter's fictional seed company. Replace the values in
+`src/lib/brand.ts` with the project's real content while keeping the typed shape
+from `src/lib/brand-types.ts`.
 
-The pattern:
+Guidelines:
 
-- Keep object keys identical to the base file.
-- Replace values with the client's real copy.
-- Pricing tiers, FAQ, testimonials, customer logos — every section reads from here.
+- Keep object keys stable unless the content model really changes.
+- Replace whole arrays for pricing, FAQ, testimonials, jobs, values, and posts.
+- Remove irrelevant sections from page composition instead of leaving empty data.
+- Keep marketing copy out of `page.tsx` files.
 
-If a block on the home page is irrelevant to the client (e.g., they don't want a testimonials section), remove the block from the page composition (`src/app/(marketing)/page.tsx`) rather than emptying the testimonials array.
+## 6. Pick a theme
 
-### 6. Pick a starting preset
+Start the app, open the dev panel with `~`, and tune Primary, Accent, Warmth,
+and Preset. When the direction is worth keeping, copy the resolved settings into
+`src/themes/registry.json`.
 
-Two paths:
+For a project-specific theme, add or update a theme entry in the clone. For a
+generic improvement that should benefit future sites, make the change upstream
+in `website-starter`.
 
-**Quick:** open `pnpm dev`, hit `~` to open the dev panel, tune Primary / Accent / Warmth, pick a preset that matches the client's brand neighborhood. Copy the resolved JSON back into `src/themes/registry.json` when the direction is worth keeping.
-
-**Code:** edit `src/themes/registry.json` directly — each entry in `themes[]` has `inputs` (Primary / Accent / Warmth) and a `derivation` (DerivationProfile). Add a new entry for a custom theme, or override an existing one.
-
-For a brand-new client project, treat this as a 15-minute design sprint, not a quick decision. The site's character is mostly determined here.
-
-### 7. Set environment variables
+## 7. Set environment variables
 
 ```bash
 cp .env.example .env.local
 ```
 
-Edit `.env.local`:
+Set:
 
-```
+```bash
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-For the deployed site, set `NEXT_PUBLIC_SITE_URL` in Vercel project settings → Environment Variables.
+In production, set `NEXT_PUBLIC_SITE_URL` to the canonical domain.
 
-### 8. Update `SECURITY.md` contact
+## 8. Update security contact
 
-Point at the right email for the new project. If unclear, leave at the agency contact. If the clone does not ship `SECURITY.md`, skip this step.
+Edit `SECURITY.md` so vulnerability reports go to the right maintainer. Remove
+the file only if the project deliberately does not publish a security policy.
 
-### 9. Link Vercel
+## 9. Link Vercel
 
 ```bash
 pnpm dlx vercel link
-pnpm dlx vercel domains add yourdomain.com
 ```
 
-Set production environment variables in the dashboard:
+Set production environment variables in Vercel:
 
 - `NEXT_PUBLIC_SITE_URL=https://yourdomain.com`
 
-For preview deploys, Vercel auto-sets `VERCEL_URL`. The `siteConfig.url` is driven by `NEXT_PUBLIC_SITE_URL` so it stays consistent.
+Add the production domain under Vercel project settings.
 
-### 10. Configure branch protection
+## 10. Configure branch protection
 
-On GitHub: Settings → Branches → Add branch protection rule for `main`:
+On GitHub, protect `main`:
 
-- Require pull request before merging
-- Require status checks: CI workflow
-- Require branches to be up to date before merging
-- (Optional) Require linear history
+- Require pull request before merge.
+- Require CI checks.
+- Require branches to be up to date before merge.
+- Optionally require linear history.
 
-### 11. Internal reference routes
+## 11. Decide internal route policy
 
-Lookbook ships `/sandbox`, `/variants`, `/accessibility`, `/dashboard`,
+The starter ships `/sandbox`, `/variants`, `/accessibility`, `/dashboard`,
 `/login`, `/signup`, and `/examples/*` inside the `(internal)` route group.
-They are useful while building a client site and are noindexed by the shared
-internal layout, and they are intentionally excluded from `sitemap.ts`.
+They are useful while building and are noindexed plus excluded from the sitemap.
 
-Before production launch, choose one policy:
+Before launch, choose one:
 
-- **Keep:** leave them available but noindexed for the agency/operator.
-- **Guard:** add middleware/auth before sharing the production URL broadly.
-- **Remove:** delete the routes from `src/app/(internal)/` and prune matching
-  entries from `src/lib/routes.ts` plus the internal sidebar config.
+- **Keep:** leave them available but noindexed for the operator.
+- **Guard:** add middleware or auth before sharing production widely.
+- **Remove:** delete routes from `src/app/(internal)/` and prune related route
+  and sidebar entries.
 
-Do not expose these as public marketing links in a client launch unless the
-client explicitly wants a visible design-system/reference area.
+Do not expose internal reference routes as public marketing links unless the
+project intentionally includes a visible design-system area.
 
-### 12. Knowledgebase freshness
+## 12. Review inherited docs
 
-Review [`KNOWLEDGEBASE.md`](KNOWLEDGEBASE.md) before handoff. The clone should
-not inherit active plans/specs that are already complete or irrelevant to the
-client. Move useful historical context to `docs/archive/<year>/`, delete
-completed plans that no longer carry unique context, and update `docs/README.md`
-so the current source of truth is obvious.
+Keep docs that help the new project. Remove or rewrite anything that only
+describes the upstream starter.
 
-### 13. Smoke-test the playbook
+Check:
 
-Pick representative content and theme requests from [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md) and run them through Claude on the fresh clone. Confirm Claude finds the right files and the changes apply cleanly. If something feels off, that's a signal to update AGENTS.md or the relevant inline README.
+- `README.md`
+- `AGENTS.md`
+- `CLAUDE.md`
+- `docs/README.md`
+- `docs/KNOWLEDGEBASE.md`
+- `docs/CLIENT_PLAYBOOK.md`
+- `docs/adr/`
+- `docs/specs/`
+- `docs/plans/`
+- `docs/archive/`
 
-### 14. Hand off
+## 13. Verify
 
-Send the client:
+For a fresh clone, run:
 
-- The preview URL (or production URL).
-- A link to [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md) — the human-facing guide for what to ask Claude.
-- Instructions for running Claude Code locally if they want to (https://claude.com/claude-code).
-- Optionally: a 30-minute walkthrough of the dev panel (`~`), explaining that live theme tweaks persist in localStorage until copied into `src/themes/registry.json`.
+```bash
+pnpm install
+pnpm check
+pnpm typecheck
+pnpm test
+pnpm audit:a11y
+pnpm build
+```
 
-## After hand-off — keeping the project healthy
+Then start the app and inspect:
 
-- Periodically `git pull` from the original Lookbook for upstream improvements. This will be manual until we ship a template-sync action.
-- Watch for the common pitfalls in [`AGENTS.md`](../AGENTS.md) — they're the failure modes that come back across clients.
-- If the client requests an architectural/high-risk change from [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md), it's a separate engagement, not a vibe-coding session.
+- `/`
+- `/pricing`
+- `/variants`
+- `/sandbox`
+- `/accessibility`
 
-## Things that stay consistent across all clones
+## 14. Keep upstream updates available
 
-- Tech stack (Next.js 16, React 19, Tailwind v4, shadcn, Biome, Vitest, Husky, Node 22, pnpm 10).
-- Folder structure (`src/{app,components,themes,lib,config,providers,hooks}`).
-- Block taxonomy (≥3 variants per type, file naming convention).
-- Theme system (controller-driven derivation pipeline).
-- Polish primitives + the polish-check script.
+If the project should receive future starter improvements, add the starter as an
+upstream remote after creating the project repo:
+
+```bash
+git remote add starter https://github.com/davidvictor/website-starter.git
+git fetch starter
+```
+
+When pulling improvements:
+
+```bash
+git fetch starter
+git merge starter/main
+pnpm install
+pnpm check && pnpm typecheck && pnpm test && pnpm audit:a11y && pnpm build
+```
+
+Resolve conflicts deliberately. Content, site config, route choices, and themes
+are expected to diverge by project. Tooling, accessibility checks, block-system
+contracts, and agent guidance should stay as close to upstream as practical.
+
+## What should stay generic upstream
+
+- Stack and tooling.
+- Block taxonomy and required variants.
+- Theme derivation system.
 - Dev panel architecture.
-- CI gates, Husky hooks, Conventional Commits.
-- Agent guidance docs ([`AGENTS.md`](../AGENTS.md), [`CLAUDE.md`](../CLAUDE.md), `docs/`, inline READMEs).
-- Knowledgebase lifecycle (`docs/README.md`, `docs/KNOWLEDGEBASE.md`, active plans/specs only while current).
+- Internal review routes.
+- Accessibility and polish checks.
+- Agent operating guidance.
+- Clone setup documentation.
 
-## Things that become project-specific
+## What should become project-specific
 
-- Brand content (`src/lib/brand.ts`).
-- Active preset / theme tuning.
-- Site config (`src/config/site.ts`).
-- Routes (additions / deletions beyond the base set).
-- Custom block variants the client requested (a `minimal.tsx`, say).
-- `package.json` `name`, `description`, `repository`, `homepage`.
-- `SECURITY.md` contact.
-- Vercel project + domain.
-
-## Things that should never diverge
-
-- The invariants in [`AGENTS.md`](../AGENTS.md).
-- The off-bounds surface in `biome.json` `experimentalScannerIgnores`.
-- The forward-compat constraints in [`PAYLOAD_CMS_FUTURE.md`](PAYLOAD_CMS_FUTURE.md).
+- Brand content in `src/lib/brand.ts`.
+- Site config in `src/config/site.ts`.
+- Package metadata.
+- Theme tuning.
+- Production domain and Vercel project.
+- Navigation and public route choices.
+- Security contact.

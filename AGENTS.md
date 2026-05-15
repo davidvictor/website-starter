@@ -4,7 +4,7 @@
 
 ## What this is
 
-Lookbook is the **base system** that every client website starts from. It ships:
+Website Starter is the **base system** that every client website starts from. It ships:
 
 - A full marketing-site composition. See [`README.md`](README.md) for the current route list.
 - A block system where each block type ships in the required style variants. See [`src/components/blocks/README.md`](src/components/blocks/README.md) for the current inventory.
@@ -12,7 +12,7 @@ Lookbook is the **base system** that every client website starts from. It ships:
 - A typed Leva-driven dev panel (toggle with `~`) for live theming and content tweaks.
 - The polish system documented in [`docs/UI_POLISH.md`](docs/UI_POLISH.md) and the ADRs in [`docs/adr/`](docs/adr/).
 
-The repo is designed to be **cloned per client project**. Clients (and the developer running the agency) then use coding agents to make changes via natural-language prompts — design tweaks, copy edits, new pages, new block variants. This document captures the conventions, invariants, and playbook that make those changes safe.
+The repo is designed to be **cloned per client project** and continuously improved as the upstream starter. Clients (and the developer running the agency) then use coding agents to make changes via natural-language prompts — design tweaks, copy edits, new pages, new block variants. This document captures the conventions, invariants, and playbook that make those changes safe.
 
 **There is no programmatic guardrail.** Nothing is strictly off-limits — this is a documentation contract, not a denylist. Your job as the agent is to follow these conventions, surface conflicts when instructions cross them, and propose a compliant path instead of silently drifting.
 
@@ -37,7 +37,7 @@ Autonomy: if the user's intent is clear, proceed. Safe and Care changes do not n
 In order:
 
 1. **This file** end-to-end. It's the contract.
-2. [`README.md`](README.md) — the human-facing project pitch (architecture diagram, "Where to look first," tech stack).
+2. [`README.md`](README.md) — the human-facing starter overview, setup flow, routes, and tech stack.
 3. [`docs/README.md`](docs/README.md) and [`docs/KNOWLEDGEBASE.md`](docs/KNOWLEDGEBASE.md) — where knowledge lives and how it stays fresh.
 4. If you're the human client running Claude: [`docs/CLIENT_PLAYBOOK.md`](docs/CLIENT_PLAYBOOK.md) — what kinds of requests work well and how to phrase them.
 5. If you're setting up a new clone for a client project: [`docs/PROJECT_SETUP.md`](docs/PROJECT_SETUP.md) — the per-clone checklist.
@@ -385,7 +385,7 @@ What a typical request maps to in code, ordered by risk. See also [`docs/CLIENT_
 
 ## Forward-compat for Payload CMS
 
-Lookbook will likely become CMS-backed via Payload. The constraints below today preserve a cheap migration tomorrow. Full doc: [`docs/PAYLOAD_CMS_FUTURE.md`](docs/PAYLOAD_CMS_FUTURE.md).
+This starter may become CMS-backed via Payload. The constraints below today preserve a cheap migration tomorrow. Full doc: [`docs/PAYLOAD_CMS_FUTURE.md`](docs/PAYLOAD_CMS_FUTURE.md).
 
 - **Content lives in `src/lib/brand.ts`** with discrete typed fields. No string concatenation in JSX for marketing copy (`"Welcome to " + name` is harder to template than two fields).
 - **No business logic in JSX for content.** Transforms go in `src/lib/format.ts` (or similar pure modules).

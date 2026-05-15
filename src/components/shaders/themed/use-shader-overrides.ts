@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react"
 import { getShaderDef } from "./registry"
 import type { ShaderId, ShaderOverrides } from "./types"
 
-const STORAGE_PREFIX = "lookbook:shader:"
+const STORAGE_PREFIX = "website-starter:shader:"
 
 function empty(v: number): ShaderOverrides {
   return { v, controls: {}, colorSlots: {} }

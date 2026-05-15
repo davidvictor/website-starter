@@ -1,6 +1,6 @@
 # UI polish system
 
-This is the rule set that keeps lookbook feeling crafted. Every decision is captured as an ADR in [`docs/adr/`](adr/) — this doc is the operator's manual for applying them.
+This is the rule set that keeps the starter feeling crafted. Every decision is captured as an ADR in [`docs/adr/`](adr/) — this doc is the operator's manual for applying them.
 
 ## Quick reference
 

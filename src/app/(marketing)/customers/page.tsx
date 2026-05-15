@@ -14,7 +14,7 @@ import { siteMetadata } from "@/lib/metadata"
 
 export const metadata = siteMetadata({
   title: "Customers",
-  description: "Customer-story scaffolding for the Lookbook marketing system.",
+  description: "Customer-story scaffolding for the website starter.",
   path: "/customers",
 })
 

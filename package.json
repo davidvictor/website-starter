@@ -1,15 +1,15 @@
 {
-  "name": "lookbook",
+  "name": "website-starter",
   "version": "0.1.0",
   "private": false,
-  "description": "A Next.js base for moving from design direction to clickable page in one sitting. Ships with three style variants per block, a typed dev panel, and a controller-driven color system.",
+  "description": "A reusable Next.js marketing website starter with block variants, seed content, a typed dev panel, and a controller-driven theme system.",
   "license": "MIT",
   "author": "David Victor",
   "repository": {
     "type": "git",
-    "url": "https://github.com/davidvictor/lookbook.git"
+    "url": "https://github.com/davidvictor/website-starter.git"
   },
-  "homepage": "https://github.com/davidvictor/lookbook",
+  "homepage": "https://github.com/davidvictor/website-starter",
   "engines": {
     "node": ">=22"
   },

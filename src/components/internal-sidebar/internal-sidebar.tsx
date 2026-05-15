@@ -31,7 +31,9 @@ export function InternalSidebar() {
             aria-hidden
             className="inline-block size-5 rounded-sm bg-foreground"
           />
-          <span className="group-data-[collapsible=icon]:hidden">lookbook</span>
+          <span className="group-data-[collapsible=icon]:hidden">
+            website starter
+          </span>
         </Link>
       </SidebarHeader>
 

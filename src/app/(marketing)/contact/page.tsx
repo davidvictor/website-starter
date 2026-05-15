@@ -8,7 +8,7 @@ import { ContactForm } from "./contact-form"
 
 export const metadata = siteMetadata({
   title: "Contact",
-  description: "A polished contact route for the Lookbook marketing system.",
+  description: "A polished contact route for the website starter.",
   path: "/contact",
 })
 

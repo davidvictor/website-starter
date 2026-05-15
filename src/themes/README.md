@@ -119,7 +119,7 @@ The dev panel picks this up automatically; the new preset appears as a chip on n
 
 Open the dev panel (`~`), pick the preset, adjust Primary / Accent / Warmth / Advanced inputs until it looks right, then copy the resolved JSON from the panel into `registry.json`. The panel persists runtime edits to localStorage so you can keep tuning locally, but source-control persistence is still a code edit.
 
-When tuning a built-in preset that should ship for **every** project cloning this base, commit the change to `registry.json`. When tuning for **this project only**, do the same — but be aware that future merges from upstream Lookbook may conflict with your project-specific edits.
+When tuning a built-in preset that should ship for **every** project cloning this base, commit the change to `registry.json`. When tuning for **this project only**, do the same - but be aware that future merges from the upstream starter may conflict with your project-specific edits.
 
 ## Invariants for the theme system
 
@@ -142,6 +142,6 @@ Two layers:
 
 ## See also
 
-- The README's "How it works" section has the high-level pipeline diagram.
+- The README has the high-level starter overview and setup flow.
 - `docs/UI_POLISH.md` documents the polish primitives (motion, surfaces, etc.) that consume these tokens.
 - ADRs in `docs/adr/` capture the design decisions behind the system.

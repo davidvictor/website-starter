@@ -1,6 +1,6 @@
 # Architecture decision records
 
-The decisions below shaped the lookbook polish system. Each is a one-pager with **Decision**, **Why**, and **How to apply**. Future contributors: if you're about to introduce a pattern that contradicts one of these, push back here first.
+The decisions below shaped the starter polish system. Each is a one-pager with **Decision**, **Why**, and **How to apply**. Future contributors: if you're about to introduce a pattern that contradicts one of these, push back here first.
 
 | # | Decision | Status |
 | --- | --- | --- |

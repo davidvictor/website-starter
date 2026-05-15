@@ -8,7 +8,7 @@ Compact button variants (`xs`, `sm`, `icon-xs`, `icon-sm`) keep their visual foo
 
 ## Why
 
-Lookbook is desktop-first; data tables, toolbars, and inline filter chips need tight controls. Forcing 40×40 everywhere breaks these layouts. But touch users need the larger target — so the choice belongs at the call site, not at the primitive level.
+The starter is desktop-first; data tables, toolbars, and inline filter chips need tight controls. Forcing 40×40 everywhere breaks these layouts. But touch users need the larger target — so the choice belongs at the call site, not at the primitive level.
 
 ## How to apply
 

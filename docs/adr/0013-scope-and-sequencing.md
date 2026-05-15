@@ -8,7 +8,7 @@ The polish system is rolled out across **all 7 phases** of the original plan: AD
 
 ## Why
 
-Lookbook is a prototyping starter — anyone who clones it inherits the polish defaults. Partial coverage means new prototypes ship with mixed motion strategies, half-applied tabular numbers, and inconsistent surface treatments. The cost of doing 80% is that the remaining 20% becomes the visible delta on every clone.
+This repo is a prototyping starter — anyone who clones it inherits the polish defaults. Partial coverage means new prototypes ship with mixed motion strategies, half-applied tabular numbers, and inconsistent surface treatments. The cost of doing 80% is that the remaining 20% becomes the visible delta on every clone.
 
 ## How to apply
 

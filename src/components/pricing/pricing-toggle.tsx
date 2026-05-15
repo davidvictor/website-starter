@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils"
  */
 export type PricingPeriod = "month" | "year"
 
-const PRICING_PERIOD_EVENT = "lookbook:pricing-period-change"
+const PRICING_PERIOD_EVENT = "website-starter:pricing-period-change"
 
 function readPeriodFromLocation(): PricingPeriod {
   const url = new URL(window.location.href)

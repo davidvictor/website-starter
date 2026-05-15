@@ -1,6 +1,6 @@
 # Payload CMS — forward-compat contract
 
-> Lookbook will likely become CMS-backed via [Payload](https://payloadcms.com/) once client projects mature. This document captures the design constraints **today** that preserve a cheap migration **tomorrow**. No CMS code is shipped yet.
+> This starter may become CMS-backed via [Payload](https://payloadcms.com/) once client projects mature. This document captures the design constraints **today** that preserve a cheap migration **tomorrow**. No CMS code is shipped yet.
 
 ## Context
 

@@ -37,7 +37,7 @@ The shape:
 
 ```ts
 export const siteConfig = {
-  name: "Lookbook",                              // Brand / project name
+  name: "Website Starter",                      // Brand / project name
   description: "…",                              // One-sentence pitch (used in meta)
   url: env.NEXT_PUBLIC_SITE_URL,                 // Base URL (no trailing slash)
   ogImage: `${env.NEXT_PUBLIC_SITE_URL}/opengraph-image`,
@@ -46,7 +46,7 @@ export const siteConfig = {
 } as const
 ```
 
-When cloning for a client, update this file in [`PROJECT_SETUP.md`](../../docs/PROJECT_SETUP.md) step 4.
+When cloning for a new project, update this file in [`PROJECT_SETUP.md`](../../docs/PROJECT_SETUP.md) step 4.
 
 ## Using `env.ts`
 

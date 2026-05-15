@@ -49,8 +49,8 @@ export function ThemeScript() {
 (function () {
   try {
     var data = ${payload};
-    var themeId = JSON.parse(localStorage.getItem("lookbook:theme-id") || "null") || data.defaultThemeId;
-    var mode = JSON.parse(localStorage.getItem("lookbook:theme-mode") || "null") || "system";
+    var themeId = JSON.parse(localStorage.getItem("website-starter:theme-id") || "null") || data.defaultThemeId;
+    var mode = JSON.parse(localStorage.getItem("website-starter:theme-mode") || "null") || "system";
     var resolved = mode;
     if (mode === "system") {
       resolved = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
