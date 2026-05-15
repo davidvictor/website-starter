@@ -57,6 +57,9 @@ export const PAIRS: readonly PairSpec[] = [
     bg: "card",
     category: "text",
   },
+  // Popover and card share the same neutral anchor today; fg-popover
+  // always equals fg-card numerically. Kept separate so a future change
+  // that diverges popover from card surfaces automatically.
   {
     id: "fg-popover",
     label: "Body text on popover",
@@ -247,7 +250,21 @@ export type AuditResult = {
   worstRatio: number
 }
 
-/** Parse an `oklch(L C H)` or `oklch(L C H / a)` string to an OKLCH triple. */
+/**
+ * Parse an `oklch(L C H)` or `oklch(L C H / a)` string to an OKLCH triple.
+ *
+ * NOTE: alpha is intentionally dropped. The audit grades the
+ * un-composited color, which is an upper bound on perceived contrast.
+ * If a token uses alpha < 1 against a background, the rendered contrast
+ * is LOWER than what `auditTheme` reports. The convention in this repo
+ * is therefore: tokens used as `fg` in PAIRS must be opaque (alpha=1).
+ * The decorative `border` token is exempt because it grades as category
+ * "decorative" (always PASS).
+ *
+ * Audited tokens with alpha < 1 currently:
+ *   - `--input` (until Task 4b makes it opaque). The audit overstates
+ *     `input-bg` contrast by a small margin in dark mode.
+ */
 export function parseOklch(s: string): { l: number; c: number; h: number } {
   // Accept "oklch(0.62 0.18 290)" or "oklch(0.62 0.18 290 / 0.6)".
   const m = s.match(
@@ -265,6 +282,9 @@ export function auditTheme(theme: ControllerTheme, mode: Mode): AuditResult {
   const pairs: PairResult[] = PAIRS.map((p) => {
     const fgCss = tokens[p.fg]
     const bgCss = tokens[p.bg]
+    // Note: alpha is dropped — see parseOklch JSDoc. Tokens used as fg in
+    // PAIRS should be opaque for the audit number to match perceived
+    // contrast.
     const r = wcagRatioOklch(parseOklch(fgCss), parseOklch(bgCss))
     const grade = gradeRatio(r, p.category)
     // For display-only text pairs, AA-Large counts as PASS.
@@ -277,16 +297,25 @@ export function auditTheme(theme: ControllerTheme, mode: Mode): AuditResult {
     return { pair: p, ratio: r, grade, fails, fgCss, bgCss }
   })
   const failures = pairs.filter((p) => p.fails).map((p) => p.pair.id)
-  const worst = pairs
-    .filter((p) => p.pair.category !== "decorative")
-    .reduce((m, p) => Math.min(m, p.ratio), Number.POSITIVE_INFINITY)
+  const nonDecorative = pairs.filter((p) => p.pair.category !== "decorative")
+  // Worst ratio across non-decorative pairs. When there are no such pairs
+  // (only possible during catalog refactoring), return 21 — the WCAG
+  // maximum — so threshold comparisons treat the audit as a pass rather
+  // than spuriously firing on Infinity.
+  const worstRatio =
+    nonDecorative.length === 0
+      ? 21
+      : nonDecorative.reduce(
+          (m, p) => Math.min(m, p.ratio),
+          Number.POSITIVE_INFINITY
+        )
   return {
     themeId: theme.id,
     themeName: theme.name,
     mode,
     pairs,
     failures,
-    worstRatio: worst,
+    worstRatio,
   }
 }
 

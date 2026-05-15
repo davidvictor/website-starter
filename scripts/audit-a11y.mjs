@@ -183,7 +183,9 @@ function buildTokens(theme, mode) {
     accent,
     neutral,
     primaryFg: fgFor(primary),
-    accentFg: fgFor(neutral.surfaceAccent), // accent token = neutral.surfaceAccent
+    // accent-fill grades the runtime body-foreground against the muted accent
+    // surface (mirrors src/themes/tokens.ts: accentForeground = neutral.fg).
+    accentFg: neutral.fg,
     brandAccentFg: fgFor(accent),
     destructive: semantic(25, mode, der.semanticIntensity),
     success: semantic(145, mode, der.semanticIntensity),
@@ -326,7 +328,15 @@ function assertNoDrift() {
   if (extras.length) {
     console.error("\nAudit script has pair ids unknown to runtime catalog:")
     for (const id of extras) console.error("  -", id)
-    console.error("Update RUNTIME_PAIR_IDS or src/themes/a11y.ts PAIRS.\n")
+    console.error(
+      "\nThe script's local pair set must be a subset of src/themes/a11y.ts PAIRS.",
+    )
+    console.error(
+      "Fix: either remove these ids from pairsFor() in this script, OR add them to",
+    )
+    console.error(
+      "src/themes/a11y.ts PAIRS (and to RUNTIME_PAIR_IDS in this script).\n",
+    )
     process.exit(2)
   }
   if (missing.length) {
