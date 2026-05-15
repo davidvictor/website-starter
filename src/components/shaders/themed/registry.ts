@@ -1,16 +1,20 @@
 // src/components/shaders/themed/registry.ts
+import { editorialVeilPair } from "./editorial/1.veil"
 import type { ShaderDef, ShaderId } from "./types"
 
-/**
- * Populated by importing each pair file and spreading the [idle, interactive]
- * tuples it returns. Filled incrementally — Phase 6 wires the first pair;
- * Phase 8 wires the remaining eleven.
- */
-export const SHADER_REGISTRY: Partial<Record<ShaderId, ShaderDef>> = {}
+const allPairs: ReadonlyArray<readonly [ShaderDef, ShaderDef]> = [
+  editorialVeilPair,
+  // remaining pairs added in Phase 8
+]
 
-export const SHADER_IDS: readonly ShaderId[] = Object.keys(
-  SHADER_REGISTRY
-) as ShaderId[]
+export const SHADER_REGISTRY: Partial<Record<ShaderId, ShaderDef>> =
+  Object.fromEntries(
+    allPairs.flat().map((d) => [d.id, d] as const)
+  ) as Partial<Record<ShaderId, ShaderDef>>
+
+export const SHADER_IDS: readonly ShaderId[] = (
+  Object.keys(SHADER_REGISTRY) as ShaderId[]
+).sort()
 
 export function getShaderDef(id: ShaderId): ShaderDef {
   const def = SHADER_REGISTRY[id]
