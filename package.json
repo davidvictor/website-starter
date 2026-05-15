@@ -26,6 +26,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:changed": "vitest run --changed origin/main",
+    "audit:a11y": "node scripts/audit-a11y.mjs",
     "prepare": "husky"
   },
   "lint-staged": {
