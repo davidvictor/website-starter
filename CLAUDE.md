@@ -24,6 +24,14 @@ Invoke them via the `Skill` tool when relevant.
 
 The `.claude/` directory is gitignored. It holds local agent state (settings, cached context, etc.) — don't commit it; don't depend on it being present when working in a fresh clone.
 
+## Worktrees
+
+For isolated parallel work, prefer git worktrees over stashing or branch-switching. The repo is preconfigured with `.worktrees/` gitignored, so worktrees go there by default.
+
+- Use the `superpowers:using-git-worktrees` skill to set one up — it handles directory selection, ignore verification, dependency install, and baseline tests.
+- Pair with `superpowers:finishing-a-development-branch` when wrapping up so the worktree gets removed cleanly.
+- See [`AGENTS.md`](AGENTS.md) §14 for the workflow basics that apply to every agent (location, create/cleanup commands, baseline verification).
+
 ## Verification workflow
 
 When making visual changes, prefer the `preview_*` MCP tools over manual browser testing:

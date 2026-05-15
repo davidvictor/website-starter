@@ -376,7 +376,20 @@ After making changes, before declaring done:
 
 If you're using Claude Code with the `preview_*` MCP tools, prefer them over manual browser testing for visual verification (`preview_start`, `preview_screenshot`, `preview_snapshot`, `preview_inspect`).
 
-## 14. Useful commands
+## 14. Working in worktrees
+
+For isolated parallel work — long-running features, risky refactors, anything you don't want to interrupt the current branch with — use git worktrees rather than stashing or branch-switching.
+
+- **Location:** `.worktrees/<branch-name>/` (already gitignored at the repo root). Don't put worktrees elsewhere; the gitignore entry is the contract.
+- **Create:** `git worktree add .worktrees/<branch-name> -b <branch-name>`
+- **Set up:** `cd .worktrees/<branch-name>` then `pnpm install`. Worktrees share `.git/` but each needs its own `node_modules/`.
+- **Verify clean baseline:** Before touching anything, run `pnpm check && pnpm typecheck && pnpm test` so any later failures are unambiguously yours.
+- **Cleanup:** `git worktree remove .worktrees/<branch-name>` once the branch is merged or abandoned. Stale worktrees pin `.git/` objects.
+- **List:** `git worktree list` to see what's active.
+
+Every invariant in §5 applies identically inside a worktree — same commit hooks, same Conventional Commit format, same surface tiers.
+
+## 15. Useful commands
 
 ```bash
 pnpm dev          # next dev
