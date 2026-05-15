@@ -1,3 +1,6 @@
+> Archived: 2026-05-15. Reason: implemented; retained as historical design context.
+> Current source of truth: [`AGENTS.md`](../../../../AGENTS.md), [`README.md`](../../../../README.md), [`docs/KNOWLEDGEBASE.md`](../../../KNOWLEDGEBASE.md), and inline READMEs.
+
 # Client-Reusable Base System Hardening
 
 **Status:** Design v2 — revised to lead with agent guidance; ready for implementation plan
@@ -103,7 +106,8 @@ docs/
   PAYLOAD_CMS_FUTURE.md          # NEW — forward-compat contract, ~150 lines
   UI_POLISH.md                   # existing — referenced from AGENTS.md
   adr/                           # existing — referenced from AGENTS.md
-  superpowers/                   # existing
+  specs/                         # active specs only
+  plans/                         # active plans only
     specs/...
     plans/...
 

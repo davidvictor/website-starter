@@ -57,6 +57,6 @@ Run on a clean branch, review the diff carefully (some primitives have had small
 
 ## See also
 
-- [`AGENTS.md`](../../../AGENTS.md) §4.4 — the off-bounds taxonomy.
+- [`AGENTS.md`](../../../AGENTS.md) — the off-bounds taxonomy.
 - The README's "Limitations" section — notes which primitives have legacy patches applied.
 - `biome.json` `experimentalScannerIgnores` — the authoritative off-bounds list.

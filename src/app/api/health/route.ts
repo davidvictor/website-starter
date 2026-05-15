@@ -1,7 +1,7 @@
 /**
  * Health check endpoint.
  *
- * NOTE: This file is the documented exception to invariant #2 ("all env
+ * NOTE: This file is the documented exception to the env contract ("all env
  * access via src/config/env.ts"). The health route reads `process.env`
  * directly so it always responds — even when `env.ts` validation would
  * throw on a misconfigured deploy. Platform healthchecks should always

@@ -18,7 +18,7 @@ A standalone audit (`pnpm audit:a11y`) runs the entire pair catalog (see [`src/t
 
 Before this change there was no enforcement. Per-preset audits revealed that every default theme failed at least one text pair in at least one mode — `mutedForeground` on `muted`, brand text on `card`, or accent text on `background`. Hand-tuning each preset to compliance was fragile: any future input change (warmth, chromaBoost, contrast band) could silently regress.
 
-The four-input system claims that every color is derived from the inputs. If accessibility requires hand-tuned overrides per preset, that claim breaks. Better to make the engine itself produce AA-compliant output by construction.
+The controller-driven system claims that every color is derived from the theme inputs. If accessibility requires hand-tuned overrides per preset, that claim breaks. Better to make the engine itself produce AA-compliant output by construction.
 
 ## How the engine guarantees the floor
 

@@ -1,15 +1,15 @@
 # `src/themes/` — theme system handbook
 
-> The four-input theme derivation engine. Sensitive code; read this before editing.
+> The controller-driven theme derivation engine. Sensitive code; read this before editing.
 
-## The four inputs
+## Controller inputs
 
-Every theme on this site is derived from four inputs:
+Every theme on this site is derived from a small controller surface:
 
-1. **Primary** — a hex color. The brand's primary hue.
-2. **Accent** — a hex color, OR an anchor relative to primary (`+30°` / `+120°` / `+180°` / `−60°`).
-3. **Warmth** — a number in `[-1, +1]`. Negative = cooler neutrals, positive = warmer neutrals.
-4. **Preset** — one of `editorial` / `saas` / `bold` / `cyber`. The preset chooses a `DerivationProfile` (chroma boost, contrast band, accent usage, radius, font choices).
+- **Primary** — a hex color. The brand's primary hue.
+- **Accent** — a hex color, OR an anchor relative to primary (`+30°` / `+120°` / `+180°` / `−60°`).
+- **Warmth** — a number in `[-1, +1]`. Negative = cooler neutrals, positive = warmer neutrals.
+- **Preset** — one of the configured presets. The preset chooses a `DerivationProfile` (chroma boost, contrast band, accent usage, radius, font choices).
 
 The dev panel (toggle with `~`) is the runtime interface for these inputs.
 
@@ -21,7 +21,7 @@ The dev panel (toggle with `~`) is the runtime interface for these inputs.
 | `tokens.ts` | The canonical color token registry — adds/renames tokens flow through here | Sensitive |
 | `derivation-axes.ts` | The discrete axes (`chromaBoost`, `contrast`, `semanticIntensity`, `accentUsage`, `radius`) | Sensitive |
 | `registry.ts` | Loads `registry.json`, exposes `baseThemes`, `presetsById`, `findPreset`, `findTheme` | Sensitive |
-| `registry.json` | **The four built-in presets** + any custom themes copied back from the dev panel | Care |
+| `registry.json` | The built-in presets + any custom themes copied back from the dev panel | Care |
 | `types.ts` | Re-exports the `ColorTokens` contract + radii/shadow shapes | Sensitive |
 | `controller-types.ts` | `ControllerInputs` + `DerivationProfile` + `ControllerTheme` shapes — drives dev panel typing | Sensitive |
 
@@ -51,7 +51,7 @@ ColorTokens object → CSS variables on <html> → entire site rerenders
 Every preset is held to WCAG 2.2 AA on text pairs (≥ 4.5:1) and 1.4.11
 on UI components (≥ 3.0:1). Anything below shows up:
 
-- as a red row on [`/accessibility`](../app/(marketing)/accessibility) — the overview page,
+- as a red row on [`/accessibility`](../app/(internal)/accessibility) — the overview page,
 - as an amber chip at the top of the **Themes** tab in the dev panel.
 
 The pair catalog lives in [`a11y.ts`](a11y.ts). Adding a new color
@@ -79,7 +79,7 @@ exits non-zero on any failure and is part of CI.
 - **`derive.ts`** is **pure** and consumed by every rendered surface. Changes here need:
   - A unit test in `src/themes/__tests__/derive.test.ts` covering the new behavior.
   - A manual sanity check at `/sandbox` (the design-system reference) and `/variants` (every block × every style, both under the noindexed internal route group).
-  - Verification that all four built-in presets still produce distinct, sensible token output.
+  - Verification that the built-in presets still produce distinct, sensible token output.
 - **`types.ts`** and **`controller-types.ts`** are the contract. Renaming or removing fields breaks both the dev panel and every CSS variable consumer (which is everything). Avoid; if unavoidable, do it in one PR with the rename rippling through every consumer.
 
 ## How to add a new built-in preset
@@ -131,13 +131,13 @@ When tuning a built-in preset that should ship for **every** project cloning thi
 
 Two layers:
 
-- **Unit tests** in `__tests__/derive.test.ts` (post-Phase 2 of the starter-kit-hardening spec). Cover: determinism, range, preset stamping, warmth swing, hex round-trip stability.
-- **Visual smoke** at `/variants` and `/sandbox` after any change. The 27 blocks × 4 themes give a wide visual surface that catches regressions you'd otherwise miss; these routes are reference surfaces, not sitemap entries.
+- **Unit tests** in `__tests__/derive.test.ts`. Cover: determinism, range, preset stamping, warmth swing, hex round-trip stability.
+- **Visual smoke** at `/variants` and `/sandbox` after any change. The block gallery and built-in presets give a wide visual surface that catches regressions you'd otherwise miss; these routes are reference surfaces, not sitemap entries.
 
 ## Common pitfalls
 
 - **Tweaking `derive.ts` to fix a single block's color.** That's almost always a sign the block should consume a different token, not that the derivation is wrong.
-- **Adding a "manual override" path that bypasses derivation.** The whole point is that every color comes from the four inputs. Overrides defeat the contract.
+- **Adding a "manual override" path that bypasses derivation.** The whole point is that every color comes from the controller inputs. Overrides defeat the contract.
 - **Adding more inputs to make tuning easier.** Resist. The system's power is in *fewer* inputs that combine in interesting ways, not more inputs with more knobs.
 
 ## See also

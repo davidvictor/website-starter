@@ -28,9 +28,10 @@ The `.claude/` directory is gitignored. It holds local agent state (settings, ca
 
 For isolated parallel work, prefer git worktrees over stashing or branch-switching. The repo is preconfigured with `.worktrees/` gitignored, so worktrees go there by default.
 
-- Use the `superpowers:using-git-worktrees` skill to set one up — it handles directory selection, ignore verification, dependency install, and baseline tests.
-- Pair with `superpowers:finishing-a-development-branch` when wrapping up so the worktree gets removed cleanly.
-- See [`AGENTS.md`](AGENTS.md) §14 for the workflow basics that apply to every agent (location, create/cleanup commands, baseline verification).
+- Create worktrees under `.worktrees/<branch-name>/` with `git worktree add .worktrees/<branch-name> -b <branch-name>`.
+- Install dependencies inside the worktree and run the baseline verification loop before editing when the work is risky or long-running.
+- Remove finished worktrees with `git worktree remove .worktrees/<branch-name>` after merge or abandonment.
+- See the [`AGENTS.md`](AGENTS.md) worktree guidance for the workflow basics that apply to every agent (location, create/cleanup commands, baseline verification).
 
 ## Verification workflow
 
@@ -50,7 +51,7 @@ The dev panel toggles with `~` (tilde, no modifier) — useful for theme tweaks 
 
 ## Commit messages
 
-This repo enforces Conventional Commits via commitlint (post-Phase 2). Pattern: `<type>(<scope>): <subject>`.
+This repo enforces Conventional Commits via commitlint. Pattern: `<type>(<scope>): <subject>`.
 
 Allowed types: `feat`, `fix`, `docs`, `refactor`, `style`, `test`, `chore`, `perf`, `ci`, `build`.
 
@@ -62,7 +63,7 @@ Scopes are optional but encouraged. Examples from the recent log:
 
 `--no-verify` exists but should be a last resort, documented in the PR.
 
-## Pre-commit hook (post-Phase 2)
+## Pre-commit hook
 
 Runs on every commit:
 
@@ -70,7 +71,7 @@ Runs on every commit:
 2. `tsc --noEmit` — full typecheck.
 3. `vitest --run --changed origin/main` — tests touching changed files.
 
-If pre-commit is slow on your machine, narrow `lint-staged` scope or split tests — do **not** bypass (invariant #10 in [`AGENTS.md`](AGENTS.md)).
+If pre-commit is slow on your machine, narrow `lint-staged` scope or split tests — do **not** bypass. The hook contract in [`AGENTS.md`](AGENTS.md) applies.
 
 ## Editing this file
 

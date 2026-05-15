@@ -1,3 +1,6 @@
+> Archived: 2026-05-15. Reason: implemented; retained as historical design context.
+> Current source of truth: [`src/components/shaders/themed/`](../../../../src/components/shaders/themed/), [`src/app/(internal)/examples/shaders/page.tsx`](../../../../src/app/(internal)/examples/shaders/page.tsx).
+
 # Theme-aware Shader System
 
 **Status:** Design accepted, ready for implementation plan

@@ -56,8 +56,8 @@ It's also a working answer to a separate question I had: how few controls do you
 
 ## What ships in the box
 
-- A complete marketing site composition — 10 top-level marketing routes: home + 2 variant homes + pricing, about, customers, changelog, blog (with a sample `[slug]` post template), careers, contact.
-- Every block — Hero, Features, Logos, Stats, Testimonials, Pricing, FAQ, CTA, Footer — comes in **three style variants**: `editorial.tsx`, `saas.tsx`, `bold.tsx`. 9 types × 3 variants = **27 block components**.
+- A complete marketing site composition — home, variant homes, pricing, about, customers, changelog, blog (with a sample `[slug]` post template), careers, and contact.
+- Every block type comes in the required style variants: `editorial.tsx`, `saas.tsx`, and `bold.tsx`. See [`src/components/blocks/`](src/components/blocks/) for the current inventory.
 - A **dev-mode-only floating panel** (toggle with `~`) exposes three brand inputs (Primary, Accent, Neutral warmth), four preset chips (editorial / saas / bold / cyber), and an Advanced disclosure for the underlying derivation profile.
 - A **controller-driven color system** in [`src/themes/`](src/themes/) takes those inputs and derives the entire shadcn token surface plus a `brand-accent`, `success`, `warning`, `info`, and `destructive` set. Everything is OKLCH under the hood; paste a hex and it auto-decomposes.
 - A separate **`(internal)` route group** behind a shared sidebar — `/sandbox`, `/variants`, `/accessibility`, `/dashboard`, `/login`, `/signup`, `/examples/*` — used as design-system reference and playgrounds. These don't form part of the public marketing site, are noindexed by the internal layout, and are excluded from the sitemap, but they live in the same Next.js app so they always see the live theme.
@@ -150,6 +150,7 @@ For per-client setup of a Lookbook-based project, follow [`docs/PROJECT_SETUP.md
 - **Pre-commit hook** (husky) runs `lint-staged` (Biome on staged files) + `tsc --noEmit` + Vitest on changed-since-main tests.
 - **CI** (GitHub Actions) runs `pnpm check → typecheck → test → audit:a11y → build` on every PR.
 - **Agents**: read [`AGENTS.md`](AGENTS.md) first. Claude-specific notes in [`CLAUDE.md`](CLAUDE.md). The client-facing playbook for vibe-coding changes is at [`docs/CLIENT_PLAYBOOK.md`](docs/CLIENT_PLAYBOOK.md).
+- **Knowledgebase**: docs live under [`docs/`](docs/). Start with [`docs/README.md`](docs/README.md); lifecycle and stale-plan cleanup rules live in [`docs/KNOWLEDGEBASE.md`](docs/KNOWLEDGEBASE.md).
 
 Use the smallest verification loop that matches the change while you work:
 
@@ -167,13 +168,14 @@ Use the smallest verification loop that matches the change while you work:
 | [`src/app/(internal)/variants/page.tsx`](src/app/(internal)/variants/page.tsx) | Block × style gallery: every block × 3 variants, side-by-side |
 | [`src/app/(internal)/sandbox/`](src/app/(internal)/sandbox/) | Per-surface shadcn references (colors, typography, forms, surfaces, navigation, overlays, polish) plus an `/all` aggregator |
 | [`src/app/(internal)/accessibility/page.tsx`](src/app/(internal)/accessibility/page.tsx) | WCAG 2.2 audit overview — every theme × mode, every token pair |
-| [`src/components/blocks/`](src/components/blocks/) | The 27 block files, organized as `<type>/{editorial,saas,bold}.tsx` |
+| [`src/components/blocks/`](src/components/blocks/) | Block files organized as `<type>/{editorial,saas,bold}.tsx` |
 | [`src/components/dev-panel/`](src/components/dev-panel/) | The panel itself + the `useDevControls` / `useDevData` hooks |
 | [`src/themes/`](src/themes/) | Color system: `derive.ts` (engine), `registry.json` (the four base presets + saved customs), `a11y.ts` (contrast scoring) |
 | [`src/lib/color.ts`](src/lib/color.ts) | OKLCH math, hex conversions, vibrancy curve, warmth model |
 | [`src/lib/brand.ts`](src/lib/brand.ts) | All Nimbus copy in one file — swap it out per prototype. Numeric data uses typed shapes from `@/lib/format` |
 | [`src/config/`](src/config/) | `site.ts` (site name, nav, social) + `env.ts` (zod-validated envs) |
-| [`docs/UI_POLISH.md`](docs/UI_POLISH.md) · [`docs/adr/`](docs/adr/) | The polish + a11y systems, grounded in 19 ADRs |
+| [`docs/README.md`](docs/README.md) · [`docs/KNOWLEDGEBASE.md`](docs/KNOWLEDGEBASE.md) | Knowledgebase map, planning lifecycle, archive/delete rules |
+| [`docs/UI_POLISH.md`](docs/UI_POLISH.md) · [`docs/adr/`](docs/adr/) | The polish + a11y systems, grounded in ADRs |
 
 ## Routes that ship
 
@@ -246,7 +248,7 @@ For real prototypes (including MetaModern), the recommended path is:
 
 ## Polish + accessibility
 
-The motion primitives, surface treatments, hit-area rules, and tabular-number conventions that make the system feel crafted are documented in [`docs/UI_POLISH.md`](docs/UI_POLISH.md) and grounded in 19 ADRs in [`docs/adr/`](docs/adr/). The reference page lives at [`/sandbox/polish`](src/app/(internal)/sandbox/polish/page.tsx) — every primitive, surface, spring tier, and the reduced-motion preview toggle, side-by-side.
+The motion primitives, surface treatments, hit-area rules, and tabular-number conventions that make the system feel crafted are documented in [`docs/UI_POLISH.md`](docs/UI_POLISH.md) and grounded in ADRs in [`docs/adr/`](docs/adr/). The reference page lives at [`/sandbox/polish`](src/app/(internal)/sandbox/polish/page.tsx) — every primitive, surface, spring tier, and the reduced-motion preview toggle, side-by-side.
 
 Accessibility is treated as a first-class derivation output, not a post-hoc check:
 

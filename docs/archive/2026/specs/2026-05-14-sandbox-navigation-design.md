@@ -1,3 +1,6 @@
+> Archived: 2026-05-15. Reason: implemented; retained as historical design context.
+> Current source of truth: [`src/app/(internal)/sandbox/`](../../../../src/app/(internal)/sandbox/), [`src/app/(internal)/layout.tsx`](../../../../src/app/(internal)/layout.tsx), [`AGENTS.md`](../../../../AGENTS.md).
+
 # Sandbox Navigation & Component Exploration
 
 **Status:** Design v1 — ready for implementation plan

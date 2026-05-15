@@ -1,6 +1,6 @@
 # `src/components/blocks/` — block conventions
 
-> The 27-block library. Three variants per type. Read this before adding or modifying.
+> The block library. Each block type keeps the required variants. Read this before adding or modifying.
 
 ## File layout
 
@@ -18,8 +18,8 @@ Current types: `hero`, `features`, `logos`, `stats`, `testimonials`, `pricing`, 
 
 ## Invariants
 
-1. **Three (or more) variants per block type.** Adding a new type means shipping editorial, saas, and bold. Skipping is a contract violation per [AGENTS.md](../../../AGENTS.md) §5 invariant #6.
-2. **Variants share the same data prop shape.** All three variants of a block kind consume the same prop shape from `src/components/blocks/props.ts`; only their presentation differs.
+1. **Required variants per block type.** Adding a new type means shipping editorial, saas, and bold. Skipping a required variant violates the variant contract in [AGENTS.md](../../../AGENTS.md).
+2. **Variants share the same data prop shape.** All required variants of a block kind consume the same prop shape from `src/components/blocks/props.ts`; only their presentation differs.
 3. **No copy inlined in JSX.** Blocks receive content through `getBlockProps(kind)` from `src/lib/brand-resolver.ts`. The block doesn't know about Nimbus or any specific copy.
 4. **Server components by default.** Add `"use client"` only when a hook or motion API requires it (typically the interactive shader heroes).
 5. **No imports from `src/components/ui/**` outside the documented primitive set** (Button, Badge, Card, Tabs, etc.). If you need something not there, compose existing primitives — don't go fishing through `ui/` for one-offs.
@@ -55,7 +55,7 @@ Pages can override per-route by spreading defaults and replacing the fields they
 
 ## How to add a new variant
 
-Example: a fourth `minimal` hero variant.
+Example: a `minimal` hero variant.
 
 ```bash
 cp src/components/blocks/hero/editorial.tsx src/components/blocks/hero/minimal.tsx
@@ -78,7 +78,7 @@ Then:
 3. Update `src/lib/compositions.ts` if any composition should pair with the new variant.
 4. Add the new variant to the gallery at `src/app/(internal)/variants/page.tsx`.
 
-A fourth variant is allowed and may stay project-specific. The three originals must still ship — don't replace them.
+An additional variant is allowed and may stay project-specific. The required originals must still ship — don't replace them.
 
 ## How to add a new block type
 
@@ -88,7 +88,7 @@ Example: a `comparison` block (feature matrix vs competitors).
 mkdir -p src/components/blocks/comparison
 ```
 
-Then create all three variants:
+Then create the full required variant set:
 
 ```tsx
 // src/components/blocks/comparison/editorial.tsx
@@ -150,5 +150,5 @@ If the design change is "every hero should look like X," check whether what you'
 
 - [`src/themes/README.md`](../../themes/README.md) — for the token contract block variants consume.
 - [`src/components/ui/README.md`](../ui/README.md) — for the off-bounds primitives.
-- [`AGENTS.md`](../../../AGENTS.md) §7 — for the page/section/component playbook.
+- [`AGENTS.md`](../../../AGENTS.md) — for the page/section/component playbook.
 - The variants gallery at `/variants` (run `pnpm dev`) — the live reference.

@@ -1,6 +1,6 @@
 # `src/config/` — central config + env
 
-> **Module ships in Phase 2 of the starter-kit-hardening plan.** This README is in place; the `site.ts` and `env.ts` modules land alongside it.
+> Centralized project configuration. Read this before adding site-wide config or env access.
 
 ## What's here
 
@@ -33,7 +33,7 @@ import { siteConfig } from "@/config/site"
 </nav>
 ```
 
-The shape (post-Phase 2):
+The shape:
 
 ```ts
 export const siteConfig = {
@@ -58,7 +58,7 @@ const siteUrl = env.NEXT_PUBLIC_SITE_URL    // typed, validated, never undefined
 
 **Never** `process.env.NEXT_PUBLIC_SITE_URL` directly in app code. The schema in `env.ts` validates at module load — missing or malformed values throw before the app even starts.
 
-The schema (post-Phase 2):
+The schema:
 
 ```ts
 const envSchema = z.object({
@@ -85,7 +85,7 @@ development/production mode branch. Do not import `env.ts` into client
 components; full env validation belongs on server-only config paths.
 
 These are the only files allowed to read `process.env` directly. The exception
-is documented in [`AGENTS.md`](../../AGENTS.md) §5 invariant #2.
+is documented in the env contract in [`AGENTS.md`](../../AGENTS.md).
 
 ## Public vs server
 
@@ -96,6 +96,6 @@ The schema is the contract; respect the naming convention so the contract is enf
 
 ## See also
 
-- [`AGENTS.md`](../../AGENTS.md) §5 invariant #2 — the env access rule.
-- [`docs/PROJECT_SETUP.md`](../../docs/PROJECT_SETUP.md) §7 — env setup for new clones.
+- [`AGENTS.md`](../../AGENTS.md) — the env access rule.
+- [`docs/PROJECT_SETUP.md`](../../docs/PROJECT_SETUP.md) — env setup for new clones.
 - `.env.example` at the repo root — the human-readable list of required + optional vars.

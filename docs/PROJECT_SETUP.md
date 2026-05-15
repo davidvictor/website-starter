@@ -7,16 +7,17 @@
 1. [ ] Clone Lookbook → new private GitHub repo
 2. [ ] Rename in `package.json` (name, description, repository, homepage, author)
 3. [ ] Update `LICENSE` if needed
-4. [ ] Update `src/config/site.ts` (post-Phase 2): name, description, url, links, navLinks
+4. [ ] Update `src/config/site.ts`: name, description, url, links, navLinks
 5. [ ] Replace `src/lib/brand.ts` with the client's content
 6. [ ] Pick a starting preset (dev panel `~` → copy JSON into `src/themes/registry.json`)
 7. [ ] Copy `.env.example` → `.env.local`, set `NEXT_PUBLIC_SITE_URL=http://localhost:3000`
-8. [ ] Update `SECURITY.md` contact (post-Phase 3)
+8. [ ] Update `SECURITY.md` contact if this clone ships one
 9. [ ] `vercel link` — connect to a new Vercel project; set production domain
 10. [ ] Configure GitHub branch protection (require CI green to merge)
 11. [ ] Decide whether to keep, guard, or remove the internal reference routes
-12. [ ] Run through one example client request (Tier 1–3 from [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md)) to verify the playbook works on this clone
-13. [ ] Hand off [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md) + the deployed preview URL to the client
+12. [ ] Review [`KNOWLEDGEBASE.md`](KNOWLEDGEBASE.md) and remove/archive stale inherited plans
+13. [ ] Run through representative content/theme/composition requests from [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md) to verify the playbook works on this clone
+14. [ ] Hand off [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md) + the deployed preview URL to the client
 
 ## Detail per step
 
@@ -56,7 +57,7 @@ If MIT works, just update the copyright line. Otherwise, replace the file.
 
 ### 4. Update `src/config/site.ts`
 
-(Post-Phase 2 — once `src/config/` exists.) Update the `siteConfig` object:
+Update the `siteConfig` object:
 
 ```ts
 export const siteConfig = {
@@ -116,7 +117,7 @@ For the deployed site, set `NEXT_PUBLIC_SITE_URL` in Vercel project settings →
 
 ### 8. Update `SECURITY.md` contact
 
-(Post-Phase 3.) Point at the right email for the new project. If unclear, leave at the agency contact.
+Point at the right email for the new project. If unclear, leave at the agency contact. If the clone does not ship `SECURITY.md`, skip this step.
 
 ### 9. Link Vercel
 
@@ -157,11 +158,19 @@ Before production launch, choose one policy:
 Do not expose these as public marketing links in a client launch unless the
 client explicitly wants a visible design-system/reference area.
 
-### 12. Smoke-test the playbook
+### 12. Knowledgebase freshness
 
-Pick one Tier 1 and one Tier 2 request from [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md) and run them through Claude on the fresh clone. Confirm Claude finds the right files and the changes apply cleanly. If something feels off, that's a signal to update AGENTS.md or the relevant inline README.
+Review [`KNOWLEDGEBASE.md`](KNOWLEDGEBASE.md) before handoff. The clone should
+not inherit active plans/specs that are already complete or irrelevant to the
+client. Move useful historical context to `docs/archive/<year>/`, delete
+completed plans that no longer carry unique context, and update `docs/README.md`
+so the current source of truth is obvious.
 
-### 13. Hand off
+### 13. Smoke-test the playbook
+
+Pick representative content and theme requests from [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md) and run them through Claude on the fresh clone. Confirm Claude finds the right files and the changes apply cleanly. If something feels off, that's a signal to update AGENTS.md or the relevant inline README.
+
+### 14. Hand off
 
 Send the client:
 
@@ -173,19 +182,20 @@ Send the client:
 ## After hand-off — keeping the project healthy
 
 - Periodically `git pull` from the original Lookbook for upstream improvements. This will be manual until we ship a template-sync action.
-- Watch for the patterns in [`AGENTS.md`](../AGENTS.md) §11 (Common pitfalls) — they're the failure modes that come back across clients.
-- If the client requests a change that crosses into Tier 5 of [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md), it's a separate engagement, not a vibe-coding session.
+- Watch for the common pitfalls in [`AGENTS.md`](../AGENTS.md) — they're the failure modes that come back across clients.
+- If the client requests an architectural/high-risk change from [`CLIENT_PLAYBOOK.md`](CLIENT_PLAYBOOK.md), it's a separate engagement, not a vibe-coding session.
 
 ## Things that stay consistent across all clones
 
 - Tech stack (Next.js 16, React 19, Tailwind v4, shadcn, Biome, Vitest, Husky, Node 22, pnpm 10).
 - Folder structure (`src/{app,components,themes,lib,config,providers,hooks}`).
 - Block taxonomy (≥3 variants per type, file naming convention).
-- Theme system (four-input derivation pipeline).
+- Theme system (controller-driven derivation pipeline).
 - Polish primitives + the polish-check script.
 - Dev panel architecture.
 - CI gates, Husky hooks, Conventional Commits.
 - Agent guidance docs ([`AGENTS.md`](../AGENTS.md), [`CLAUDE.md`](../CLAUDE.md), `docs/`, inline READMEs).
+- Knowledgebase lifecycle (`docs/README.md`, `docs/KNOWLEDGEBASE.md`, active plans/specs only while current).
 
 ## Things that become project-specific
 
@@ -193,13 +203,13 @@ Send the client:
 - Active preset / theme tuning.
 - Site config (`src/config/site.ts`).
 - Routes (additions / deletions beyond the base set).
-- Custom block variants the client requested (a 4th `minimal.tsx`, say).
+- Custom block variants the client requested (a `minimal.tsx`, say).
 - `package.json` `name`, `description`, `repository`, `homepage`.
 - `SECURITY.md` contact.
 - Vercel project + domain.
 
 ## Things that should never diverge
 
-- The invariants in [`AGENTS.md`](../AGENTS.md) §5.
+- The invariants in [`AGENTS.md`](../AGENTS.md).
 - The off-bounds surface in `biome.json` `experimentalScannerIgnores`.
 - The forward-compat constraints in [`PAYLOAD_CMS_FUTURE.md`](PAYLOAD_CMS_FUTURE.md).

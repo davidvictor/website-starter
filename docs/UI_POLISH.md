@@ -182,6 +182,6 @@ and its expanded 40×40 area will not overlap a neighbor.
 
 ## Where to look next
 
-- [Architecture decision records](adr/) — the 17 decisions that ground every rule above.
+- [Architecture decision records](adr/) — the durable decisions that ground every rule above.
 - [`/sandbox/polish`](../src/app/(internal)/sandbox/polish/page.tsx) — live reference renderings of every primitive and treatment.
 - [`scripts/check-polish.mjs`](../scripts/check-polish.mjs) — warn-only guardrail. Run via `pnpm check:polish`.
