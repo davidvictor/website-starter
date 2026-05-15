@@ -1,10 +1,12 @@
 import { editorialLetterpressPair } from "./editorial/2.letterpress"
+import { editorialMarblePair } from "./editorial/3.marble"
 import { editorialVeilPair } from "./editorial/1.veil"
 import type { ShaderDef, ShaderId } from "./types"
 
 const allPairs: ReadonlyArray<readonly [ShaderDef, ShaderDef]> = [
   editorialVeilPair,
   editorialLetterpressPair,
+  editorialMarblePair,
 ]
 
 export const SHADER_REGISTRY: Partial<Record<ShaderId, ShaderDef>> =
