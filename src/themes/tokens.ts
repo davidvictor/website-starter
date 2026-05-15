@@ -10,9 +10,9 @@
 
 import {
   applyAccentAnchor,
-  darkenForMode,
   type OKLCH,
   oklchToCss,
+  tuneBrandForMode,
   vibrancyToLC,
   warmthToNeutral,
 } from "@/lib/color"
@@ -55,27 +55,8 @@ export function buildDeriveCtx(
   derivation: DerivationProfile,
   mode: Mode
 ): DeriveCtx {
-  // Primary
-  const pLC = vibrancyToLC(inputs.primary.vibrancy)
-  const primary: OKLCH = {
-    l: mode === "dark" ? darkenForMode(pLC.l, { kind: "brand" }) : pLC.l,
-    c: pLC.c * derivation.chromaBoost,
-    h: inputs.primary.hue,
-  }
-
-  // Accent (anchor applied)
-  const aLC = vibrancyToLC(inputs.accent.vibrancy)
-  const accent: OKLCH = {
-    l: mode === "dark" ? darkenForMode(aLC.l, { kind: "brand" }) : aLC.l,
-    c: aLC.c * derivation.chromaBoost,
-    h: applyAccentAnchor(
-      inputs.primary.hue,
-      inputs.accent.hue,
-      inputs.accent.anchor
-    ),
-  }
-
-  // Neutral palette (driven by warmth + contrast)
+  // Neutral palette (driven by warmth + contrast). Built first so brand
+  // tones can consult `neutral.bg` for legibility tuning.
   const { hue: warmHue, chroma: warmChroma } = warmthToNeutral(
     inputs.warmth,
     inputs.primary.hue
@@ -95,6 +76,37 @@ export function buildDeriveCtx(
     ring: { l: mode === "dark" ? 0.7 : 0.55, c, h },
     secondary: { l: anchors.muted, c: c * 1.4, h },
   }
+
+  // Primary — tuned so it clears AA against neutral.bg AND against its
+  // own near-B/W foreground (so filled buttons read).
+  const pLC = vibrancyToLC(inputs.primary.vibrancy)
+  const primary: OKLCH = tuneBrandForMode(
+    {
+      l: pLC.l,
+      c: pLC.c * derivation.chromaBoost,
+      h: inputs.primary.hue,
+    },
+    mode,
+    neutral.bg,
+    4.5
+  )
+
+  // Accent (anchor applied) — same tuning treatment.
+  const aLC = vibrancyToLC(inputs.accent.vibrancy)
+  const accent: OKLCH = tuneBrandForMode(
+    {
+      l: aLC.l,
+      c: aLC.c * derivation.chromaBoost,
+      h: applyAccentAnchor(
+        inputs.primary.hue,
+        inputs.accent.hue,
+        inputs.accent.anchor
+      ),
+    },
+    mode,
+    neutral.bg,
+    4.5
+  )
 
   return { inputs, derivation, mode, primary, accent, neutral }
 }

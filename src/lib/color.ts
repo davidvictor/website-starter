@@ -11,6 +11,8 @@
  *   the perceptual cost is small at the chroma ranges we care about.
  */
 
+import { wcagRatioOklch } from "./contrast"
+
 export type OKLCH = { l: number; c: number; h: number }
 
 const _TAU = Math.PI * 2
@@ -227,4 +229,52 @@ export function darkenForMode(
   }
   // border-like — invert and reduce contrast.
   return Math.max(0.18, Math.min(0.32, 1 - l))
+}
+
+/* ------------------------------------------------------------------ */
+/* Brand-tone-for-mode (legibility-driven)                              */
+/* ------------------------------------------------------------------ */
+
+const NEAR_BLACK_FG: OKLCH = { l: 0.13, c: 0, h: 0 }
+const NEAR_WHITE_FG: OKLCH = { l: 0.97, c: 0, h: 0 }
+
+/**
+ * Tone a brand color for the target mode so it clears a contrast floor
+ * against TWO things simultaneously:
+ *   1. the mode's background (so the brand reads as a link / display)
+ *   2. the best near-white/near-black foreground for the brand (so a
+ *      filled button label reads on top of it)
+ *
+ * Without constraint (2), the brand-vs-bg search can land in the L≈0.5
+ * "middle zone" where neither black nor white foreground passes 4.5 —
+ * which produces the observed cluster of brand-fill pairs at 4.35–4.47.
+ *
+ * In dark mode we lift L; in light mode we drop L. Chroma is preserved.
+ * Returns the brand color at the smallest L delta that clears both.
+ */
+export function tuneBrandForMode(
+  raw: OKLCH,
+  mode: "light" | "dark",
+  bg: OKLCH,
+  floor = 4.5
+): OKLCH {
+  // Step 1: apply mode-baseline lift (legacy darkenForMode brand behavior)
+  const l0 =
+    mode === "dark" ? Math.max(0.55, Math.min(0.85, raw.l + 0.08)) : raw.l
+
+  // Step 2: walk L in the legibility direction until BOTH constraints clear.
+  //  - light bg → we want a darker brand → decrease L
+  //  - dark  bg → we want a lighter brand → increase L
+  const dir = bg.l > 0.5 ? -1 : 1
+  let attempt: OKLCH = { ...raw, l: clamp01(l0) }
+  for (let step = 0; step <= 40; step++) {
+    const test: OKLCH = { ...raw, l: clamp01(l0 + dir * step * 0.02) }
+    const rBg = wcagRatioOklch(test, bg)
+    const rWhiteFg = wcagRatioOklch(NEAR_WHITE_FG, test)
+    const rBlackFg = wcagRatioOklch(NEAR_BLACK_FG, test)
+    const rBestFg = Math.max(rWhiteFg, rBlackFg)
+    attempt = test
+    if (rBg >= floor && rBestFg >= floor) break
+  }
+  return attempt
 }
