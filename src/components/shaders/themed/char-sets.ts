@@ -3,6 +3,14 @@ import type { ShaderId } from "./types"
 const editorial2 = { marks: " .:-=+", rule: "─│┼", dots: "·:∶" } as const
 const saas3 = { data: ".+×▪█", dots: "·•◦●", blocks: "░▒▓█" } as const
 const bold2 = { blocks: "█▓▒░ ", digits: "0123456789", letters: "MWHEX#-:." } as const
+const cyber1 = { density: "#@%*+-: ", sparse: ". : ;", blocks: "█▓▒░ " } as const
+const cyber2 = {
+  binary: "01",
+  hex: "0123456789ABCDEF",
+  katakana: "アイウエオカキクケコ",
+  asciiArt: "#@%*+-: ",
+} as const
+const cyber3 = { phosphor: "@█▓▒░ ", loFi: "█▒░ ", stark: "█ " } as const
 
 /**
  * Per-shader curated glyph ramps. Each ASCII shader's preset names map to
@@ -16,6 +24,12 @@ export const CHAR_SETS: Partial<Record<ShaderId, Record<string, string>>> = {
   "saas.3.interactive": saas3,
   "bold.2.idle": bold2,
   "bold.2.interactive": bold2,
+  "cyber.1.idle": cyber1,
+  "cyber.1.interactive": cyber1,
+  "cyber.2.idle": cyber2,
+  "cyber.2.interactive": cyber2,
+  "cyber.3.idle": cyber3,
+  "cyber.3.interactive": cyber3,
 }
 
 export function getCharSet(shaderId: ShaderId, preset: string): string {

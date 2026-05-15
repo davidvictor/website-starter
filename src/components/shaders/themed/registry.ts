@@ -1,6 +1,9 @@
 import { boldAsciiPlasmaPair } from "./bold/2.ascii-plasma"
 import { boldAuroraPair } from "./bold/1.aurora"
 import { boldSwirlPair } from "./bold/3.swirl"
+import { cyberAsciiTerrainPair } from "./cyber/1.ascii-terrain"
+import { cyberCodeRainPair } from "./cyber/2.code-rain"
+import { cyberPhosphorConsolePair } from "./cyber/3.phosphor-console"
 import { editorialLetterpressPair } from "./editorial/2.letterpress"
 import { editorialMarblePair } from "./editorial/3.marble"
 import { editorialVeilPair } from "./editorial/1.veil"
@@ -19,6 +22,9 @@ const allPairs: ReadonlyArray<readonly [ShaderDef, ShaderDef]> = [
   boldAuroraPair,
   boldAsciiPlasmaPair,
   boldSwirlPair,
+  cyberAsciiTerrainPair,
+  cyberCodeRainPair,
+  cyberPhosphorConsolePair,
 ]
 
 export const SHADER_REGISTRY: Partial<Record<ShaderId, ShaderDef>> =
